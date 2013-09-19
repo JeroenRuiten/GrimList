@@ -1,0 +1,30 @@
+name: GrimList
+main: com.caelusrp.grimlist.grimlist
+website: http://caelusrp.com
+version: 1.2
+author: FerusGrim
+description: GrimList is a whitelist plugin designed to operate using mySQL, for CaelusRP Servers.
+commands:
+  grimlist:
+    description: Commands for GrimList
+    usage: /<command> <variable> [player]
+permissions:
+    grimlist.*:
+        description: Grants all GrimList permissions.
+        children:
+            grimlist.add: true
+            grimlist.remove: true
+            grimlist.reload: true
+            grimlist.toggle: true
+    grimlist.add:
+        description: Add users to GrimList.
+        default: op
+    grimlist.remove:
+        description: Remove users from Grimlist
+        default: op
+    grimlist.reload:
+        description: Reloads GrimList configuration.
+        default: op
+    grimlist.toggle:
+        description: Toggle GrimList off/on.
+        default: op
