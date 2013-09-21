@@ -1,9 +1,6 @@
-//////////////////////////////////////////////////////////
-///// Copyright Nicholas Badger (a.k.a. FerusGrim) //////
-////////////////////////////////////////////////////////
-/////////////////////////// Attribution 3.0 Unported //
-////////////////////////// (CC BY 3.0) ///////////////
-/////////////////////////////////////////////////////
+// Copyright Nicholas Badger (A.K.A. FerusGrim) //
+// Attribution 3.0 Unported (CC BY 3.0) //
+
 package com.caelusrp.grimlist;
 
 import java.io.File;
@@ -28,18 +25,21 @@ public class config {
                 config.load(Settings);
             }
             SetDefault("grimlist.enabled", true);
+            SetDefault("grimlist.connection", "mysql");
             SetDefault("grimlist.debug", false);
-            SetDefault("grimlist.notification.disallow-message", "Hi §1{player}§f, you are not on the whitelist!");
+            SetDefault("grimlist.notification.disallow-message", "§e[GL]§f Sorry, {player}, but you aren't whitelisted.");
             SetDefault("grimlist.notification.print-failure", true);
-            SetDefault("grimlist.notification.failure-message", "Disallowed §2{player}§f from joining");
-            SetDefault("grimlist.sql.host", "localhost");
-            SetDefault("grimlist.sql.port", 3306);
-            SetDefault("grimlist.sql.username", "root");
-            SetDefault("grimlist.sql.password", "toor");
-            SetDefault("grimlist.sql.database", "whitelist");
-            SetDefault("grimlist.sql.table", "users");
-            SetDefault("grimlist.sql.field", "username");
-            SetDefault("grimlist.sql.query", "SELECT {field} FROM `{table}`;");
+            SetDefault("grimlist.notification.failure-message", "§e[GL]§f {player} attempted to join.");
+            SetDefault("grimlist.file.name", "players.txt");
+            SetDefault("grimlist.file.update-interval", "10");
+            SetDefault("grimlist.mysql.host", "localhost");
+            SetDefault("grimlist.mysql.port", 3306);
+            SetDefault("grimlist.mysql.username", "root");
+            SetDefault("grimlist.mysql.password", "toor");
+            SetDefault("grimlist.mysql.database", "whitelist");
+            SetDefault("grimlist.mysql.table", "users");
+            SetDefault("grimlist.mysql.field", "username");
+            SetDefault("grimlist.mysql.query", "SELECT {field} FROM `{table}`;");
             config.save(Settings);
             return config;
         } catch (FileNotFoundException e) {

@@ -13,17 +13,20 @@ permissions:
         description: Grants all GrimList permissions.
         children:
             grimlist.add: true
-            grimlist.remove: true
+            grimlist.refresh: true
             grimlist.reload: true
+            grimlist.remove: true
             grimlist.toggle: true
     grimlist.add:
         description: Add users to GrimList.
         default: op
-    grimlist.remove:
-        description: Remove users from Grimlist
-        default: op
+    grimlist.refresh:
+    	description: Refresh the GrimList player file.
     grimlist.reload:
         description: Reloads GrimList configuration.
+        default: op
+    grimlist.remove:
+        description: Remove users from Grimlist
         default: op
     grimlist.toggle:
         description: Toggle GrimList off/on.
