@@ -1,9 +1,6 @@
-//////////////////////////////////////////////////////////
-///// Copyright Nicholas Badger (a.k.a. FerusGrim) //////
-////////////////////////////////////////////////////////
-/////////////////////////// Attribution 3.0 Unported //
-////////////////////////// (CC BY 3.0) ///////////////
-/////////////////////////////////////////////////////
+// Copyright Nicholas Badger (A.K.A. FerusGrim) //
+// Attribution 3.0 Unported (CC BY 3.0) //
+
 package com.caelusrp.grimlist;
 
 import java.util.logging.Level;
@@ -30,14 +27,14 @@ public class listener implements Listener {
                     event.setKickMessage(DisMSG);
                     event.setResult(PlayerLoginEvent.Result.KICK_WHITELIST);
 
-                    grimlist.log.log(Level.INFO,"[GL] the player '" + player.getName() + "' attempted to join, but was denied.");
+                    grimlist.log.log(Level.INFO,"§e[GL]§3 the player '" + player.getName() + "' attempted to join, but was denied.");
                     //Check if print connection failures is enabled
                     if(grimlist.Settings.getBoolean("grimlist.notification.print-failure") == true){
-                        Bukkit.getServer().broadcast("§7[GL] §f" + grimlist.Settings.getString("grimlist.notification.failure-message").replace("{player}", player.getName()), "grimlist.displayfails");
+                        Bukkit.getServer().broadcast("§e[GL] §3" + grimlist.Settings.getString("grimlist.notification.failure-message").replace("{player}", player.getName()), "grimlist.displayfails");
                     }
                 }
             }else{
-                grimlist.DebugPrint("Player was already denied by another plugin.");
+                grimlist.DebugPrint("§e[GL] \"" + player.getName() + "\" §3was already denied access by another plugin.");
             }
         }
     }
