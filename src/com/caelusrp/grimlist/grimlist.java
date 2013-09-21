@@ -257,7 +257,7 @@ public class grimlist extends JavaPlugin {
 						String Query = grimlist.Settings.getString("grimlist.mysql.query");
 						Query = Query.replace("{table}",
 								grimlist.Settings.getString("grimlist.mysql.table"));
-						Query = Query.replace("{name}",
+						Query = Query.replace("{field}",
 								grimlist.Settings.getString("grimlist.mysql.field"));
 						Query = Query.replace("{time}", "" + GetTime());
 						ps = conn.prepareStatement(Query);
