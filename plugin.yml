@@ -12,27 +12,27 @@ permissions:
     whitelist.*:
         description: Grants all GrimList permissions.
         children:
-            whitelist.add: true
-            whitelist.remove: true
-            whitelist.print-failure: true
-            whitelist.reload: true
-            whitelist.refresh: true
-            whitelist.toggle: true
-    whitelist.add:
+            grimlist.add: true
+            grimlist.remove: true
+            grimlist.print-failure: true
+            grimlist.reload: true
+            grimlist.refresh: true
+            grimlist.toggle: true
+    grimlist.add:
         description: Add users to the whitelist.
         default: op
-    whitelist.remove:
+    grimlist.remove:
         description: Remove users from the whitelist.
         default: op
-    whitelist.print-failure:
+    grimlist.print-failure:
         description: View when a player is disconnected.
         default: op
-    whitelist.reload:
+    grimlist.reload:
         description: Reload GrimList configuration.
         default: op
-    whitelist.refresh:
+    grimlist.refresh:
         description: Refreshes the whitelist.
         default: op
-    whitelist.toggle:
+    grimlist.toggle:
         description: Toggle the whitelist off/on.
         default: op
