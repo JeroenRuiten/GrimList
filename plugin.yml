@@ -1,7 +1,7 @@
 name: GrimList
 main: com.caelusrp.grimlist.grimlist
 website: http://caelusrp.com
-version: 2.0
+version: 2.1
 author: Nicholas Badger (A.K.A. FerusGrim)
 description: Plugin created to be the whitelist for Caelus Roleplay servers.
 commands:

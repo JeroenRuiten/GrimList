@@ -192,14 +192,12 @@ public class grimlist extends JavaPlugin {
 	}
 
 	private void PrintHelper(CommandSender sender){
-		sender.sendMessage("§7==================================");
-		sender.sendMessage("§7== §8GrimList §7======================");
-		sender.sendMessage("§7== > §a/whitelist §c[on/off]        §7==");
-		sender.sendMessage("§7== > §a/whitelist §badd §c[player]    §7==");
-		sender.sendMessage("§7== > §a/whitelist §bremove §c[player] §7==");
-		sender.sendMessage("§7== > §a/whitelist §brefresh         §7==");
-		sender.sendMessage("§7== > §a/whitelist §breload          §7==");
-		sender.sendMessage("§7==================================");
+		sender.sendMessage("§7== §8GrimList");
+		sender.sendMessage("§7== > §a/whitelist §c[on/off]");
+		sender.sendMessage("§7== > §a/whitelist §badd §c[player]");
+		sender.sendMessage("§7== > §a/whitelist §bremove §c[player]");
+		sender.sendMessage("§7== > §a/whitelist §brefresh");
+		sender.sendMessage("§7== > §a/whitelist §breload");
 	}
 
 	private boolean ReloadPlugin(CommandSender sender, String[] args){
