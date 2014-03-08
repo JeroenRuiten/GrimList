@@ -1,38 +1,42 @@
 name: GrimList
-main: com.caelusrp.grimlist.grimlist
-website: http://caelusrp.com
-version: 2.1
-author: Nicholas Badger (A.K.A. FerusGrim)
-description: Plugin created to be the whitelist for Caelus Roleplay servers.
+main: io.github.ferusgrim.GrimList.GrimList
+website: ferusgrim.github.io
+version: 3.0
+author: FerusGrim
+description: Efficient whitelist plugin, able to use multiple data sources.
 commands:
   whitelist:
-    description: GrimList commands.
-    usage: /<command> <variable> [input]
+    description: Commands for GrimList.
+    usage: /whitelist <argument> [player]
 permissions:
-    whitelist.*:
-        description: Grants all GrimList permissions.
+    grimlist.admin:
+        description: Grants full permissions.
         children:
             grimlist.add: true
             grimlist.remove: true
             grimlist.print-failure: true
             grimlist.reload: true
             grimlist.refresh: true
+            grimlist.import: true
             grimlist.toggle: true
     grimlist.add:
-        description: Add users to the whitelist.
+        description: Allows user to add people to the whitelist.
         default: op
     grimlist.remove:
-        description: Remove users from the whitelist.
+        description: Allows user to remove people from the whitelist.
         default: op
     grimlist.print-failure:
-        description: View when a player is disconnected.
+        description: Shows users with this permission any users that isn't on the whitelist and tries to connect, this feature needs to be activated in the config.
         default: op
     grimlist.reload:
-        description: Reload GrimList configuration.
+        description: Reloads the plugin.
         default: op
     grimlist.refresh:
         description: Refreshes the whitelist.
         default: op
+    grimlist.import:
+        description: Imports whitelist from one source to a another
+        default: op
     grimlist.toggle:
-        description: Toggle the whitelist off/on.
+        description: Allows you to turn on/off the whitelist
         default: op
