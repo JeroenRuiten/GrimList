@@ -8,62 +8,39 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class ConfigManager {
-	private static GrimList gl;
-	private static File ConfigFile = new File(gl.pluginDir.getAbsolutePath() + File.separator + "config.yml");
-	private static File PhraseFile = new File(gl.pluginDir.getAbsolutePath() + File.separator + "phrase.yml");
+	private static final String mDirString = "plugins/GrimList/";
+	public static final File mDir = new File(mDirString);
+	private static File ConfigFile = new File(mDir.getAbsolutePath() + File.separator + "config.yml");
 	public static YamlConfiguration Config;
-	public static YamlConfiguration Phrase;
+	private static File playerFile;
 	
 	public static YamlConfiguration loadConfig(boolean inputNewConfiguration) {
-		Config = new YamlConfiguration();
-		if(!inputNewConfiguration) try{
-			Config.load(ConfigFile);
-		}catch(FileNotFoundException e){
-			e.printStackTrace();
-		}catch(IOException e){
-			e.printStackTrace();
-		}catch(InvalidConfigurationException e){
-			e.printStackTrace();
-		}else try{
+		try {
+			Config = new YamlConfiguration();
+			if(!inputNewConfiguration){
+				Config.load(ConfigFile);
+			}
 			DefaultConfig("GrimList.Enabled", true);
 			DefaultConfig("GrimList.Debug-Level", 3);
-			DefaultConfig("GrimList.Method", 1);
+			DefaultConfig("GrimList.Updater.Notify-Update", true);
+			DefaultConfig("GrimList.Updater.Verbose-Update", false);
+			DefaultConfig("GrimList.Use.MySQL", false);
+			DefaultConfig("GrimList.Use.File", true);
+			DefaultConfig("GrimList.Use.URL", false);
 			DefaultConfig("GrimList.MySQL.Host", "localhost");
 			DefaultConfig("GrimList.MySQL.Port", 3306);
 			DefaultConfig("GrimList.MySQL.Database", "whitelist");
 			DefaultConfig("GrimList.MySQL.Username", "root");
 			DefaultConfig("GrimList.MySQL.Password", "toor");
 			DefaultConfig("GrimList.File.Name", "players.txt");
-			DefaultConfig("GrimList.File.Update-Interval", 180);
-			DefaultConfig("GrimList.URL.URL", "https://my.com/players.txt");
+			DefaultConfig("GrimList.File.URL", "");
 			Config.save(ConfigFile);
 			return Config;
 		}catch(FileNotFoundException e){
 			e.printStackTrace();
 		}catch(IOException e){
 			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	public static YamlConfiguration loadPhrase(boolean inputNewConfiguration) {
-		Phrase = new YamlConfiguration();
-		if(!inputNewConfiguration) try{
-			Phrase.load(PhraseFile);
-		}catch(FileNotFoundException e){
-			e.printStackTrace();
-		}catch(IOException e){
-			e.printStackTrace();
 		}catch(InvalidConfigurationException e){
-			e.printStackTrace();
-		}else try{
-			DefaultPhrase("Phrases.KickMessage", "Phrase");
-			DefaultPhrase("Phrases.NotifyFail", "Phrase");
-			Phrase.save(PhraseFile);
-			return Phrase;
-		}catch(FileNotFoundException e){
-			e.printStackTrace();
-		}catch(IOException e){
 			e.printStackTrace();
 		}
 		return null;
@@ -73,34 +50,49 @@ public class ConfigManager {
 		Config.set(Path, Config.get(Path, Value));
 	}
 	
-	private static void DefaultPhrase(String Path, Object Value) {
-		Phrase.set(Path, Phrase.get(Path, Value));
+	public static void Start() {
+		if(!mDir.exists()){
+			mDir.mkdir();
+		}
+		ConfigFile = new File(mDir.getAbsolutePath() + File.separator + "config.yml");
+		if(ConfigFile.exists()){
+			Config = loadConfig(false);
+		}else try{
+			ConfigFile.createNewFile();
+			Config = loadConfig(true);
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+		SetVariables();
+		playerFile = new File(mDir.getAbsolutePath() + File.separator + filesource);
+		if(!playerFile.exists()) try{
+			playerFile.createNewFile();
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 	}
 	
-	public static void Start(boolean start) {
-		if(start){
-			if(!gl.pluginDir.exists()){
-				gl.pluginDir.mkdir();
-			}
-			if(ConfigFile.exists()){
-				Config = loadConfig(false);
-			}else try{
-				ConfigFile.createNewFile();
-				Config = loadConfig(true);
-			}catch(IOException e){
-				e.printStackTrace();
-			}
-			if(PhraseFile.exists()){
-				Phrase = loadPhrase(false);
-			}else try{
-				PhraseFile.createNewFile();
-				Phrase = loadPhrase(true);
-			}catch(IOException e){
-				e.printStackTrace();
-			}
-		}else{
-			Config = null;
-			Phrase = null;
-		}
+	public static boolean glEnabled;
+	public static int debuglevel;
+	
+	public static String filesource;
+	public static String urlsource;
+	
+	public static String sqlhost;
+	public static int sqlport;
+	public static String sqldatabase;
+	public static String sqlusername;
+	public static String sqlpassword;
+	
+	public static void SetVariables(){
+		glEnabled = Config.getBoolean("GrimList.Enabled");
+		debuglevel = Config.getInt("GrimList.Debug-Level");
+		filesource = Config.getString("GrimList.File.Name");
+		urlsource = Config.getString("GrimList.File.URL");
+		sqlhost = Config.getString("GrimList.MySQL.Host");
+		sqlport = Config.getInt("GrimList.MySQL.Port");
+		sqldatabase = Config.getString("GrimList.MySQL.Database");
+		sqlusername = Config.getString("GrimList.MySQL.Username");
+		sqlpassword = Config.getString("GrimList.MySQL.Password");
 	}
 }

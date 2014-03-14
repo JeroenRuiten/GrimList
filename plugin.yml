@@ -1,7 +1,7 @@
 name: GrimList
 main: io.github.ferusgrim.GrimList.GrimList
 website: ferusgrim.github.io
-version: 3.0
+version: 3.0.0
 author: FerusGrim
 description: Efficient whitelist plugin, able to use multiple data sources.
 commands:
@@ -25,14 +25,14 @@ permissions:
     grimlist.remove:
         description: Allows user to remove people from the whitelist.
         default: op
-    grimlist.print-failure:
-        description: Shows users with this permission any users that isn't on the whitelist and tries to connect, this feature needs to be activated in the config.
+    grimlist.notify-fail:
+        description: Notifies users with this permission upon a non-whitelisted player attempting to join.
+        default: op
+    grimlist.notify-update:
+        description: Notifies users with this permission that an update is available, upon logging in.
         default: op
     grimlist.reload:
         description: Reloads the plugin.
-        default: op
-    grimlist.refresh:
-        description: Refreshes the whitelist.
         default: op
     grimlist.import:
         description: Imports whitelist from one source to a another

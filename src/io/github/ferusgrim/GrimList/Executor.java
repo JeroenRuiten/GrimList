@@ -1,41 +1,61 @@
 package io.github.ferusgrim.GrimList;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import io.github.ferusgrim.GrimList.Commands.*;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class Executor implements CommandExecutor {
-	private GrimList gl;
-	
-	public Executor(GrimList gl) {
-		this.gl = gl;
+	private GrimList plugin;
+
+	public Executor(GrimList plugin) {
+		this.plugin = plugin;
 	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if(args.length > 2){
-			gl.toLog("Whoops! Too many inputs!");
-			return true;
-		}
-		if(args.length < 1 || args[0].equalsIgnoreCase("help")){
+		if(args.length < 1 || args.length > 2){
+			sender.sendMessage("Try '/whitelist help' for more information!");
 			return false;
 		}
-		if(args[0].equalsIgnoreCase("add") || args[0].equalsIgnoreCase("remove")){
-			Pattern p = Pattern.compile(".*\\W+.*");
-			Matcher m = p.matcher(args[1]);
-			if(args.length < 2){
-				gl.toLog("You forgot to enter a username!");
-				return true;
-			}else if(args[1].length() < 3 || args[1].length() > 16 || m.find()){
-				gl.toLog("Invalid username!");
-				return true;
-			}
-			gl.toLog("Worked!");
-			return true;
+		if(args[0].equals("on") || args[0].equals("off")){
+			args[0] = "toggle";
 		}
-		return false;
+		Player player = null;
+		boolean hasPerm = false;
+		if(sender instanceof Player){
+			player = (Player) sender;
+			if(player.hasPermission("grimlist." + args[0])){
+				hasPerm = true;
+			}else{
+				hasPerm = false;
+			}
+		}else{
+			hasPerm = true;
+		}
+		if(hasPerm){
+			if(args[0].equals("add")){
+				return Add.Start(sender, args);
+			}else if(args[0].equals("remove")){
+				return Remove.Start(sender, args);
+			}else if(args[0].equals("reload")){
+				return Reload.Start(sender);
+			}else if(args[0].equals("refresh")){
+				return Refresh.Start(sender);
+			}else if(args[0].equals("toggle")){
+				return Toggle.Start(sender);
+			}else if(args[0].equals("help")){
+				return Help.Start(sender);
+			}else if(args[0].equals("update")){
+				return Update.Start(sender);
+			}else{
+				sender.sendMessage(plugin.pName + "Unknown Argument!");
+				return false;
+			}
+		}
+		sender.sendMessage("No Permissions!");
+		return true;
 	}
 }
