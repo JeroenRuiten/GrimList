@@ -18,7 +18,7 @@ public final class GrimList extends JavaPlugin {
 		MetricsManager.Start(this);
 		UpdateManager.Start(this);
 		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(new PlayerManager(), this);
+		pm.registerEvents(new PlayerManager(this), this);
 		getCommand("whitelist").setExecutor(new Executor(this));
 	}
 	

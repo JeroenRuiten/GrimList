@@ -7,9 +7,9 @@ import org.mcstats.Metrics.Graph;
 
 public class MetricsManager {
 	
-	public static void Start(GrimList grimList) {
+	public static void Start(GrimList plugin) {
 		try{
-			Metrics metrics = new Metrics(grimList);
+			Metrics metrics = new Metrics(plugin);
 			Graph datausage = metrics.createGraph("Most used Data Source?");
 			Graph debugusage = metrics.createGraph("Most used Debug Level?");
 			Graph listusage = metrics.createGraph("Are we actually on?");

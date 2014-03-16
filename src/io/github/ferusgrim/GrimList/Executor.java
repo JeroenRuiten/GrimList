@@ -49,7 +49,7 @@ public class Executor implements CommandExecutor {
 			}else if(args[0].equals("help")){
 				return Help.Start(sender);
 			}else if(args[0].equals("update")){
-				return Update.Start(sender);
+				return Update.Start(sender, args);
 			}else{
 				sender.sendMessage(plugin.pName + "Unknown Argument!");
 				return false;
