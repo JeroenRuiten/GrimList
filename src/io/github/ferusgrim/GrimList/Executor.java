@@ -7,6 +7,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+/**
+ * Copyright (C) 2014 FerusGrim
+ * @author FerusGrim
+ */
+
 public class Executor implements CommandExecutor {
 	private GrimList plugin;
 
@@ -49,13 +54,13 @@ public class Executor implements CommandExecutor {
 			}else if(args[0].equals("help")){
 				return Help.Start(sender);
 			}else if(args[0].equals("update")){
-				return Update.Start(sender, args);
+				return Update.Start(player, args);
 			}else{
-				sender.sendMessage(plugin.pName + "Unknown Argument!");
+				plugin.toExecutor(player, "Unknown Argument!");
 				return false;
 			}
 		}
-		sender.sendMessage("No Permissions!");
+		plugin.toExecutor(player, "Insufficient Permissions!");
 		return true;
 	}
 }

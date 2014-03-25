@@ -5,6 +5,11 @@ import java.io.IOException;
 import org.mcstats.Metrics;
 import org.mcstats.Metrics.Graph;
 
+/**
+ * Copyright (C) 2014 FerusGrim
+ * @author FerusGrim
+ */
+
 public class MetricsManager {
 	
 	public static void Start(GrimList plugin) {

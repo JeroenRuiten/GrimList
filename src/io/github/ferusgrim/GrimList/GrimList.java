@@ -4,11 +4,17 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+/**
+ * Copyright (C) 2014 FerusGrim
+ * @author FerusGrim
+ */
+
 public final class GrimList extends JavaPlugin {
-	public static final Logger toLog = Logger.getLogger("Minecraft");
+	private static final Logger toLog = Logger.getLogger("Minecraft");
 	public final String pName = "[GrimList] ";
 	public final File jarFile = this.getFile();
 	
@@ -29,21 +35,25 @@ public final class GrimList extends JavaPlugin {
 	
 	public static void toLog(int msgLevel, String MSG){
 		if(msgLevel == 4){
-			if(ConfigManager.debuglevel == 4){
+			if(ConfigManager.dLevel== 4){
 				toLog.log(Level.INFO, MSG);
 			}
 		}else if(msgLevel == 3){
-			if(ConfigManager.debuglevel == 3){
+			if(ConfigManager.dLevel == 3){
 				toLog.log(Level.INFO, MSG);
 			}
 		}else if(msgLevel == 2){
-			if(ConfigManager.debuglevel == 2){
+			if(ConfigManager.dLevel == 2){
 				toLog.log(Level.WARNING, MSG);
 			}
 		}else if(msgLevel == 1){
-			if(ConfigManager.debuglevel == 1){
+			if(ConfigManager.dLevel == 1){
 				toLog.log(Level.SEVERE, MSG);
 			}
 		}
+	}
+	
+	public void toExecutor(Player executor, String MSG){
+		executor.sendMessage(pName + MSG);
 	}
 }

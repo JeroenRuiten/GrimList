@@ -5,6 +5,11 @@ import java.util.regex.Pattern;
 
 import org.bukkit.command.CommandSender;
 
+/**
+ * Copyright (C) 2014 FerusGrim
+ * @author FerusGrim
+ */
+
 public class Add {
 
 	public static boolean Start(CommandSender sender, String[] args) {

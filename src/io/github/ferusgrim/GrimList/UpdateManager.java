@@ -4,6 +4,11 @@ import net.gravitydevelopment.updater.Updater;
 
 import org.bukkit.plugin.PluginDescriptionFile;
 
+/**
+ * Copyright (C) 2014 FerusGrim
+ * @author FerusGrim
+ */
+
 public class UpdateManager {
 	public static final int ID = 65828;
 	public static boolean update = false;

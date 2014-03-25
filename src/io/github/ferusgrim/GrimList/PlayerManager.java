@@ -1,15 +1,28 @@
 package io.github.ferusgrim.GrimList;
 
+import java.util.ArrayList;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerLoginEvent.Result;
+import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.plugin.PluginDescriptionFile;
+
+/**
+ * Copyright (C) 2014 FerusGrim
+ * @author FerusGrim
+ */
 
 public class PlayerManager implements Listener {
 	private GrimList plugin;
+	private ArrayList<String> sqlList = new ArrayList<String>();
+	private ArrayList<String> urlList = new ArrayList<String>();
+	private ArrayList<String> filList = new ArrayList<String>();
+	public ArrayList<ArrayList<String>> allowedPlayers = new ArrayList<ArrayList<String>>();
 	
 	public PlayerManager(GrimList plugin) {
 		this.plugin = plugin;
@@ -17,6 +30,17 @@ public class PlayerManager implements Listener {
 	
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerLogin(PlayerLoginEvent event){
+		if(ConfigManager.Config.getBoolean("GrimList.Enabled")){
+			Player player = event.getPlayer();
+			if(event.getResult() == Result.ALLOWED){
+				if(ConfigManager.Config.getBoolean("GrimList.Use.SQL")) allowedPlayers.add(sqlList);
+				if(ConfigManager.Config.getBoolean("GrimList.Use.URL")) allowedPlayers.add(urlList);
+				if(ConfigManager.Config.getBoolean("GrimList.Use.FILE")) allowedPlayers.add(filList);
+				if(!allowedPlayers.contains(player.getName().toLowerCase())){
+					//TODO: Actions for disallowing player who isn't whitelisted.
+				}
+			}
+		}
 	}
 	
 	@EventHandler(priority = EventPriority.LOW)
@@ -28,6 +52,29 @@ public class PlayerManager implements Listener {
 				player.sendMessage("[GrimList - Update Available!]");
 				player.sendMessage("Current: v" + descFile.getVersion());
 				player.sendMessage("Newest: " + UpdateManager.version);
+			}
+		}
+		if(ConfigManager.Config.getBoolean("GrimList.MotD")){
+			Player player = event.getPlayer();
+			String playerIP = player.getAddress().getAddress().toString();
+			playerIP = playerIP.replaceAll("/", "");
+			playerIP = playerIP.replaceAll("\\.", "-");
+			if(!ConfigManager.PlayerData.contains(player.getName())){
+				ConfigManager.AddPlayerData(playerIP, player.getName());
+			}
+		}
+	}	
+	
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onServerListPing(final ServerListPingEvent event){
+		if(ConfigManager.Config.getBoolean("GrimList.MotD")){
+			String playerIP = event.getAddress().toString();
+			playerIP = playerIP.replaceAll("/", "");
+			playerIP = playerIP.replaceAll("\\.", "-");
+			boolean userHasPlayed = ConfigManager.PlayerData.contains(playerIP);
+			if(userHasPlayed){
+				String playerName = ConfigManager.PlayerData.getString(playerIP);
+				event.setMotd(playerName + ": YOU ARE WHITELISTED!");
 			}
 		}
 	}
