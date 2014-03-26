@@ -59,15 +59,15 @@ public class PlayerManager implements Listener {
 			String playerIP = player.getAddress().getAddress().toString();
 			playerIP = playerIP.replaceAll("/", "");
 			playerIP = playerIP.replaceAll("\\.", "-");
-			if(!ConfigManager.PlayerData.contains(player.getName())){
-				ConfigManager.AddPlayerData(playerIP, player.getName());
+			if(ConfigManager.PlayerData.getString(player.getName() + ".IP").isEmpty()) 
+			while(ConfigManager.PlayerData.getString(player.getName() + ".IP").contains(playerIP)){
 			}
 		}
 	}	
 	
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onServerListPing(final ServerListPingEvent event){
-		if(ConfigManager.Config.getBoolean("GrimList.MotD")){
+		/*if(ConfigManager.Config.getBoolean("GrimList.MotD")){
 			String playerIP = event.getAddress().toString();
 			playerIP = playerIP.replaceAll("/", "");
 			playerIP = playerIP.replaceAll("\\.", "-");
@@ -76,6 +76,11 @@ public class PlayerManager implements Listener {
 				String playerName = ConfigManager.PlayerData.getString(playerIP);
 				event.setMotd(playerName + ": YOU ARE WHITELISTED!");
 			}
-		}
+			for(String parent : ConfigManager.PlayerData.getConfigurationSection(playerIP).getKeys(false)){
+				if(ConfigManager.PlayerData.getString(parent) == playerIP){
+					event.setMotd(parent + ": YOU ARE WHITELISTED!");
+				}
+			}
+		}*/
 	}
 }

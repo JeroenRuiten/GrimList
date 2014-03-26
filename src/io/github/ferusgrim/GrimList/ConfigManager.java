@@ -21,6 +21,13 @@ public class ConfigManager {
 	public static YamlConfiguration PlayerData;
 	private static File ConfigFile = new File(mDir.getAbsolutePath() + File.separator + "config.yml");
 	private static File PlayerFile = new File(mDir.getAbsolutePath() + File.separator + "playerdata.yml");
+	public static String QUERY_CONNECTION;
+	public static String QUERY_CREATEDATABASE;
+	public static String QUERY_CREATETABLE;
+	public static String QUERY_LOADWHITELIST;
+	public static String QUERY_ADDPLAYER;
+	public static String QUERY_REMOVEPLAYER;
+	public static String QUERY_CHECKFORPLAYER;
 	
 	public static YamlConfiguration loadConfig(boolean inputNewConfiguration) {
 		try {
@@ -117,11 +124,6 @@ public class ConfigManager {
 	public static boolean useSQL;
 	public static boolean useURL;
 	public static boolean useFILE;
-	public static String sqlHost;
-	public static int sqlPort;
-	public static String sqlDatabase;
-	public static String sqlUsername;
-	public static String sqlPassword;
 	public static String stringURL;
 	public static URL wlURL;
 	public static void ConfigureVariables() {
@@ -134,11 +136,6 @@ public class ConfigManager {
 		useSQL = Config.getBoolean("GrimList.Source.MySQL");
 		useURL = Config.getBoolean("GrimList.Source.URL");
 		useFILE = Config.getBoolean("GrimList.Source.File");
-		sqlHost = Config.getString("GrimList.MySQL.Host");
-		sqlPort = Config.getInt("GrimList.MySQL.Port");
-		sqlDatabase = Config.getString("GrimList.MySQL.Database");
-		sqlUsername = Config.getString("GrimList.MySQL.Username");
-		sqlPassword = Config.getString("GrimList.MySQL.Password");
 		if(useURL){
 			stringURL = Config.getString("GrimList.URL");
 			try {
@@ -148,5 +145,55 @@ public class ConfigManager {
 				useURL = false;
 			}
 		}
+		if(useSQL) ConfigureSQL();
+	}
+	
+	public static void ConfigureSQL() {
+		boolean usepassword;
+		int sqlPort;
+		String sqlHost = "";
+		String sqlDatabase = "";
+		String sqlUsername = "";
+		String sqlPassword = "";
+		sqlHost = Config.getString("GrimList.MySQL.Host").isEmpty()? "localhost" : Config.getString("MySQL.Host");
+		sqlPort = Config.getInt("MySQL.Port") == 0? 3306 : Config.getInt("MySQL.Port");
+		sqlDatabase = Config.getString("MySQL.Database").isEmpty()? "whitelist" : Config.getString("MySQL.Database");
+		sqlUsername = Config.getString("MySQL.Username").isEmpty()? "root" : Config.getString("MySQL.Username");
+		usepassword = Config.getString("MySQL.Password").isEmpty()? false : true;
+		QUERY_CONNECTION = "jdbc:mysql://" + sqlHost + ":" + sqlPort + "/" + sqlDatabase + "?user=" + sqlUsername;
+		if(usepassword){
+			sqlPassword = Config.getString("MySQL.Password");
+			QUERY_CONNECTION = QUERY_CONNECTION + "&password=" + sqlPassword;
+		}
+		QUERY_CREATEDATABASE = "CREATE DATABASE IF NOT EXISTS `" + sqlDatabase + "` "
+				+ "DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;";
+		QUERY_CREATETABLE = "CREATE TABLE IF NOT EXISTS `playerdata` ("
+				+ "`player` varchar(16) NOT NULL, "
+				+ "`whitelisted_by` varchar(16) NOT NULL, "
+				+ "`whitelisted_on` datetime NOT NULL, "
+				+ "`last_login_ip` varchar(16) NOT NULL, "
+				+ "`last_login_date` timestamp(4) NOT NULL DEFAULT CURRENT_TIMESTAMP(4) ON UPDATE_CURRENT_TIMESTAMP(4), "
+				+ "`still_active` int(1) NOT NULL, "
+				+ "`removed_by` varchar(16) NOT NULL, "
+				+ "`removed_on` datetime NOT NULL, "
+				+ "UNIQUE KEY `player` (`player`)"
+				+ ") ENGINE=InnoDB DEFAULT CHARSET=latin1;";
+		QUERY_LOADWHITELIST = "";
+		QUERY_CHECKFORPLAYER = "";
+		QUERY_ADDPLAYER = "INSERT INTO `" + sqlDatabase + "`.`playerdata` ("
+				+ "`player`, "
+				+ "`whitelisted_by`, "
+				+ "`whitelisted_on`, "
+				+ "`last_login_ip`, "
+				+ "`last_login_date`, "
+				+ "`still_active`, "
+				+ "`removed_by`, "
+				+ "`removed_on`) VALUES ("
+				+ "'?', '?', CURRENT_TIME(), '', '', '1', '', '');";
+		QUERY_REMOVEPLAYER = "UPDATE `" + sqlDatabase + "`.`playerdata`"
+				+ "SET `still active` = '0',"
+				+ "`removed_by` = '?',"
+				+ "`removed_on` = CURRENT_TIME( )"
+				+ "WHERE `playerdata`.`?`";
 	}
 }
