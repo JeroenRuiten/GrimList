@@ -4,12 +4,11 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
- * Copyright (C) 2014 FerusGrim
+ * Copyright (C) 2014 Nicholas Badger
  * @author FerusGrim
  */
 
@@ -25,7 +24,7 @@ public final class GrimList extends JavaPlugin {
 		UpdateManager.Start(this);
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(new PlayerManager(this), this);
-		getCommand("whitelist").setExecutor(new Executor(this));
+		getCommand("whitelist").setExecutor(new Executor());
 	}
 	
 	@Override
@@ -51,9 +50,5 @@ public final class GrimList extends JavaPlugin {
 				toLog.log(Level.SEVERE, MSG);
 			}
 		}
-	}
-	
-	public void toExecutor(Player executor, String MSG){
-		executor.sendMessage(pName + MSG);
 	}
 }

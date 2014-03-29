@@ -6,7 +6,7 @@ import org.mcstats.Metrics;
 import org.mcstats.Metrics.Graph;
 
 /**
- * Copyright (C) 2014 FerusGrim
+ * Copyright (C) 2014 Nicholas Badger
  * @author FerusGrim
  */
 

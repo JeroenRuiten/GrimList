@@ -3,7 +3,7 @@ package io.github.ferusgrim.GrimList.Commands;
 import org.bukkit.command.CommandSender;
 
 /**
- * Copyright (C) 2014 FerusGrim
+ * Copyright (C) 2014 Nicholas Badger
  * @author FerusGrim
  */
 

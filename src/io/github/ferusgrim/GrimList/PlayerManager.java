@@ -13,13 +13,12 @@ import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.plugin.PluginDescriptionFile;
 
 /**
- * Copyright (C) 2014 FerusGrim
+ * Copyright (C) 2014 Nicholas Badger
  * @author FerusGrim
  */
 
 public class PlayerManager implements Listener {
 	private GrimList plugin;
-	private ArrayList<String> sqlList = new ArrayList<String>();
 	private ArrayList<String> urlList = new ArrayList<String>();
 	private ArrayList<String> filList = new ArrayList<String>();
 	public ArrayList<ArrayList<String>> allowedPlayers = new ArrayList<ArrayList<String>>();
@@ -33,7 +32,6 @@ public class PlayerManager implements Listener {
 		if(ConfigManager.Config.getBoolean("GrimList.Enabled")){
 			Player player = event.getPlayer();
 			if(event.getResult() == Result.ALLOWED){
-				if(ConfigManager.Config.getBoolean("GrimList.Use.SQL")) allowedPlayers.add(sqlList);
 				if(ConfigManager.Config.getBoolean("GrimList.Use.URL")) allowedPlayers.add(urlList);
 				if(ConfigManager.Config.getBoolean("GrimList.Use.FILE")) allowedPlayers.add(filList);
 				if(!allowedPlayers.contains(player.getName().toLowerCase())){

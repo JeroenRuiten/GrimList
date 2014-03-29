@@ -8,16 +8,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 /**
- * Copyright (C) 2014 FerusGrim
+ * Copyright (C) 2014 Nicholas Badger
  * @author FerusGrim
  */
 
 public class Executor implements CommandExecutor {
-	private GrimList plugin;
-
-	public Executor(GrimList plugin) {
-		this.plugin = plugin;
-	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -54,13 +49,13 @@ public class Executor implements CommandExecutor {
 			}else if(args[0].equals("help")){
 				return Help.Start(sender);
 			}else if(args[0].equals("update")){
-				return Update.Start(player, args);
+				return Update.Start(sender, args);
 			}else{
-				plugin.toExecutor(player, "Unknown Argument!");
+				sender.sendMessage("Unknown Argument!");
 				return false;
 			}
 		}
-		plugin.toExecutor(player, "Insufficient Permissions!");
+		sender.sendMessage("Insufficient Permissions!");
 		return true;
 	}
 }

@@ -1,12 +1,9 @@
 package io.github.ferusgrim.GrimList.Commands;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.bukkit.command.CommandSender;
 
 /**
- * Copyright (C) 2014 FerusGrim
+ * Copyright (C) 2014 Nicholas Badger
  * @author FerusGrim
  */
 
@@ -29,9 +26,7 @@ public class Remove {
 	}
 	
 	public static boolean checkUsernameValidity(String username){
-		Pattern p = Pattern.compile(".*\\W+.*");
-		Matcher m = p.matcher(username);
-		if(username.length() < 3 || username.length() > 16 || m.find()){
+		if(username.length() < 3 || username.length() > 16 || !username.matches("[a-zA-Z0-9_]")){
 			return false;
 		}
 		return true;

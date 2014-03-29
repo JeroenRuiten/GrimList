@@ -5,7 +5,7 @@ import net.gravitydevelopment.updater.Updater;
 import org.bukkit.plugin.PluginDescriptionFile;
 
 /**
- * Copyright (C) 2014 FerusGrim
+ * Copyright (C) 2014 Nicholas Badger
  * @author FerusGrim
  */
 
