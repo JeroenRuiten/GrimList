@@ -21,7 +21,7 @@ public class Add {
 			sender.sendMessage(Plugin + "You forgot to enter a username!");
 			return true;
 		}
-		if(checkUsernameValidity(args[1])){
+		if(!(args[1].length() < 3) && !(args[1].length() > 16) && args[1].matches("[a-zA-Z0-9_]")){
 			if(ConfigManager.useSQL){
 				if(ConfigManager.isPlayerInRecord(args[1])){
 					if(!ConfigManager.isPlayerActive(args[1])){
@@ -55,13 +55,5 @@ public class Add {
 			e.printStackTrace();
 		}
 		ConfigManager.CleanUp(conn, ps);
-	}
-	
-	
-	public static boolean checkUsernameValidity(String username){
-		if(username.length() < 3 || username.length() > 16 || !username.matches("[a-zA-Z0-9_]")){
-			return false;
-		}
-		return true;
 	}
 }

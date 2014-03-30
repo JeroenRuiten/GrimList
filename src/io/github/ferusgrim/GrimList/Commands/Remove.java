@@ -1,5 +1,11 @@
 package io.github.ferusgrim.GrimList.Commands;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import io.github.ferusgrim.GrimList.ConfigManager;
+
 import org.bukkit.command.CommandSender;
 
 /**
@@ -8,27 +14,46 @@ import org.bukkit.command.CommandSender;
  */
 
 public class Remove {
+	private final static String Plugin = "[GrimList] ";
 
 	public static boolean Start(CommandSender sender, String[] args) {
-		boolean usernameIsValid = false;
 		if(args.length < 2){
 			sender.sendMessage("You forgot to enter a username!");
 			return true;
 		}
-		usernameIsValid = checkUsernameValidity(args[1]);
-		if(usernameIsValid){
-			sender.sendMessage(args[1] + " was removed from the whitelist!");
+		if(!(args[1].length() < 3) && !(args[1].length() > 16) && args[1].matches("[a-zA-Z0-9_]")){
+			if(ConfigManager.useSQL){
+				if(ConfigManager.isPlayerInRecord(args[1])){
+					if(ConfigManager.isPlayerActive(args[1])){
+						MakeInactive(args[1]);
+					}else{
+						sender.sendMessage(Plugin + args[1] + " isn't whitelisted!");
+						return true;
+					}
+				}else{
+					ConfigManager.createPlayerRecord(args[1]);
+					MakeInactive(args[1]);
+				}
+			}
+			sender.sendMessage(Plugin + args[1] + " was removed from the whitelist!");
 			return true;
 		}else{
-			sender.sendMessage("Please enter a valid username!");
+			sender.sendMessage(Plugin + "Please enter a valid username!");
 			return true;
 		}
 	}
 	
-	public static boolean checkUsernameValidity(String username){
-		if(username.length() < 3 || username.length() > 16 || !username.matches("[a-zA-Z0-9_]")){
-			return false;
+	public static void MakeInactive(String player){
+		Connection conn = null;
+		PreparedStatement ps = null;
+		try{
+			conn = ConfigManager.sqlConnection();
+			ps = conn.prepareStatement(ConfigManager.QUERY_DISALLOWPLAYER);
+			ps.setString(1, player);
+			ps.executeQuery();
+		}catch(SQLException e){
+			e.printStackTrace();
 		}
-		return true;
+		ConfigManager.CleanUp(conn, ps);
 	}
 }
