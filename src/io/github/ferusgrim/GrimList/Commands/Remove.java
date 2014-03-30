@@ -18,7 +18,7 @@ public class Remove {
 
 	public static boolean Start(CommandSender sender, String[] args) {
 		if(args.length < 2){
-			sender.sendMessage("You forgot to enter a username!");
+			sender.sendMessage(Plugin + "You forgot to enter a username!");
 			return true;
 		}
 		if(!(args[1].length() < 3) && !(args[1].length() > 16) && args[1].matches("[a-zA-Z0-9_]")){
