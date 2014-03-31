@@ -212,42 +212,54 @@ public class ConfigManager {
 				+ "'?', '?', '?', TIMESTAMP('CURRENT_TIMESTAMP(4)'));";
 	}
 	
-	public static boolean isPlayerInRecord(String player){
-		Connection conn = null;
-		PreparedStatement ps = null;
-		try {
-			conn = sqlConnection();
-			ps = conn.prepareStatement(QUERY_CHECKFORPLAYER);
-			ps.setString(1, player);
-			ResultSet rs = ps.executeQuery();
-			if(rs.next()){
-				CleanUp(conn, ps);
-				return true;
-			}
-		}catch(SQLException e){
-			e.printStackTrace();
+	public static boolean isPlayerInRecord(String player, String type){
+		if(type == "file"){
 		}
-		CleanUp(conn, ps);
+		if(type == "mysql"){
+			Connection conn = null;
+			PreparedStatement ps = null;
+			try {
+				conn = sqlConnection();
+				ps = conn.prepareStatement(QUERY_CHECKFORPLAYER);
+				ps.setString(1, player);
+				ResultSet rs = ps.executeQuery();
+				if(rs.next()){
+					CleanUpSQL(conn, ps);
+					return true;
+				}
+			}catch(SQLException e){
+				e.printStackTrace();
+			}
+			CleanUpSQL(conn, ps);
+		}
+		if(type == "url"){
+		}
 		return false;
 	}
 	
-	public static boolean isPlayerActive(String player){
-		Connection conn = null;
-		PreparedStatement ps = null;
-		try{
-			conn = sqlConnection();
-			ps = conn.prepareStatement(QUERY_CHECKFORACTIVE);
-			ps.setString(1, player);
-			ResultSet rs = ps.executeQuery();
-			rs.next();
-			if(rs.getInt("still_active") == 1){
-				CleanUp(conn, ps);
-				return true;
-			}
-		}catch(SQLException e){
-			e.printStackTrace();
+	public static boolean isPlayerActive(String player, String type){
+		if(type == "file"){
 		}
-		CleanUp(conn, ps);
+		if(type == "mysql"){
+			Connection conn = null;
+			PreparedStatement ps = null;
+			try{
+				conn = sqlConnection();
+				ps = conn.prepareStatement(QUERY_CHECKFORACTIVE);
+				ps.setString(1, player);
+				ResultSet rs = ps.executeQuery();
+				rs.next();
+				if(rs.getInt("still_active") == 1){
+					CleanUpSQL(conn, ps);
+					return true;
+				}
+			}catch(SQLException e){
+				e.printStackTrace();
+			}
+			CleanUpSQL(conn, ps);
+		}
+		if(type == "url"){
+		}
 		return false;
 	}
 	
@@ -260,21 +272,27 @@ public class ConfigManager {
 		return null;
 	}
 	
-	public static void createPlayerRecord(String player){
-		Connection conn = null;
-		PreparedStatement ps = null;
-		try{
-			conn = sqlConnection();
-			ps = conn.prepareStatement(QUERY_ADDPLAYERRECORD);
-			ps.setString(1, player);
-			ps.executeQuery();
-		}catch(SQLException e){
-			e.printStackTrace();
+	public static void createPlayerRecord(String player, String type){
+		if(type == "file"){
 		}
-		CleanUp(conn, ps);
+		if(type == "mysql"){
+			Connection conn = null;
+			PreparedStatement ps = null;
+			try{
+				conn = sqlConnection();
+				ps = conn.prepareStatement(QUERY_ADDPLAYERRECORD);
+				ps.setString(1, player);
+				ps.executeQuery();
+			}catch(SQLException e){
+				e.printStackTrace();
+			}
+			CleanUpSQL(conn, ps);
+		}
+		if(type == "url"){
+		}
 	}
 	
-	public static void CleanUp(Connection conn, PreparedStatement ps){
+	public static void CleanUpSQL(Connection conn, PreparedStatement ps){
 		try{
 			if(ps != null) ps.close();
 			if(conn != null) conn.close();
