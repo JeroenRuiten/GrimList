@@ -23,7 +23,7 @@ public class Add {
 		}
 		if(!(args[1].length() < 3) && !(args[1].length() > 16) && args[1].matches("[a-zA-Z0-9_]")){
 			if(ConfigManager.useSQL) addUsingSQL(args[1], sender);
-			if(ConfigManager.useFILE) addUsingFile(args[1], sender);
+			if(ConfigManager.useFile) addUsingFile(args[1], sender);
 			if(ConfigManager.useURL) addUsingURL(args[1], sender);
 			sender.sendMessage(Plugin + args[1] + " was added to the whitelist!");
 			return true;

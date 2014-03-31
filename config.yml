@@ -1,0 +1,21 @@
+GrimList: true
+Features:
+  Whitelist: true
+  MotD: true
+  Updater: true
+  Metrics: true
+Updater:
+  Notify: true
+  Verbose: false
+Sources:
+  File: true
+  MySQL: false
+  URL: false
+MySQL:
+  Host: localhost
+  Port: 3306
+  Database: whitelist
+  Username:
+  Password:
+URL: http://localhost:80/players.txt
+Debug: 3

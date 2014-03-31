@@ -24,7 +24,6 @@ public class ConfigManager {
 	public static final File mDir = new File(mDirString);
 	public static YamlConfiguration Config;
 	public static YamlConfiguration PlayerData;
-	private static File ConfigFile = new File(mDir.getAbsolutePath() + File.separator + "config.yml");
 	private static File PlayerFile = new File(mDir.getAbsolutePath() + File.separator + "playerdata.yml");
 	public static String QUERY_CONNECTION;
 	public static String QUERY_CREATEDATABASE;
@@ -38,40 +37,6 @@ public class ConfigManager {
 	public static String QUERY_ADDPLAYERRECORD;
 	public static String QUERY_DELETEPLAYERRECORD;
 	public static String QUERY_ADDLOG;
-	public static YamlConfiguration loadConfig(boolean inputNewConfiguration) {
-		try {
-			Config = new YamlConfiguration();
-			if(!inputNewConfiguration){
-				Config.load(ConfigFile);
-			}
-			DefaultConfig("GrimList", true);
-			DefaultConfig("Features.Whitelist", true);
-			DefaultConfig("Features.MotD", true);
-			DefaultConfig("Features.Updater", true);
-			DefaultConfig("Features.Metrics", true);
-			DefaultConfig("Updater.Notify", true);
-			DefaultConfig("Updater.Verbose", false);
-			DefaultConfig("Sources.File", true);
-			DefaultConfig("Sources.MySQL", false);
-			DefaultConfig("Sources.URL", false);
-			DefaultConfig("MySQL.Host", "localhost");
-			DefaultConfig("MySQL.Port", 3306);
-			DefaultConfig("MySQL.Database", "whitelist");
-			DefaultConfig("MySQL.Username", "root");
-			DefaultConfig("MySQL.Password", "toor");
-			DefaultConfig("URL", "http://localhost:80/players.txt");
-			DefaultConfig("Debug", 3);
-			Config.save(ConfigFile);
-			return Config;
-		}catch(FileNotFoundException e){
-			e.printStackTrace();
-		}catch(IOException e){
-			e.printStackTrace();
-		}catch(InvalidConfigurationException e){
-			e.printStackTrace();
-		}
-		return null;
-	}
 	
 	private static YamlConfiguration loadPlayerData() {
 		try{
@@ -88,10 +53,6 @@ public class ConfigManager {
 		return null;
 	}
 	
-	private static void DefaultConfig(String Path, Object Value) {
-		Config.set(Path, Config.get(Path, Value));
-	}
-	
 	public static void AddPlayerData(String Path, String Value) {
 		PlayerData.set(Path, Value);
 		try {
@@ -101,19 +62,11 @@ public class ConfigManager {
 		}
 	}
 	
-	public static void Start() {
+	public static void Start(GrimList plugin){
 		if(!mDir.exists()){
 			mDir.mkdir();
 		}
-		ConfigFile = new File(mDir.getAbsolutePath() + File.separator + "config.yml");
-		if(ConfigFile.exists()){
-			Config = loadConfig(false);
-		}else try{
-			ConfigFile.createNewFile();
-			Config = loadConfig(true);
-		}catch(IOException e){
-			e.printStackTrace();
-		}
+		plugin.saveDefaultConfig();
 		PlayerFile = new File(mDir.getAbsolutePath() + File.separator + "playerdata.yml");
 		if(PlayerFile.exists()){
 			PlayerData = loadPlayerData();
@@ -123,57 +76,64 @@ public class ConfigManager {
 		}catch(IOException e){
 			e.printStackTrace();
 		}
-		ConfigureVariables();
+		ConfigureVariables(plugin);
 	}
 	
 	public static boolean glEnabled;
+	
+	public static boolean wlEnabled;
 	public static boolean motdEnabled;
-	public static int dLevel;
-	public static boolean upEnabled;
+	public static boolean updaterEnabled;
+	public static boolean metricsEnabled;
+	
 	public static boolean upNotify;
 	public static boolean upVerbose;
+	
+	public static boolean useFile;
 	public static boolean useSQL;
 	public static boolean useURL;
-	public static boolean useFILE;
-	public static String stringURL;
+	
+	public static String strURL;
 	public static URL wlURL;
-	public static void ConfigureVariables() {
-		glEnabled = Config.getBoolean("GrimList.Enabled");
-		motdEnabled = Config.getBoolean("GrimList.MotD");
-		dLevel = Config.getInt("GrimList.Debug-Level");
-		upEnabled = Config.getBoolean("GrimList.Updater.Enabled");
-		upNotify = Config.getBoolean("GrimList.Updater.Notify");
-		upVerbose = Config.getBoolean("GrimList.Updater.Verbose");
-		useSQL = Config.getBoolean("GrimList.Source.MySQL");
-		useURL = Config.getBoolean("GrimList.Source.URL");
-		useFILE = Config.getBoolean("GrimList.Source.File");
-		if(useURL){
-			stringURL = Config.getString("GrimList.URL");
-			try {
-				wlURL = new URL(stringURL);
-			}catch(MalformedURLException e){
-				GrimList.toLog(1, "Invalid URL");
-				useURL = false;
-			}
-		}
-		if(useSQL) ConfigureSQL();
+	
+	public static int dLevel;
+	
+	public static void ConfigureVariables(GrimList plugin) {
+		glEnabled = plugin.getConfig().getBoolean("GrimList");
+		wlEnabled = plugin.getConfig().getBoolean("Features.Whitelist");
+		motdEnabled = plugin.getConfig().getBoolean("Features.MotD");
+		updaterEnabled = plugin.getConfig().getBoolean("Features.Updater");
+		metricsEnabled = plugin.getConfig().getBoolean("Features.Metrics");
+		upNotify = plugin.getConfig().getBoolean("Updater.Notify");
+		upVerbose = plugin.getConfig().getBoolean("Updater.Verbose");
+		useFile = plugin.getConfig().getBoolean("Sources.File");
+		useSQL = plugin.getConfig().getBoolean("Sources.MySQL");
+		useURL = plugin.getConfig().getBoolean("Sources.URL");
+		dLevel = plugin.getConfig().getInt("Debug");
+		if(useFile) ConfigureFile(plugin);
+		if(useSQL) ConfigureSQL(plugin);
+		if(useURL) ConfigureURL(plugin);
 	}
 	
-	public static void ConfigureSQL() {
+	public static void ConfigureFile(GrimList plugin) {
+		//TODO Put something here. >.>;; <.<;;
+	}
+	
+	public static void ConfigureSQL(GrimList plugin) {
 		boolean usepassword;
 		int sqlPort;
 		String sqlHost = "";
 		String sqlDatabase = "";
 		String sqlUsername = "";
 		String sqlPassword = "";
-		sqlHost = Config.getString("GrimList.MySQL.Host").isEmpty()? "localhost" : Config.getString("MySQL.Host");
-		sqlPort = Config.getInt("MySQL.Port") == 0? 3306 : Config.getInt("MySQL.Port");
-		sqlDatabase = Config.getString("MySQL.Database").isEmpty()? "whitelist" : Config.getString("MySQL.Database");
-		sqlUsername = Config.getString("MySQL.Username").isEmpty()? "root" : Config.getString("MySQL.Username");
-		usepassword = Config.getString("MySQL.Password").isEmpty()? false : true;
+		sqlHost = plugin.getConfig().getString("MySQL.Host").isEmpty()? "localhost" : plugin.getConfig().getString("MySQL.Host");
+		sqlPort = plugin.getConfig().getInt("MySQL.Port") == 0? 3306 : plugin.getConfig().getInt("MySQL.Port");
+		sqlDatabase = plugin.getConfig().getString("MySQL.Database").isEmpty()? "whitelist" : plugin.getConfig().getString("MySQL.Database");
+		sqlUsername = plugin.getConfig().getString("MySQL.Username").isEmpty()? "root" : plugin.getConfig().getString("MySQL.Username");
+		usepassword = plugin.getConfig().getString("MySQL.Password").isEmpty()? false : true;
 		QUERY_CONNECTION = "jdbc:mysql://" + sqlHost + ":" + sqlPort + "/" + sqlDatabase + "?user=" + sqlUsername;
 		if(usepassword){
-			sqlPassword = Config.getString("MySQL.Password");
+			sqlPassword = plugin.getConfig().getString("MySQL.Password");
 			QUERY_CONNECTION = QUERY_CONNECTION + "&password=" + sqlPassword;
 		}
 		QUERY_CREATEDATABASE = "CREATE DATABASE IF NOT EXISTS `" + sqlDatabase + "` "
@@ -210,6 +170,16 @@ public class ConfigManager {
 				+ "`victim`, "
 				+ "`timestamp`) VALUES ("
 				+ "'?', '?', '?', TIMESTAMP('CURRENT_TIMESTAMP(4)'));";
+	}
+	
+	public static void ConfigureURL(GrimList plugin) {
+		strURL = plugin.getConfig().getString("URL");
+		try {
+			wlURL = new URL(strURL);
+		}catch(MalformedURLException e){
+			GrimList.toLog(1, "Invalid URL");
+			useURL = false;
+		}
 	}
 	
 	public static boolean isPlayerInRecord(String player, String type){

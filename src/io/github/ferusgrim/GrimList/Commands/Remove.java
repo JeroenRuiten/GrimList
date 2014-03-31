@@ -23,7 +23,7 @@ public class Remove {
 		}
 		if(!(args[1].length() < 3) && !(args[1].length() > 16) && args[1].matches("[a-zA-Z0-9_]")){
 			if(ConfigManager.useSQL) removeUsingSQL(args[1], sender);
-			if(ConfigManager.useFILE) removeUsingFile(args[1], sender);
+			if(ConfigManager.useFile) removeUsingFile(args[1], sender);
 			if(ConfigManager.useURL) removeUsingURL(args[1], sender);
 			sender.sendMessage(Plugin + args[1] + " was removed from the whitelist!");
 			return true;

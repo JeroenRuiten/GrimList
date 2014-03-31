@@ -19,7 +19,7 @@ public final class GrimList extends JavaPlugin {
 	
 	@Override
 	public void onEnable(){
-		ConfigManager.Start();
+		ConfigManager.Start(this);
 		MetricsManager.Start(this);
 		UpdateManager.Start(this);
 		PluginManager pm = getServer().getPluginManager();
