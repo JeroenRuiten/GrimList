@@ -33,3 +33,4 @@ local.properties
 ###########
 *.jar
 *.bat
+resources/
