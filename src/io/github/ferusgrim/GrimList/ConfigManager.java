@@ -67,15 +67,6 @@ public class ConfigManager {
 			mDir.mkdir();
 		}
 		plugin.saveDefaultConfig();
-		PlayerFile = new File(mDir.getAbsolutePath() + File.separator + "playerdata.yml");
-		if(PlayerFile.exists()){
-			PlayerData = loadPlayerData();
-		}else try{
-			PlayerFile.createNewFile();
-			PlayerData = loadPlayerData();
-		}catch(IOException e){
-			e.printStackTrace();
-		}
 		ConfigureVariables(plugin);
 	}
 	
@@ -116,7 +107,15 @@ public class ConfigManager {
 	}
 	
 	public static void ConfigureFile(GrimList plugin) {
-		//TODO Put something here. >.>;; <.<;;
+		PlayerFile = new File(mDir.getAbsolutePath() + File.separator + "playerdata.yml");
+		if(PlayerFile.exists()){
+			PlayerData = loadPlayerData();
+		}else try{
+			PlayerFile.createNewFile();
+			PlayerData = loadPlayerData();
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 	}
 	
 	public static void ConfigureSQL(GrimList plugin) {
@@ -156,7 +155,7 @@ public class ConfigManager {
 		QUERY_ADDPLAYERRECORD = "INSERT INTO `" + sqlDatabase + "`.`playerdata` ("
 				+ "`player`, `last_login_date`) VALUES ("
 				+ "'?', '0000');";
-		QUERY_DELETEPLAYERRECORD = "DELETE FROM `" + sqlDatabase + "`.`playerdata`` "
+		QUERY_DELETEPLAYERRECORD = "DELETE FROM `" + sqlDatabase + "`.`playerdata` "
 				+ "WHERE `playerdata`.`player` = '?';";
 		QUERY_ALLOWPLAYER = "UPDATE `" + sqlDatabase + "`.`playerdata`"
 				+ "SET `still_active` = '1', "
@@ -182,10 +181,10 @@ public class ConfigManager {
 		}
 	}
 	
-	public static boolean isPlayerInRecord(String player, String type){
-		if(type == "file"){
+	public static boolean isPlayerInRecord(String player){
+		if(useFile){
 		}
-		if(type == "mysql"){
+		if(useSQL){
 			Connection conn = null;
 			PreparedStatement ps = null;
 			try {
@@ -202,15 +201,15 @@ public class ConfigManager {
 			}
 			CleanUpSQL(conn, ps);
 		}
-		if(type == "url"){
+		if(useURL){
 		}
 		return false;
 	}
 	
-	public static boolean isPlayerActive(String player, String type){
-		if(type == "file"){
+	public static boolean isPlayerActive(String player){
+		if(useFile){
 		}
-		if(type == "mysql"){
+		if(useSQL){
 			Connection conn = null;
 			PreparedStatement ps = null;
 			try{
@@ -228,7 +227,7 @@ public class ConfigManager {
 			}
 			CleanUpSQL(conn, ps);
 		}
-		if(type == "url"){
+		if(useURL){
 		}
 		return false;
 	}
@@ -242,10 +241,9 @@ public class ConfigManager {
 		return null;
 	}
 	
-	public static void createPlayerRecord(String player, String type){
-		if(type == "file"){
-		}
-		if(type == "mysql"){
+	public static void createPlayerRecord(String player){
+		if(useFile){}
+		if(useSQL){
 			Connection conn = null;
 			PreparedStatement ps = null;
 			try{
@@ -258,8 +256,7 @@ public class ConfigManager {
 			}
 			CleanUpSQL(conn, ps);
 		}
-		if(type == "url"){
-		}
+		if(useURL){}
 	}
 	
 	public static void CleanUpSQL(Connection conn, PreparedStatement ps){

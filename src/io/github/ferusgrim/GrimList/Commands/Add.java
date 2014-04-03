@@ -37,23 +37,22 @@ public class Add {
 	}
 	
 	public static void addUsingSQL(String player, CommandSender sender){
-		if(ConfigManager.isPlayerInRecord(player, "mysql")){
-			if(!ConfigManager.isPlayerActive(player, "mysql")){
-				MakeActive(player, "mysql");
+		if(ConfigManager.isPlayerInRecord(player)){
+			if(!ConfigManager.isPlayerActive(player)){
+				MakeActive(player);
 				return;
 			}
 		}
-		ConfigManager.createPlayerRecord(player, "mysql");
-		MakeActive(player, "mysql");
+		ConfigManager.createPlayerRecord(player);
+		MakeActive(player);
 	}
 	
 	public static void addUsingURL(String player, CommandSender sender){
 	}
 	
-	public static void MakeActive(String player, String type){
-		if(type == "file"){
-		}
-		if(type == "mysql"){
+	public static void MakeActive(String player){
+		if(ConfigManager.useFile){}
+		if(ConfigManager.useSQL){
 			Connection conn = null;
 			PreparedStatement ps = null;
 			try{
@@ -66,7 +65,6 @@ public class Add {
 			}
 			ConfigManager.CleanUpSQL(conn, ps);
 		}
-		if(type == "url"){
-		}
+		if(ConfigManager.useURL){}
 	}
 }

@@ -1,7 +1,5 @@
 package io.github.ferusgrim.GrimList;
 
-import java.util.ArrayList;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -19,9 +17,6 @@ import org.bukkit.plugin.PluginDescriptionFile;
 
 public class PlayerManager implements Listener {
 	private GrimList plugin;
-	private ArrayList<String> urlList = new ArrayList<String>();
-	private ArrayList<String> filList = new ArrayList<String>();
-	public ArrayList<ArrayList<String>> allowedPlayers = new ArrayList<ArrayList<String>>();
 	
 	public PlayerManager(GrimList plugin) {
 		this.plugin = plugin;
@@ -30,15 +25,28 @@ public class PlayerManager implements Listener {
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerLogin(PlayerLoginEvent event){
 		if(ConfigManager.Config.getBoolean("GrimList.Enabled")){
-			Player player = event.getPlayer();
 			if(event.getResult() == Result.ALLOWED){
-				if(ConfigManager.Config.getBoolean("GrimList.Use.URL")) allowedPlayers.add(urlList);
-				if(ConfigManager.Config.getBoolean("GrimList.Use.FILE")) allowedPlayers.add(filList);
-				if(!allowedPlayers.contains(player.getName().toLowerCase())){
+				Player player = event.getPlayer();
+				if(playerIsWhitelisted(player)){
 					//TODO: Actions for disallowing player who isn't whitelisted.
 				}
 			}
 		}
+	}
+	
+	public boolean playerIsWhitelisted(Player player){
+		boolean PlayerIsInRecord = false;
+		boolean playerIsActive = false;
+		if(ConfigManager.useFile) if(!PlayerIsInRecord) ConfigManager.isPlayerInRecord(player.getName());
+		if(ConfigManager.useSQL) if(!PlayerIsInRecord) ConfigManager.isPlayerInRecord(player.getName());
+		if(ConfigManager.useURL) if(!PlayerIsInRecord) ConfigManager.isPlayerInRecord(player.getName());
+		if(PlayerIsInRecord){
+			if(ConfigManager.useFile) if(!playerIsActive) ConfigManager.isPlayerActive(player.getName());
+			if(ConfigManager.useSQL) if(!playerIsActive) ConfigManager.isPlayerActive(player.getName());
+			if(ConfigManager.useURL) if(!playerIsActive) ConfigManager.isPlayerActive(player.getName());
+		}
+		if(playerIsActive) return true;
+		return false;
 	}
 	
 	@EventHandler(priority = EventPriority.LOW)

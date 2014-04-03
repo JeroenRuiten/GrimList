@@ -22,9 +22,7 @@ public class Remove {
 			return true;
 		}
 		if(!(args[1].length() < 3) && !(args[1].length() > 16) && args[1].matches("[a-zA-Z0-9_]")){
-			if(ConfigManager.useSQL) removeUsingSQL(args[1], sender);
-			if(ConfigManager.useFile) removeUsingFile(args[1], sender);
-			if(ConfigManager.useURL) removeUsingURL(args[1], sender);
+			removePlayer(args[1], sender);
 			sender.sendMessage(Plugin + args[1] + " was removed from the whitelist!");
 			return true;
 		}else{
@@ -33,27 +31,20 @@ public class Remove {
 		}
 	}
 	
-	public static void removeUsingFile(String player, CommandSender sender){
-	}
-	
-	public static void removeUsingSQL(String player, CommandSender sender){
-		if(ConfigManager.isPlayerInRecord(player, "mysql")){
-			if(ConfigManager.isPlayerActive(player, "mysql")){
-				MakeInactive(player, "mysql");
+	public static void removePlayer(String player, CommandSender sender){
+		if(ConfigManager.isPlayerInRecord(player)){
+			if(ConfigManager.isPlayerActive(player)){
+				MakeInactive(player);
 				return;
 			}
 		}
-		ConfigManager.createPlayerRecord(player, "mysql");
-		MakeInactive(player, "mysql");
+		ConfigManager.createPlayerRecord(player);
+		MakeInactive(player);
 	}
 	
-	public static void removeUsingURL(String player, CommandSender sender){
-	}
-	
-	public static void MakeInactive(String player, String type){
-		if(type == "file"){
-		}
-		if(type == "mysql"){
+	public static void MakeInactive(String player){
+		if(ConfigManager.useFile){}
+		if(ConfigManager.useSQL){
 			Connection conn = null;
 			PreparedStatement ps = null;
 			try{
@@ -66,7 +57,6 @@ public class Remove {
 			}
 			ConfigManager.CleanUpSQL(conn, ps);
 		}
-		if(type == "url"){
-		}
+		if(ConfigManager.useURL){}
 	}
 }
