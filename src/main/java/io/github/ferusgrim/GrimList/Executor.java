@@ -45,6 +45,9 @@ public class Executor implements CommandExecutor {
             case "view":
                 ViewPlayer vp = new ViewPlayer(plugin);
                 return vp.run(sender, args[1]);
+            case "getid":
+                GetUUID gid = new GetUUID(plugin);
+                return gid.run(sender, args[1]);
             case "set":
                 SetConfig sc = new SetConfig(plugin);
                 return sc.run(sender, args);

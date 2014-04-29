@@ -12,7 +12,6 @@ import java.util.Date;
 import java.util.List;
 
 import io.github.ferusgrim.GrimList.GrimList;
-import io.github.ferusgrim.GrimList.PlayerData;
 
 public class FileManager {
     private GrimList plugin;
@@ -102,6 +101,14 @@ public class FileManager {
             }
         }
         return "";
+    }
+
+    public void newPlayerRecord(String uuid, String name){
+        registerPaths(uuid);
+        plugin.playerData.get().createSection(path);
+        plugin.playerData.get().set(isWhitelisted, false);
+        plugin.playerData.get().set(lastUsername, name);
+        plugin.playerData.save();
     }
 
     public void toggleIsWhitelisted(String uuid, String name){

@@ -30,9 +30,7 @@ public class ViewPlayer {
                 if(uuid.isEmpty()){
                     runOperation(sender, name);
                 }else{
-                    if(plugin.filem.recordExists(uuid)){
-                        outputText(sender, uuid);
-                    }
+                    outputText(sender, uuid);
                 }
                 break;
         }
@@ -129,6 +127,12 @@ public class ViewPlayer {
                         if(plugin.filem.recordExists(uuid)){
                             outputText(sender, uuid);
                             return;
+                        }else{
+                            if(!plugin.filem.recordExists(uuid) && plugin.getConfig().getBoolean("SaveQueries")){
+                                plugin.filem.newPlayerRecord(uuid, name);
+                                outputText(sender, uuid);
+                                return;
+                            }
                         }
                         if (sender instanceof Player) {
                             sender.sendMessage(plugin.mStart + "Player record not found!");

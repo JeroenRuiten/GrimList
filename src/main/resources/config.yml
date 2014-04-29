@@ -2,6 +2,7 @@ Whitelist: true
 Metrics: true
 Updater: true
 DebugMessages: true
+SaveQueries: true
 Focus: 'file'
 Notify:
   Console: false

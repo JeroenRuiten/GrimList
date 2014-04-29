@@ -83,6 +83,9 @@ public class RemovePlayer {
                 String uuid = response.get(name.toLowerCase()).toString();
                 switch(plugin.focusOn){
                     case "file":
+                        if(!plugin.filem.recordExists(uuid) && plugin.getConfig().getBoolean("SaveQueries")){
+                            plugin.filem.newPlayerRecord(uuid, name);
+                        }
                         if(!plugin.filem.alreadyOnWhitelist(uuid)){
                             if(sender instanceof Player){
                                 sender.sendMessage(plugin.mStart + "'" + name + "' isn't whitelisted!");

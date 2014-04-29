@@ -188,6 +188,43 @@ public class SetConfig {
                             plugin.log("INFO", "Debug messages are already disabled!");
                         }
                         return true;
+                    case "queries":
+                        switch(args[2].toLowerCase()) {
+                            case "true":
+                                if (plugin.getConfig().getBoolean("SaveQueries")) {
+                                    if (sender instanceof Player) {
+                                        sender.sendMessage(plugin.mStart + "Saving queries is already enabled!");
+                                    } else {
+                                        plugin.log("INFO", "Saving queries is already enabled!");
+                                    }
+                                    return true;
+                                }
+                                plugin.getConfig().set("SaveQueries", true);
+                                plugin.saveConfig();
+                                if (sender instanceof Player) {
+                                    sender.sendMessage(plugin.mStart + "Saving queries has been enabled!");
+                                } else {
+                                    plugin.log("INFO", "Saving queries has been enabled!");
+                                }
+                                return true;
+                            case "false":
+                                if (plugin.getConfig().getBoolean("SaveQueries")) {
+                                    plugin.getConfig().set("SaveQueries", false);
+                                    plugin.saveConfig();
+                                    if (sender instanceof Player) {
+                                        sender.sendMessage(plugin.mStart + "Saving queries has been disabled!");
+                                    } else {
+                                        plugin.log("INFO", "Saving queries has been disabled!");
+                                    }
+                                    return true;
+                                }
+                                if (sender instanceof Player) {
+                                    sender.sendMessage(plugin.mStart + "Saving queries is already disabled!");
+                                } else {
+                                    plugin.log("INFO", "Saving queries is already disabled!");
+                                }
+                                return true;
+                        }
                     default:
                         if (sender instanceof Player) {
                             sender.sendMessage(plugin.mStart + "Please select between true or false!");
