@@ -69,9 +69,10 @@ public class ViewPlayer {
             for (String viewPI : viewPIs) {
                 sender.sendMessage("  - " + viewPI);
             }
-            sender.sendMessage("First Login: " + viewIds.get(2));
-            sender.sendMessage("Last Login: " + viewIds.get(3));
+            sender.sendMessage("First Login: " + (viewIds.get(2) == null? "Never" : viewIds.get(2)));
+            sender.sendMessage("Last Login: " + (viewIds.get(3) == null? "Never" : viewIds.get(3)));
             sender.sendMessage("Logged in: " + viewIds.get(4) + " times");
+            sender.sendMessage("*-- " + viewIds.get(0) + " --*");
         }else{
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6*&7-- &6&l" + viewIds.get(0) + " &r&7--&6*"));
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&lUUID: &r&9" + uuid));
@@ -84,9 +85,10 @@ public class ViewPlayer {
             for (String viewPI : viewPIs) {
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "  &a&l- &r&9" + viewPI));
             }
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&lFirst Login: &r&9" + viewIds.get(2)));
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&lLast Login: &r&9" + viewIds.get(3)));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&lFirst Login: &r&9" + (viewIds.get(2) == null? "Never" : viewIds.get(2))));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&lLast Login: &r&9" + (viewIds.get(3) == null? "Never" : viewIds.get(3))));
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&lLogged in: &r&9" + viewIds.get(4) + " times"));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6*&7-- &6&l" + viewIds.get(0) + " &r&7--&6*"));
         }
         viewPUs.clear();
         viewPIs.clear();
