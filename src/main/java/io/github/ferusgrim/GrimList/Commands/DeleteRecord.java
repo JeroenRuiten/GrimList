@@ -42,9 +42,9 @@ public class DeleteRecord {
                         }
                     }else{
                         if(sender instanceof Player){
-                            sender.sendMessage(plugin.mStart + "No record found for '" + name + "'!");
+                            sender.sendMessage(plugin.mStart + "Player record not found!");
                         }else{
-                            plugin.log("INFO", "No record found for '" + name + "'!");
+                            plugin.log("INFO", "Player record not found!");
                         }
                     }
                 }
@@ -54,6 +54,11 @@ public class DeleteRecord {
     }
 
     private void runOperation(CommandSender sender, String name) {
+        if (sender instanceof Player) {
+            sender.sendMessage(plugin.mStart + "Looking up UUID. This can take a moment...");
+        } else {
+            plugin.log("INFO", "Looking up UUID. This can take a moment...");
+        }
         new AsyncThenSyncOperation(plugin, true) {
             private Map<String, UUID> response = null;
 
@@ -91,9 +96,9 @@ public class DeleteRecord {
                             }
                         }else{
                             if(sender instanceof Player){
-                                sender.sendMessage(plugin.mStart + "No record found for '" + name + "'!");
+                                sender.sendMessage(plugin.mStart + "Player record not found!");
                             }else{
-                                plugin.log("INFO", "No record found for '" + name + "'!");
+                                plugin.log("INFO", "Player record not found!");
                             }
                         }
                         break;

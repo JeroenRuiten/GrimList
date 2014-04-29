@@ -95,6 +95,11 @@ public class ViewPlayer {
     }
 
     public void runOperation(CommandSender sender, String name){
+        if (sender instanceof Player) {
+            sender.sendMessage(plugin.mStart + "Looking up UUID. This can take a moment...");
+        } else {
+            plugin.log("INFO", "Looking up UUID. This can take a moment...");
+        }
         new AsyncThenSyncOperation(plugin, true){
             private Map<String, UUID> response = null;
 
