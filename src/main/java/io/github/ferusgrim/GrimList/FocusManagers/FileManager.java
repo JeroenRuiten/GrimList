@@ -93,7 +93,7 @@ public class FileManager {
     }
 
     public String getUUID(String name){
-        if(plugin.playerData.get().getConfigurationSection("Players").getKeys(false) == null){
+        if(plugin.playerData.get().getConfigurationSection("Players") == null){
             return "";
         }
         for(String uuid : plugin.playerData.get().getConfigurationSection("Players").getKeys(false)){

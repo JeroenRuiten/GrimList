@@ -121,6 +121,12 @@ public class ViewPlayer {
                     case "file":
                         if(plugin.filem.recordExists(uuid)){
                             outputText(sender, uuid);
+                            return;
+                        }
+                        if (sender instanceof Player) {
+                            sender.sendMessage(plugin.mStart + "Player record not found!");
+                        }else{
+                            plugin.log("WARNING", "Player record not found!");
                         }
                         break;
                 }
