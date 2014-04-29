@@ -1,21 +1,52 @@
+# Determines whether or not a player is checked against the whitelist, before being allowed to join.
 Whitelist: true
+
+# A nifty tool that allows me to keep tabs on how the plugin is used!
 Metrics: true
+
+# Another utility that will warn a player if an update is available!
+# Note, that this does NOT download anything to your server.
 Updater: true
-DebugMessages: true
+
+# Should I output debugging messages to your console? If you're experiencing issues,
+# you should enable this, and then run the plugin. Submitting a server log with debugging
+# is extremely useful in helping me determine the issue.
+DebugMessages: false
+
+# This is a VERY useful feature which, when enabled, saves the UUID and username of a player
+# who you've queried in the past into your player data. This saves a lot of time, in the future.
 SaveQueries: true
+
+# What should GrimList pay attention to, when writing and looking up information?
+# Options:
+#  - file
+#  - mysql // Still being worked on, to make compatible with the UUID system.
+#  - sqlite // Still being worked on, to make compatible with the UUID system.
+#  - url // Still being worked on, to make compatible with the UUID system.
 Focus: 'file'
+
+# Who should be notified of a player being denied access to the server?
+# Console - outputs a failure to the console.
+# Player - outputs a failure to a superuser.
 Notify:
   Console: false
-  Executor: true
   Player: true
-File:
-  update-interval: 120
+
+# Standard MySQL settings. Note, that the database has to be created.
+# GrimList will populate the rest of the information.
 MySQL:
   host: 'localhost'
   port: 3306
   database: 'grimlist'
   username: 'root'
   password: 'toor'
+
+# Location of the remote file that GrimList will check players against.
+# Setting update-interval to '0', will automatically recheck the remote file
+# everytime a player connects.
+# For VERY small servers : 0
+# For smaller servers : 60
+# For average servers : 120
 Url:
   link: 'http://localhost/playerdata.yml'
   update-interval: 120
