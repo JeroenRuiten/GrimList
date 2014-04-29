@@ -18,7 +18,6 @@ permissions:
     children:
       grimlist.add: true
       grimlist.remove: true
-      grimlist.create: true
       grimlist.delete: true
       grimlist.view: true
       grimlist.getid: true
@@ -31,9 +30,6 @@ permissions:
   grimlist.remove:
     description: Allows you to remove a player from the whitelist.
     default: op
-  grimlist.create:
-    description: Allows you to create a playerdata entry.
-    default: op
   grimlist.delete:
     description: Deletes a playerdata entry.
     default: op
@@ -43,12 +39,15 @@ permissions:
   grimlist.getid:
     description: Allows player to get the UUID of another player.
     default: op
-  grimlist.update:
-    description: Notifies player on login if an update is available.
-    default: op
   grimlist.set:
     description: Allows you to edit configuration while in-game.
     default: op
   grimlist.help:
     description: Allows you to view the help/usage message.
+    default: op
+  grimlist.update:
+    description: Notifies player on login if an update is available.
+    default: op
+  grimlist.notify:
+    description: Notifies player of failed login attempts.
     default: op
