@@ -1,0 +1,20 @@
+Whitelist: true
+Metrics: true
+Updater: true
+DebugMessages: true
+Focus: 'file'
+Notify:
+  Console: false
+  Executor: true
+  Player: true
+File:
+  update-interval: 120
+MySQL:
+  host: 'localhost'
+  port: 3306
+  database: 'grimlist'
+  username: 'root'
+  password: 'toor'
+Url:
+  link: 'http://localhost/playerdata.yml'
+  update-interval: 120

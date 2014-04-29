@@ -1,0 +1,50 @@
+name: GrimList
+version: 3.0
+main: io.github.ferusgrim.GrimList.GrimList
+description: Advanced whitelisting plugin for Bukkit Servers.
+author: FerusGrim
+website: http://ferusgrim.github.io/
+commands:
+  whitelist:
+    description: Main command for this plugin.
+    aliases: [grimlist, wl, gl]
+    usage: |
+      /&lt;whitelist&gt; [arguments] [player/msg]
+      Example: /&lt;whitelist&gt; add/remove Notch - Adds or Removes Notch from the whitelist.
+      Example: /&lt;whitelist&gt; set focus mysql - Changes focus to MySQL.
+permissions:
+  whitelist.*:
+    description: Grants access to all commands.
+    children:
+      whitelist.add: true
+      whitelist.remove: true
+      whitelist.create: true
+      whitelist.delete: true
+      whitelist.view: true
+      whitelist.update: true
+      whitelist.help: true
+      whitelist.set: true
+  whitelist.add:
+    description: Allows you to add a player to the whitelist.
+    default: op
+  whitelist.remove:
+    description: Allows you to remove a player from the whitelist.
+    default: op
+  whitelist.create:
+    description: Allows you to create a playerdata entry.
+    default: op
+  whitelist.delete:
+    description: Deletes a playerdata entry.
+    default: op
+  whitelist.view:
+    description: Allows you to view player information in-game.
+    default: op
+  whitelist.update:
+    description: Notifies player on login if an update is available.
+    default: op
+  whitelist.set:
+    description: Allows you to edit configuration while in-game.
+    default: op
+  whitelist.help:
+    description: Allows you to view the help/usage message.
+    default: op
