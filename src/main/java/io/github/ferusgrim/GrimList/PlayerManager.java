@@ -30,12 +30,22 @@ public class PlayerManager implements Listener {
         String uuid = player.getUniqueId().toString();
         String playerName = player.getName();
         String playerAddress = event.getAddress().getHostAddress();
-        event.setKickMessage(plugin.mStart + "You're not whitelisted!");
+        boolean denyUser = false;
         switch(plugin.focusOn){
         case "file":
             plugin.filem.onLoginRecordUpdater(uuid, playerName, playerAddress);
-            event.setResult(plugin.filem.alreadyOnWhitelist(uuid)? Result.ALLOWED : Result.KICK_WHITELIST);
+            denyUser = plugin.filem.alreadyOnWhitelist(uuid);
             break;
+        }
+        if(denyUser){
+            event.setKickMessage(plugin.mStart + "You're not whitelisted!");
+            event.setResult(Result.KICK_WHITELIST);
+            if(plugin.getConfig().getBoolean("Notify.Console")){
+                plugin.log("INFO", "User was denied access!: " + playerName);
+            }
+            if(plugin.getConfig().getBoolean("Notify.Player")){
+                plugin.getServer().broadcast(plugin.mStart + "User was denied access!: " + playerName, "grimlist.notify");
+            }
         }
     }
 
