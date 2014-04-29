@@ -13,38 +13,42 @@ commands:
       Example: /&lt;whitelist&gt; add/remove Notch - Adds or Removes Notch from the whitelist.
       Example: /&lt;whitelist&gt; set focus mysql - Changes focus to MySQL.
 permissions:
-  whitelist.*:
+  grimlist.*:
     description: Grants access to all commands.
     children:
-      whitelist.add: true
-      whitelist.remove: true
-      whitelist.create: true
-      whitelist.delete: true
-      whitelist.view: true
-      whitelist.update: true
-      whitelist.help: true
-      whitelist.set: true
-  whitelist.add:
+      grimlist.add: true
+      grimlist.remove: true
+      grimlist.create: true
+      grimlist.delete: true
+      grimlist.view: true
+      grimlist.getid: true
+      grimlist.update: true
+      grimlist.help: true
+      grimlist.set: true
+  grimlist.add:
     description: Allows you to add a player to the whitelist.
     default: op
-  whitelist.remove:
+  grimlist.remove:
     description: Allows you to remove a player from the whitelist.
     default: op
-  whitelist.create:
+  grimlist.create:
     description: Allows you to create a playerdata entry.
     default: op
-  whitelist.delete:
+  grimlist.delete:
     description: Deletes a playerdata entry.
     default: op
-  whitelist.view:
+  grimlist.view:
     description: Allows you to view player information in-game.
     default: op
-  whitelist.update:
+  grimlist.getid:
+    description: Allows player to get the UUID of another player.
+    default: op
+  grimlist.update:
     description: Notifies player on login if an update is available.
     default: op
-  whitelist.set:
+  grimlist.set:
     description: Allows you to edit configuration while in-game.
     default: op
-  whitelist.help:
+  grimlist.help:
     description: Allows you to view the help/usage message.
     default: op
