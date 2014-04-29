@@ -7,13 +7,10 @@
 package io.github.ferusgrim.GrimList;
 
 import io.github.ferusgrim.GrimList.FocusManagers.FileManager;
-import io.github.ferusgrim.GrimList.FocusManagers.MySQLManager;
 
 import java.io.File;
 import java.util.logging.Level;
 
-import io.github.ferusgrim.GrimList.FocusManagers.SQLiteManager;
-import io.github.ferusgrim.GrimList.FocusManagers.URLManager;
 import net.gravitydevelopment.updater.Updater;
 
 import org.bukkit.ChatColor;
@@ -26,12 +23,9 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 
 public class GrimList extends JavaPlugin {
-    private PlayerData playerData;
+    public PlayerData playerData;
     public boolean isUpdateAvailable;
     public FileManager filem;
-    public MySQLManager mysqlm;
-    public SQLiteManager sqlitem;
-    public URLManager urlm;
     public String mStart = ChatColor.translateAlternateColorCodes('&', "&a&l[GrimList]&r&e ");
     public String version = "";
     public String link = "";
@@ -49,6 +43,7 @@ public class GrimList extends JavaPlugin {
         switch(focusOn){
             case "file":
                 filem = new FileManager(this);
+                playerData = new PlayerData(this);
                 break;
             case "mysql":
                 log("SEVERE", "GrimList is released, right now, to prepare users for the UUID changes. Right now, \"file\" is the only supported whitelist format.");
@@ -90,10 +85,13 @@ public class GrimList extends JavaPlugin {
             link = updater.getLatestFileLink();
         }
         if(focusOn.equals("file")){
-            playerData = new PlayerData(this);
             if(!new File(getDataFolder(), "playerdata.yml").exists()){
                 playerData.saveDefault();
             }
+        }
+        if(getConfig().getBoolean("Metrics")){
+            MetricManager mm = new MetricManager(this);
+            mm.setupMetric();
         }
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new PlayerManager(this), this);

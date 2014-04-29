@@ -6,8 +6,6 @@
 
 package io.github.ferusgrim.GrimList;
 
-import io.github.ferusgrim.GrimList.FocusManagers.FileManager;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -25,7 +23,7 @@ public class PlayerManager implements Listener {
     
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerLogin(PlayerLoginEvent event){
-        if(!plugin.whitelistOn){
+        if(!plugin.getConfig().getBoolean("Whitelist")){
             return;
         }
         Player player = event.getPlayer();

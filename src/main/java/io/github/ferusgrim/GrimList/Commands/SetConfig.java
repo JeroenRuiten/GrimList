@@ -8,7 +8,6 @@ package io.github.ferusgrim.GrimList.Commands;
 
 import io.github.ferusgrim.GrimList.GrimList;
 
-import org.apache.commons.lang.WordUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

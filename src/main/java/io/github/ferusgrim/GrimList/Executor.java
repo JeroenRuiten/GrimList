@@ -9,15 +9,10 @@ package io.github.ferusgrim.GrimList;
 import io.github.ferusgrim.GrimList.Commands.*;
 import io.github.ferusgrim.GrimList.Commands.DeleteRecord;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class Executor implements CommandExecutor {
     private GrimList plugin;
@@ -36,7 +31,7 @@ public class Executor implements CommandExecutor {
         }
         switch(function){
             case "help":
-                Helper hlp = new Helper(plugin);
+                Helper hlp = new Helper();
                 return hlp.run(sender, args);
             case "add":
                 AddPlayer ap = new AddPlayer(plugin);

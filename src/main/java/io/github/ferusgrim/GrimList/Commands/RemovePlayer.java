@@ -8,7 +8,6 @@ package io.github.ferusgrim.GrimList.Commands;
 
 import io.github.ferusgrim.GrimList.utils.UUIDFetcher;
 import io.github.ferusgrim.GrimList.utils.AsyncThenSyncOperation;
-import io.github.ferusgrim.GrimList.FocusManagers.FileManager;
 import org.bukkit.command.CommandSender;
 
 import io.github.ferusgrim.GrimList.GrimList;

@@ -13,12 +13,9 @@ import java.util.List;
 
 import io.github.ferusgrim.GrimList.GrimList;
 import io.github.ferusgrim.GrimList.PlayerData;
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
 
 public class FileManager {
     private GrimList plugin;
-    private PlayerData pd;
     
     private String path;
     private String isWhitelisted;
@@ -32,7 +29,6 @@ public class FileManager {
     
     public FileManager(GrimList plugin) {
         this.plugin = plugin;
-        pd = new PlayerData(plugin);
     }
     
     private void registerPaths(String uuid){
@@ -49,43 +45,37 @@ public class FileManager {
 
     public boolean alreadyOnWhitelist(String uuid){
         registerPaths(uuid);
-        if(!pd.get().isSet(path)){
-            return false;
-        }
-        if(!pd.get().getBoolean(isWhitelisted)){
-            return false;
-        }
-        return true;
+        return plugin.playerData.get().isSet(path) && plugin.playerData.get().getBoolean(isWhitelisted);
     }
 
     public boolean recordExists(String uuid){
         registerPaths(uuid);
-        return pd.get().isSet(path);
+        return plugin.playerData.get().isSet(path);
     }
 
     public void deleteRecord(String uuid){
         registerPaths(uuid);
-        pd.get().set(path, null);
-        pd.save();
+        plugin.playerData.get().set(path, null);
+        plugin.playerData.save();
     }
 
     public List<String> setupViewPlayers(String uuid){
         registerPaths(uuid);
         List<String> setupView = new ArrayList<String>();
-        setupView.add(pd.get().getString(lastUsername));
-        setupView.add(pd.get().getBoolean(isWhitelisted)? "Yes" : "No");
-        setupView.add(pd.get().getString(firstLogin));
-        setupView.add(pd.get().getString(lastLogin));
-        setupView.add(String.valueOf(pd.get().getInt(loginCount)));
+        setupView.add(plugin.playerData.get().getString(lastUsername));
+        setupView.add(plugin.playerData.get().getBoolean(isWhitelisted)? "Yes" : "No");
+        setupView.add(plugin.playerData.get().getString(firstLogin));
+        setupView.add(plugin.playerData.get().getString(lastLogin));
+        setupView.add(String.valueOf(plugin.playerData.get().getInt(loginCount)));
         return setupView;
     }
 
     public List<String> setupPreviousUsernames(String uuid){
         registerPaths(uuid);
         List<String> usernames = new ArrayList<String>();
-        List<String> tmpStr = new ArrayList<String>(pd.get().getStringList(previousUsernames));
-        for(int i = 0; i < tmpStr.size(); i++){
-            usernames.add(tmpStr.get(i));
+        List<String> tmpStr = new ArrayList<String>(plugin.playerData.get().getStringList(previousUsernames));
+        for (String aTmpStr : tmpStr) {
+            usernames.add(aTmpStr);
         }
         tmpStr.clear();
         return usernames;
@@ -94,17 +84,20 @@ public class FileManager {
     public List<String> setupPreviousAddresses(String uuid){
         registerPaths(uuid);
         List<String> addresses = new ArrayList<String>();
-        List<String> tmpStr = new ArrayList<String>(pd.get().getStringList(previousAddresses));
-        for(int i = 0; i < tmpStr.size(); i++){
-            addresses.add(tmpStr.get(i));
+        List<String> tmpStr = new ArrayList<String>(plugin.playerData.get().getStringList(previousAddresses));
+        for (String aTmpStr : tmpStr) {
+            addresses.add(aTmpStr);
         }
         tmpStr.clear();
         return addresses;
     }
 
     public String getUUID(String name){
-        for(String uuid : pd.get().getConfigurationSection("Players").getKeys(false)){
-            if(pd.get().getString("Players." + uuid + ".lastUsername").equalsIgnoreCase(name)){
+        if(plugin.playerData.get().getConfigurationSection("Players").getKeys(false) == null){
+            return "";
+        }
+        for(String uuid : plugin.playerData.get().getConfigurationSection("Players").getKeys(false)){
+            if(plugin.playerData.get().getString("Players." + uuid + ".lastUsername").equalsIgnoreCase(name)){
                 return uuid;
             }
         }
@@ -114,42 +107,42 @@ public class FileManager {
     public void toggleIsWhitelisted(String uuid, String name){
         registerPaths(uuid);
         if(alreadyOnWhitelist(uuid)){
-            pd.get().set(isWhitelisted, false);
+            plugin.playerData.get().set(isWhitelisted, false);
         }else{
-            pd.get().set(isWhitelisted, true);
+            plugin.playerData.get().set(isWhitelisted, true);
         }
-        pd.get().set(lastUsername, name);
-        pd.save();
+        plugin.playerData.get().set(lastUsername, name);
+        plugin.playerData.save();
     }
 
     public void onLoginRecordUpdater(String uuid, String playerName, String playerAddress) {
         registerPaths(uuid);
-        if(!pd.get().isConfigurationSection(path)){
-            pd.get().createSection(path);
+        if(!plugin.playerData.get().isConfigurationSection(path)){
+            plugin.playerData.get().createSection(path);
         }
-        if(!pd.get().isSet(isWhitelisted)){
-            pd.get().set(isWhitelisted, false);
+        if(!plugin.playerData.get().isSet(isWhitelisted)){
+            plugin.playerData.get().set(isWhitelisted, false);
         }
-        pd.get().set(lastUsername, playerName);
-        List<String> tmpUn = new ArrayList<String>(pd.get().getStringList(previousUsernames));
+        plugin.playerData.get().set(lastUsername, playerName);
+        List<String> tmpUn = new ArrayList<String>(plugin.playerData.get().getStringList(previousUsernames));
         if(!tmpUn.contains(playerName)){
             tmpUn.add(playerName);
-            pd.get().set(previousUsernames, tmpUn);
+            plugin.playerData.get().set(previousUsernames, tmpUn);
         }
-        pd.get().set(lastAddress, playerAddress);
-        List<String> tmpAd = new ArrayList<String>(pd.get().getStringList(previousAddresses));
+        plugin.playerData.get().set(lastAddress, playerAddress);
+        List<String> tmpAd = new ArrayList<String>(plugin.playerData.get().getStringList(previousAddresses));
         if(!tmpAd.contains(playerAddress)){
             tmpAd.add(playerAddress);
-            pd.get().set(previousAddresses, tmpAd);
+            plugin.playerData.get().set(previousAddresses, tmpAd);
         }
         SimpleDateFormat fDate = new SimpleDateFormat("MM.dd.yyyy-HH:mm:ss");
         Date rDate = new Date();
         String sDate = fDate.format(rDate);
-        if(!pd.get().isSet(firstLogin)){
-            pd.get().set(firstLogin, sDate);
+        if(!plugin.playerData.get().isSet(firstLogin)){
+            plugin.playerData.get().set(firstLogin, sDate);
         }
-        pd.get().set(lastLogin, sDate);
-        pd.get().set(loginCount, pd.get().getInt(loginCount) + 1);
-        pd.save();
+        plugin.playerData.get().set(lastLogin, sDate);
+        plugin.playerData.get().set(loginCount, plugin.playerData.get().getInt(loginCount) + 1);
+        plugin.playerData.save();
     }
 }

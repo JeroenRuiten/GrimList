@@ -6,17 +6,11 @@
 
 package io.github.ferusgrim.GrimList.Commands;
 
-import io.github.ferusgrim.GrimList.GrimList;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class Helper {
-    private GrimList plugin;
-
-    public Helper(GrimList plugin){
-        this.plugin = plugin;
-    }
 
     public boolean run(CommandSender sender, String[] args) {
         if(sender instanceof Player){

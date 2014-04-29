@@ -12,7 +12,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import io.github.ferusgrim.GrimList.GrimList;
-import io.github.ferusgrim.GrimList.FocusManagers.FileManager;
 
 import java.util.Arrays;
 import java.util.Map;

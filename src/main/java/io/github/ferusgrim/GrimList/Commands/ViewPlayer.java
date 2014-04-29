@@ -51,7 +51,7 @@ public class ViewPlayer {
                 break;
         }
         if(viewIds == null || viewIds.size() < 5 || viewPUs == null || viewPIs == null){
-            plugin.log("SEVERE", "ViewPlayer arrays returned unexpectedly.");
+            plugin.log("SEVERE", "ViewPlayer arrays returned null unexpectedly.");
             if(sender instanceof Player){
                 sender.sendMessage(plugin.mStart + "Command returned error. Check logs!");
             }
@@ -62,12 +62,12 @@ public class ViewPlayer {
             sender.sendMessage("UUID: " + uuid);
             sender.sendMessage("Whitelisted: " + viewIds.get(1));
             sender.sendMessage("Previous Usernames:");
-            for(int i = 0; i < viewPUs.size(); i++){
-                sender.sendMessage("  - " + viewPUs.get(i));
+            for (String viewPU : viewPUs) {
+                sender.sendMessage("  - " + viewPU);
             }
             sender.sendMessage("Previous Addresses:");
-            for(int i = 0; i < viewPIs.size(); i++){
-                sender.sendMessage("  - " + viewPIs.get(i));
+            for (String viewPI : viewPIs) {
+                sender.sendMessage("  - " + viewPI);
             }
             sender.sendMessage("First Login: " + viewIds.get(2));
             sender.sendMessage("Last Login: " + viewIds.get(3));
@@ -77,12 +77,12 @@ public class ViewPlayer {
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&lUUID: &r&9" + uuid));
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&lWhitelisted: &r&9" + viewIds.get(1)));
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&lPrevious Usernames:"));
-            for(int i = 0; i < viewPUs.size(); i++){
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "  &a&l- &r&9" + viewPUs.get(i)));
+            for (String viewPU : viewPUs) {
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "  &a&l- &r&9" + viewPU));
             }
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&lPrevious Addresses:"));
-            for(int i = 0; i < viewPIs.size(); i++){
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "  &a&l- &r&9" + viewPIs.get(i)));
+            for (String viewPI : viewPIs) {
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "  &a&l- &r&9" + viewPI));
             }
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&lFirst Login: &r&9" + viewIds.get(2)));
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&lLast Login: &r&9" + viewIds.get(3)));
