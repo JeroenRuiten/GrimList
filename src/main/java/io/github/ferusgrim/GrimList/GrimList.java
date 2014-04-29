@@ -32,19 +32,17 @@ public class GrimList extends JavaPlugin {
     public MySQLManager mysqlm;
     public SQLiteManager sqlitem;
     public URLManager urlm;
-    public String mStart = ChatColor.GREEN + "" + ChatColor.BOLD + "[GrimList] " + ChatColor.RESET + ChatColor.YELLOW + "";
+    public String mStart = ChatColor.translateAlternateColorCodes('&', "&a&l[GrimList]&r&e ");
     public String version = "";
     public String link = "";
     public String focusOn;
-    public boolean whitelistOn;
     
     @Override
     public void onEnable(){
         if(!new File(getDataFolder(), "config.yml").exists()){
             saveDefaultConfig();
         }
-        whitelistOn = getConfig().getBoolean("Whitelist");
-        if(!whitelistOn){
+        if(!getConfig().getBoolean("Whitelist")){
             log("WARNING", "The whitelist has been disabled! Why do you even want me? :(");
         }
         focusOn = getConfig().getString("Focus");
