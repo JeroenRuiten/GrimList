@@ -2,6 +2,7 @@
 # GrimList will do it's best to keep this storage file as accurate as possible.
 # Any changes made to this file has the potential to break any part of GrimList
 # which relies on the consistency offered by this file. Please be aware.
+# To better understand this file, view the BukkitDev playerdata page:
+# http://dev.bukkit.org/bukkit-plugins/grimlist/pages/player-data/
 
 Players:
-
