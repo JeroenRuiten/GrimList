@@ -23,6 +23,7 @@ In short, GrimList is the premier whitelisting plugin. I challenge you to find a
 
 ### About the YMLs:
 [config.yml](https://github.com/FerusGrim/GrimList/wiki/Configuration "Configuration Wiki") - _The config.yml is intended to be streamlined for use!_
+
 [playerdata.yml](https://github.com/FerusGrim/GrimList/wiki/PlayerData "PlayerData Wiki") - _Be careful if you want to edit this! I've warned you!_
 
 ### Commands and Permissions:
