@@ -79,12 +79,6 @@ public class FileManager {
         return "";
     }
 
-    public void deleteRecord(String uuid) {
-        registerPaths(uuid);
-        get().set(path, null);
-        save();
-    }
-
     public void recordAfterIdLookup(String uuid, String name) {
         registerPaths(uuid);
         get().createSection(path);
@@ -104,6 +98,12 @@ public class FileManager {
         registerPaths(uuid);
         get().set(isWhitelisted, false);
         get().set(lastUsername, name);
+        save();
+    }
+
+    public void deleteRecord(String uuid) {
+        registerPaths(uuid);
+        get().set(path, null);
         save();
     }
 

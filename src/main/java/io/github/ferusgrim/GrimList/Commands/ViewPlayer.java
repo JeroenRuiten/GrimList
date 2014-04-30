@@ -23,23 +23,27 @@ public class ViewPlayer {
     }
 
     public boolean run(CommandSender sender, String name) {
-        switch (plugin.focusOn) {
-            case "file":
-                if (plugin.filem.isPlayersPopulated()) {
-                    String uuid = plugin.filem.getUUID(name);
-                    if (uuid.isEmpty()) {
-                        runOperation(sender, name);
+        if (plugin.getConfig().getBoolean("AlwaysLookup")) {
+            runOperation(sender, name);
+        } else {
+            switch (plugin.focusOn) {
+                case "file":
+                    if (plugin.filem.isPlayersPopulated()) {
+                        String uuid = plugin.filem.getUUID(name);
+                        if (uuid.isEmpty()) {
+                            runOperation(sender, name);
+                        } else {
+                            plugin.filem.ViewPlayer(sender, uuid);
+                        }
                     } else {
-                        plugin.filem.ViewPlayer(sender, uuid);
+                        if (plugin.getConfig().getBoolean("SaveQueries")) {
+                            runOperation(sender, name);
+                        } else {
+                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player record doesn't exist!");
+                        }
                     }
-                } else {
-                    if (plugin.getConfig().getBoolean("SaveQueries")) {
-                        runOperation(sender, name);
-                    } else {
-                        sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player record doesn't exist!");
-                    }
-                }
-                break;
+                    break;
+            }
         }
         return true;
     }
@@ -63,7 +67,7 @@ public class ViewPlayer {
             @Override
             protected void execSyncThen() {
                 if (response.get(name.toLowerCase()) == null) {
-                    sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "UUID Query returned null! Invalid username?");
+                    sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "UUID Query returned null! No user by this name?");
                     return;
                 }
                 String uuid = response.get(name.toLowerCase()).toString();

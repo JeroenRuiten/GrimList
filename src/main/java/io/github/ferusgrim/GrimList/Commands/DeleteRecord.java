@@ -24,24 +24,28 @@ public class DeleteRecord {
     }
 
     public boolean run(CommandSender sender, String name) {
-        switch (plugin.focusOn) {
-            case "file":
-                if (plugin.filem.isPlayersPopulated()) {
-                    String uuid = plugin.filem.getUUID(name);
-                    if (uuid.isEmpty()) {
-                        runOperation(sender, name);
-                    } else {
-                        plugin.filem.deleteRecord(uuid);
-                        if (plugin.getConfig().getBoolean("KickRemove") && plugin.getServer().getPlayerExact(name) != null) {
-                            plugin.getServer().getPlayerExact(name).kickPlayer(plugin.mStart + "You were removed from the whitelist!");
+        if (plugin.getConfig().getBoolean("AlwaysLookup")) {
+            runOperation(sender, name);
+        } else {
+            switch (plugin.focusOn) {
+                case "file":
+                    if (plugin.filem.isPlayersPopulated()) {
+                        String uuid = plugin.filem.getUUID(name);
+                        if (uuid.isEmpty()) {
+                            runOperation(sender, name);
+                        } else {
+                            plugin.filem.deleteRecord(uuid);
+                            if (plugin.getConfig().getBoolean("KickRemove") && plugin.getServer().getPlayerExact(name) != null) {
+                                plugin.getServer().getPlayerExact(name).kickPlayer(plugin.mStart + "You were removed from the whitelist!");
+                            }
+                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player record was deleted!");
+                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "UUID: (" + uuid + ")");
                         }
-                        sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player record was deleted!");
-                        sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "UUID: (" + uuid + ")");
+                    } else {
+                        sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player record doesn't exist!");
                     }
-                } else {
-                    sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player record doesn't exist!");
-                }
-                break;
+                    break;
+            }
         }
         return true;
     }
@@ -65,7 +69,7 @@ public class DeleteRecord {
             @Override
             protected void execSyncThen() {
                 if (response.get(name.toLowerCase()) == null) {
-                    sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "UUID Query returned null! Invalid username?");
+                    sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "UUID Query returned null! No user by this name?");
                     return;
                 }
                 String uuid = response.get(name.toLowerCase()).toString();

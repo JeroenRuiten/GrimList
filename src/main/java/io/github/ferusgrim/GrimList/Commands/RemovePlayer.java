@@ -24,31 +24,35 @@ public class RemovePlayer {
     }
 
     public boolean run(CommandSender sender, String name) {
-        switch (plugin.focusOn) {
-            case "file":
-                if (plugin.filem.isPlayersPopulated()) {
-                    String uuid = plugin.filem.getUUID(name);
-                    if (uuid.isEmpty()) {
-                        runOperation(sender, name);
-                    } else {
-                        if (plugin.filem.isPlayerWhitelisted(uuid)) {
-                            plugin.filem.removePlayerFromWhitelist(uuid, name);
-                            if (plugin.getConfig().getBoolean("KickRemove") && plugin.getServer().getPlayerExact(name) != null) {
-                                plugin.getServer().getPlayerExact(name).kickPlayer(plugin.mStart + "You were removed from the whitelist!");
+        if (plugin.getConfig().getBoolean("AlwaysLookup")) {
+            runOperation(sender, name);
+        } else {
+            switch (plugin.focusOn) {
+                case "file":
+                    if (plugin.filem.isPlayersPopulated()) {
+                        String uuid = plugin.filem.getUUID(name);
+                        if (uuid.isEmpty()) {
+                            runOperation(sender, name);
+                        } else {
+                            if (plugin.filem.isPlayerWhitelisted(uuid)) {
+                                plugin.filem.removePlayerFromWhitelist(uuid, name);
+                                if (plugin.getConfig().getBoolean("KickRemove") && plugin.getServer().getPlayerExact(name) != null) {
+                                    plugin.getServer().getPlayerExact(name).kickPlayer(plugin.mStart + "You were removed from the whitelist!");
+                                }
+                                sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player has been removed from the whitelist!");
+                            } else {
+                                sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player isn't whitelisted!");
                             }
-                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player has been removed from the whitelist!");
+                        }
+                    } else {
+                        if (plugin.getConfig().getBoolean("SaveQueries")) {
+                            runOperation(sender, name);
                         } else {
                             sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player isn't whitelisted!");
                         }
                     }
-                } else {
-                    if (plugin.getConfig().getBoolean("SaveQueries")) {
-                        runOperation(sender, name);
-                    } else {
-                        sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player isn't whitelisted!");
-                    }
-                }
-                break;
+                    break;
+            }
         }
         return true;
     }
@@ -72,7 +76,7 @@ public class RemovePlayer {
             @Override
             protected void execSyncThen() {
                 if (response.get(name.toLowerCase()) == null) {
-                    sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "UUID Query returned null! Invalid username?");
+                    sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "UUID Query returned null! No user by this name?");
                     return;
                 }
                 String uuid = response.get(name.toLowerCase()).toString();

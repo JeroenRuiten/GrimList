@@ -24,24 +24,28 @@ public class AddPlayer {
     }
 
     public boolean run(CommandSender sender, String name) {
-        switch (plugin.focusOn) {
-            case "file":
-                if (plugin.filem.isPlayersPopulated()) {
-                    String uuid = plugin.filem.getUUID(name);
-                    if (uuid.isEmpty()) {
-                        runOperation(sender, name);
-                    } else {
-                        if (plugin.filem.isPlayerWhitelisted(uuid)) {
-                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "'" + name + "' is already whitelisted!");
+        if (plugin.getConfig().getBoolean("AlwaysLookup")) {
+            runOperation(sender, name);
+        } else {
+            switch (plugin.focusOn) {
+                case "file":
+                    if (plugin.filem.isPlayersPopulated()) {
+                        String uuid = plugin.filem.getUUID(name);
+                        if (uuid.isEmpty()) {
+                            runOperation(sender, name);
                         } else {
-                            plugin.filem.addPlayerToWhitelist(uuid, name);
-                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "'" + name + "' was whitelisted!");
+                            if (plugin.filem.isPlayerWhitelisted(uuid)) {
+                                sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "'" + name + "' is already whitelisted!");
+                            } else {
+                                plugin.filem.addPlayerToWhitelist(uuid, name);
+                                sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "'" + name + "' was whitelisted!");
+                            }
                         }
+                    } else {
+                        runOperation(sender, name);
                     }
-                } else {
-                    runOperation(sender, name);
-                }
-                break;
+                    break;
+            }
         }
         return true;
     }
@@ -65,7 +69,7 @@ public class AddPlayer {
             @Override
             protected void execSyncThen() {
                 if (response.get(name.toLowerCase()) == null) {
-                    sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "UUID Query returned null! Invalid username?");
+                    sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "UUID Query returned null! No user by this name?");
                     return;
                 }
                 String uuid = response.get(name.toLowerCase()).toString();

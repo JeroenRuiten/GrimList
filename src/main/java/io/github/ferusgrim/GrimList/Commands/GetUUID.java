@@ -24,20 +24,24 @@ public class GetUUID {
     }
 
     public boolean run(CommandSender sender, String name) {
-        switch (plugin.focusOn) {
-            case "file":
-                if (plugin.filem.isPlayersPopulated()) {
-                    String uuid = plugin.filem.getUUID(name);
-                    if (uuid.isEmpty()) {
-                        runOperation(sender, name);
+        if (plugin.getConfig().getBoolean("AlwaysLookup")) {
+            runOperation(sender, name);
+        } else {
+            switch (plugin.focusOn) {
+                case "file":
+                    if (plugin.filem.isPlayersPopulated()) {
+                        String uuid = plugin.filem.getUUID(name);
+                        if (uuid.isEmpty()) {
+                            runOperation(sender, name);
+                        } else {
+                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "UUID of " + name + ":");
+                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + uuid);
+                        }
                     } else {
-                        sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "UUID of " + name + ":");
-                        sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + uuid);
+                        runOperation(sender, name);
                     }
-                } else {
-                    runOperation(sender, name);
-                }
-                break;
+                    break;
+            }
         }
         return true;
     }
@@ -61,7 +65,7 @@ public class GetUUID {
             @Override
             protected void execSyncThen() {
                 if (response.get(name.toLowerCase()) == null) {
-                    sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "UUID Query returned null! Invalid username?");
+                    sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "UUID Query returned null! No user by this name?");
                     return;
                 }
                 String uuid = response.get(name.toLowerCase()).toString();
