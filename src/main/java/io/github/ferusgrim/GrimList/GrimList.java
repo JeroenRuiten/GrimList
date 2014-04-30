@@ -22,7 +22,6 @@ import java.util.logging.Level;
  */
 
 public class GrimList extends JavaPlugin {
-    public PlayerData playerData;
     public boolean isUpdateAvailable;
     public FileManager filem;
     public String mStart = ChatColor.translateAlternateColorCodes('&', "&a&l[GrimList]&r&e ");
@@ -42,7 +41,6 @@ public class GrimList extends JavaPlugin {
         switch (focusOn) {
             case "file":
                 filem = new FileManager(this);
-                playerData = new PlayerData(this);
                 break;
             case "mysql":
                 log("SEVERE", "GrimList is released, right now, to prepare users for the UUID changes. Right now, \"file\" is the only supported whitelist format.");
@@ -82,11 +80,6 @@ public class GrimList extends JavaPlugin {
             isUpdateAvailable = updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE;
             version = updater.getLatestName();
             link = updater.getLatestFileLink();
-        }
-        if (focusOn.equals("file")) {
-            if (!new File(getDataFolder(), "playerdata.yml").exists()) {
-                playerData.saveDefault();
-            }
         }
         if (getConfig().getBoolean("Metrics")) {
             MetricManager mm = new MetricManager(this);
