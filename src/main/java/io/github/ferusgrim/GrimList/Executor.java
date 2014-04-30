@@ -60,11 +60,12 @@ public class Executor implements CommandExecutor {
     }
 
     private boolean containsError(CommandSender sender, String[] args) {
+        String function = inferAlias(args[0].toLowerCase());
         if (!sender.hasPermission("grimlist." + args[0])) {
             sender.sendMessage(plugin.mStart + "Insufficient privileges!");
             return true;
         }
-        if (args[0].equals("add") || args[0].equals("remove") || args[0].equals("delete") || args[0].equals("view") || args[0].equals("getid")) {
+        if (function.equals("add") || function.equals("remove") || function.equals("delete") || function.equals("view") || function.equals("getid")) {
             if (args.length < 2) {
                 if (sender instanceof Player) {
                     sender.sendMessage(plugin.mStart + "Missing username!");
@@ -82,7 +83,7 @@ public class Executor implements CommandExecutor {
                 return true;
             }
         }
-        if (args[0].equals("set")) {
+        if (function.equals("set")) {
             if (args.length < 3) {
                 if (sender instanceof Player) {
                     sender.sendMessage(plugin.mStart + "Not enough arguments to use this command!");
