@@ -8,6 +8,7 @@ package io.github.ferusgrim.GrimList.Commands;
 
 import io.github.ferusgrim.GrimList.GrimList;
 
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -19,348 +20,101 @@ public class SetConfig {
     }
 
     public boolean run(CommandSender sender, String[] args) {
-        switch(args[1].toLowerCase()){
-            case "whitelist":
-                switch(args[2].toLowerCase()){
-                    case "true":
-                        if (plugin.getConfig().getBoolean("Whitelist")) {
-                            if (sender instanceof Player) {
-                                sender.sendMessage(plugin.mStart + "Whitelist is already enabled!");
-                            } else {
-                                plugin.log("INFO", "Whitelist is already enabled!");
-                            }
-                            return true;
-                        }
-                        plugin.getConfig().set("Whitelist", true);
-                        plugin.saveConfig();
-                        if (sender instanceof Player) {
-                            sender.sendMessage(plugin.mStart + "Whitelist has been enabled!");
-                        } else {
-                            plugin.log("INFO", "Whitelist has been enabled!");
-                        }
-                        return true;
-                    case "false":
-                        if (plugin.getConfig().getBoolean("Whitelist")) {
-                            plugin.getConfig().set("Whitelist", false);
-                            plugin.saveConfig();
-                            if (sender instanceof Player) {
-                                sender.sendMessage(plugin.mStart + "Whitelist has been disabled!");
-                            } else {
-                                plugin.log("INFO", "Whitelist has been disabled!");
-                            }
-                            return true;
-                        }
-                        if (sender instanceof Player) {
-                            sender.sendMessage(plugin.mStart + "Whitelist has already been disabled!");
-                        } else {
-                            plugin.log("INFO", "Whitelist has already been disabled!");
-                        }
-                        return true;
-                    default:
-                        if (sender instanceof Player) {
-                            sender.sendMessage(plugin.mStart + "Please select between true or false!");
-                        } else {
-                            plugin.log("INFO", "Please select between true of false!");
-                        }
-                        return true;
+        String s1 = WordUtils.capitalize(args[1].toLowerCase());
+        String s2 = args[2].toLowerCase();
+        if (s1.equals("Whitelist") || s1.equals("Metrics") || s1.equals("Updater") || s1.equals("Debugmessages") || s1.equals("Savequeries")) {
+            if (s1.equals("Debugmessages")) {
+                s1 = "DebugMessages";
+            }
+            if (s1.equals("Savequeries")) {
+                s1 = "SaveQueries";
+            }
+            if (!s2.equals("true") && !s2.equals("false")) {
+                if (sender instanceof Player) {
+                    sender.sendMessage(plugin.mStart + "Please select between true or false!");
+                } else {
+                    plugin.log("INFO", "Please select between true of false!");
                 }
-            case "metrics":
-                switch(args[2].toLowerCase()){
-                    case "true":
-                        if (plugin.getConfig().getBoolean("Metrics")) {
-                            if (sender instanceof Player) {
-                                sender.sendMessage(plugin.mStart + "Metrics is already enabled!");
-                            } else {
-                                plugin.log("INFO", "Metrics is already enabled!");
-                            }
-                            return true;
-                        }
-                        plugin.getConfig().set("Metrics", true);
-                        plugin.saveConfig();
-                        if (sender instanceof Player) {
-                            sender.sendMessage(plugin.mStart + "Metrics has been enabled!");
-                        } else {
-                            plugin.log("INFO", "Metrics has been enabled!");
-                        }
-                        return true;
-                    case "false":
-                        if (plugin.getConfig().getBoolean("Metrics")) {
-                            plugin.getConfig().set("Metrics", false);
-                            plugin.saveConfig();
-                            if (sender instanceof Player) {
-                                sender.sendMessage(plugin.mStart + "Metrics has been disabled!");
-                            } else {
-                                plugin.log("INFO", "Metrics has been disabled!");
-                            }
-                            return true;
-                        }
-                        if (sender instanceof Player) {
-                            sender.sendMessage(plugin.mStart + "Metrics has already been disabled!");
-                        } else {
-                            plugin.log("INFO", "Metrics has already been disabled!");
-                        }
-                        return true;
-                    default:
-                        if (sender instanceof Player) {
-                            sender.sendMessage(plugin.mStart + "Please select between true or false!");
-                        } else {
-                            plugin.log("INFO", "Please select between true of false!");
-                        }
-                        return true;
+                return true;
+            }
+            if (s2.equals("true")) {
+                if (plugin.getConfig().getBoolean(s1)) {
+                    if (sender instanceof Player) {
+                        sender.sendMessage(plugin.mStart + s1 + " is already enabled!");
+                    } else {
+                        plugin.log("INFO", s1 + " is already enabled!");
+                    }
+                    return true;
                 }
-            case "updater":
-                switch(args[2].toLowerCase()){
-                    case "true":
-                        if (plugin.getConfig().getBoolean("Updater")) {
-                            if (sender instanceof Player) {
-                                sender.sendMessage(plugin.mStart + "Updater is already enabled!");
-                            } else {
-                                plugin.log("INFO", "Updater is already enabled!");
-                            }
-                            return true;
-                        }
-                        plugin.getConfig().set("Updater", true);
-                        plugin.saveConfig();
-                        if (sender instanceof Player) {
-                            sender.sendMessage(plugin.mStart + "Updater has been enabled!");
-                        } else {
-                            plugin.log("INFO", "Updater has been enabled!");
-                        }
-                        return true;
-                    case "false":
-                        if (plugin.getConfig().getBoolean("Updater")) {
-                            plugin.getConfig().set("Updater", false);
-                            plugin.saveConfig();
-                            if (sender instanceof Player) {
-                                sender.sendMessage(plugin.mStart + "Updater has been disabled!");
-                            } else {
-                                plugin.log("INFO", "Updater has been disabled!");
-                            }
-                            return true;
-                        }
-                        if (sender instanceof Player) {
-                            sender.sendMessage(plugin.mStart + "Updater is already disabled!");
-                        } else {
-                            plugin.log("INFO", "Updater is already disabled!");
-                        }
-                        return true;
-                    default:
-                        if (sender instanceof Player){
-                            sender.sendMessage(plugin.mStart + "Please select between true or false!");
-                        }else{
-                            plugin.log("INFO", "Please select between true of false!");
-                        }
-                        return true;
+                plugin.getConfig().set(s1, true);
+                plugin.saveConfig();
+                if (sender instanceof Player) {
+                    sender.sendMessage(plugin.mStart + s1 + " has been enabled!");
+                } else {
+                    plugin.log("INFO", s1 + " has been enabled!");
                 }
-            case "debug":
-                switch(args[2].toLowerCase()){
-                    case "true":
-                        if (plugin.getConfig().getBoolean("DebugMessages")){
-                            if (sender instanceof Player) {
-                                sender.sendMessage(plugin.mStart + "Debug messages are already enabled!");
-                            } else {
-                                plugin.log("INFO", "Debug messages are already enabled!");
-                            }
-                            return true;
-                        }
-                        plugin.getConfig().set("DebugMessages", true);
-                        plugin.saveConfig();
-                        if (sender instanceof Player) {
-                            sender.sendMessage(plugin.mStart + "Debug messages have been enabled!");
-                        } else {
-                            plugin.log("INFO", "Debug messages have been enabled!");
-                        }
-                        return true;
-                    case "false":
-                        if (plugin.getConfig().getBoolean("DebugMessages")) {
-                            plugin.getConfig().set("DebugMessages", false);
-                            plugin.saveConfig();
-                            if (sender instanceof Player) {
-                                sender.sendMessage(plugin.mStart + "Debug messages have been disabled!");
-                            } else {
-                                plugin.log("INFO", "Debug messages have been disabled!");
-                            }
-                            return true;
-                        }
-                        if (sender instanceof Player) {
-                            sender.sendMessage(plugin.mStart + "Debug messages are already disabled!");
-                        } else {
-                            plugin.log("INFO", "Debug messages are already disabled!");
-                        }
-                        return true;
-                    case "queries":
-                        switch(args[2].toLowerCase()) {
-                            case "true":
-                                if (plugin.getConfig().getBoolean("SaveQueries")) {
-                                    if (sender instanceof Player) {
-                                        sender.sendMessage(plugin.mStart + "Saving queries is already enabled!");
-                                    } else {
-                                        plugin.log("INFO", "Saving queries is already enabled!");
-                                    }
-                                    return true;
-                                }
-                                plugin.getConfig().set("SaveQueries", true);
-                                plugin.saveConfig();
-                                if (sender instanceof Player) {
-                                    sender.sendMessage(plugin.mStart + "Saving queries has been enabled!");
-                                } else {
-                                    plugin.log("INFO", "Saving queries has been enabled!");
-                                }
-                                return true;
-                            case "false":
-                                if (plugin.getConfig().getBoolean("SaveQueries")) {
-                                    plugin.getConfig().set("SaveQueries", false);
-                                    plugin.saveConfig();
-                                    if (sender instanceof Player) {
-                                        sender.sendMessage(plugin.mStart + "Saving queries has been disabled!");
-                                    } else {
-                                        plugin.log("INFO", "Saving queries has been disabled!");
-                                    }
-                                    return true;
-                                }
-                                if (sender instanceof Player) {
-                                    sender.sendMessage(plugin.mStart + "Saving queries is already disabled!");
-                                } else {
-                                    plugin.log("INFO", "Saving queries is already disabled!");
-                                }
-                                return true;
-                        }
-                    default:
-                        if (sender instanceof Player) {
-                            sender.sendMessage(plugin.mStart + "Please select between true or false!");
-                        } else {
-                            plugin.log("INFO", "Please select between true of false!");
-                        }
-                        return true;
+                return true;
+            }
+            if (s2.equals("false")) {
+                if (!plugin.getConfig().getBoolean(s1)) {
+                    if (sender instanceof Player) {
+                        sender.sendMessage(plugin.mStart + s1 + " is already disabled!");
+                    } else {
+                        plugin.log("INFO", s1 + " is already disabled!");
+                    }
+                    return true;
                 }
-            case "focus":
-                switch(args[2].toLowerCase()) {
-                    case "file":
-                        if (plugin.getConfig().getString("Focus").equals("file")) {
-                            if (sender instanceof Player) {
-                                sender.sendMessage(plugin.mStart + "Whitelist focus is already set to \"file\"!");
-                            } else {
-                                plugin.log("INFO", "Whitelist focus is already set to \"file\"!");
-                            }
-                            return true;
-                        }
-                        plugin.getConfig().set("Focus", "file");
-                        plugin.saveConfig();
-                        plugin.focusOn = "file";
-                        if (sender instanceof Player) {
-                            sender.sendMessage(plugin.mStart + "Whitelist focus altered to \"file\"!");
-                        } else {
-                            plugin.log("INFO", "Whitelist focus altered to \"file\"!");
-                        }
-                        return true;
-                    case "mysql":
-                        if (sender instanceof Player) {
-                            sender.sendMessage(plugin.mStart + "Currently, GrimList only supports \"file\" as a whitelist focus.");
-                            sender.sendMessage(plugin.mStart + "GrimList v3.0 was released early to address the upcoming UUID necessity.");
-                            sender.sendMessage(plugin.mStart + "I, personally, apologize for any inconvenience. GrimList 3.1 will be released soon, with full functionality.");
-                        } else {
-                            plugin.log("INFO", "Currently, GrimList only supports \"file\" as a whitelist focus.");
-                            plugin.log("INFO", "GrimList v3.0 was released early to address the upcoming UUID necessity.");
-                            plugin.log("INFO", "I, personally, apologize for any inconvenience. GrimList 3.1 will be released soon, with full functionality.");
-                        }
-                        return true;
-                        /*
-                        if (plugin.getConfig().getString("Focus").equals("mysql")) {
-                            if (sender instanceof Player) {
-                                sender.sendMessage(plugin.mStart + "Whitelist focus is already set to \"mysql\"!");
-                            } else {
-                                plugin.log("INFO", "Whitelist focus is already set to \"mysql\"!");
-                            }
-                            return true;
-                        }
-                        plugin.getConfig().set("Focus", "mysql");
-                        plugin.saveConfig();
-                        plugin.focusOn = "mysql";
-                        if (sender instanceof Player) {
-                            sender.sendMessage(plugin.mStart + "Whitelist focus altered to \"mysql\"!");
-                        } else {
-                            plugin.log("INFO", "Whitelist focus altered to \"mysql\"!");
-                        }
-                        return true;
-                        */
-                    case "sqlite":
-                        if (sender instanceof Player) {
-                            sender.sendMessage(plugin.mStart + "Currently, GrimList only supports \"file\" as a whitelist focus.");
-                            sender.sendMessage(plugin.mStart + "GrimList v3.0 was released early to address the upcoming UUID necessity.");
-                            sender.sendMessage(plugin.mStart + "I, personally, apologize for any inconvenience. GrimList 3.1 will be released soon, with full functionality.");
-                        } else {
-                            plugin.log("INFO", "Currently, GrimList only supports \"file\" as a whitelist focus.");
-                            plugin.log("INFO", "GrimList v3.0 was released early to address the upcoming UUID necessity.");
-                            plugin.log("INFO", "I, personally, apologize for any inconvenience. GrimList 3.1 will be released soon, with full functionality.");
-                        }
-                        return true;
-                        /*
-                        if (plugin.getConfig().getString("Focus").equals("sqlite")) {
-                            if (sender instanceof Player) {
-                                sender.sendMessage(plugin.mStart + "Whitelist focus is already set to \"sqlite\"!");
-                            } else {
-                                plugin.log("INFO", "Whitelist focus is already set to \"sqlite\"!");
-                            }
-                            return true;
-                        }
-                        plugin.getConfig().set("Focus", "sqlite");
-                        plugin.saveConfig();
-                        plugin.focusOn = "sqlite";
-                        if (sender instanceof Player) {
-                            sender.sendMessage(plugin.mStart + "Whitelist focus altered to \"sqlite\"!");
-                        } else {
-                            plugin.log("INFO", "Whitelist focus altered to \"sqlite\"!");
-                        }
-                        return true;
-                        */
-                    case "url":
-                        if (sender instanceof Player) {
-                            sender.sendMessage(plugin.mStart + "Currently, GrimList only supports \"file\" as a whitelist focus.");
-                            sender.sendMessage(plugin.mStart + "GrimList v3.0 was released early to address the upcoming UUID necessity.");
-                            sender.sendMessage(plugin.mStart + "I, personally, apologize for any inconvenience. GrimList 3.1 will be released soon, with full functionality.");
-                        } else {
-                            plugin.log("INFO", "Currently, GrimList only supports \"file\" as a whitelist focus.");
-                            plugin.log("INFO", "GrimList v3.0 was released early to address the upcoming UUID necessity.");
-                            plugin.log("INFO", "I, personally, apologize for any inconvenience. GrimList 3.1 will be released soon, with full functionality.");
-                        }
-                        return true;
-                        /*
-                        if (plugin.getConfig().getString("Focus").equals("url")) {
-                            if (sender instanceof Player) {
-                                sender.sendMessage(plugin.mStart + "Whitelist focus is already set to \"url\"!");
-                            } else {
-                                plugin.log("INFO", "Whitelist focus is already set to \"url\"!");
-                            }
-                            return true;
-                        }
-                        plugin.getConfig().set("Focus", "url");
-                        plugin.saveConfig();
-                        plugin.focusOn = "url";
-                        if (sender instanceof Player) {
-                            sender.sendMessage(plugin.mStart + "Whitelist focus altered to \"url\"!");
-                        } else {
-                            plugin.log("INFO", "Whitelist focus altered to \"url\"!");
-                        }
-                        return true;
-                        */
-                    default:
-                        if (sender instanceof Player) {
-                            sender.sendMessage(plugin.mStart + "The focus you selected, '" + args[2] + "', isn't a valid focus.");
-                        } else {
-                            plugin.log("INFO", "The focus you selected, '\" + args[2] + \"', isn't a valid focus.");
-                        }
-                        return true;
+                plugin.getConfig().set(s1, false);
+                plugin.saveConfig();
+                if (sender instanceof Player) {
+                    sender.sendMessage(plugin.mStart + s1 + " has been disabled!");
+                } else {
+                    plugin.log("INFO", s1 + " has been disabled!");
                 }
-            default:
-                if(sender instanceof Player){
-                    sender.sendMessage(plugin.mStart + "Currently, only a few settings may be modified from within the game:");
-                    sender.sendMessage(plugin.mStart + "For a current list of these settings, as well as how to change them, please visit the BukkitDev page.");
-                }else{
-                    plugin.log("WARNING", "Currently, only a few settings may be modified from within the game:");
-                    plugin.log("WARNING", "For a current list of these settings, as well as how to change them, please visit the BukkitDev page.");
+                return true;
+            }
+
+        }
+        if (s1.equals("Focus")) {
+            if (!s2.equals("file") && !s2.equals("mysql") && !s2.equals("sqlite") && !s2.equals("url")) {
+                if (sender instanceof Player) {
+                    sender.sendMessage(plugin.mStart + "The focus you selected, \"" + s2 + "\", isn't a valid focus.");
+                } else {
+                    plugin.log("INFO", "The focus you selected, '\"" + s2 + "\"', isn't a valid focus.");
                 }
+                return true;
+            }
+            //TODO - Remove the below if statements as more methods are added.
+            if (s2.equals("mysql") || s2.equals("sqlite") || s2.equals("url")) {
+                if (sender instanceof Player) {
+                    sender.sendMessage(plugin.mStart + "Currently, GrimList only supports \"file\" as a whitelist focus.");
+                    sender.sendMessage(plugin.mStart + "GrimList v3.0 was released early to address the upcoming UUID necessity.");
+                    sender.sendMessage(plugin.mStart + "I, personally, apologize for any inconvenience. GrimList 3.1 will be released soon, with full functionality.");
+                } else {
+                    plugin.log("INFO", "Currently, GrimList only supports \"file\" as a whitelist focus.");
+                    plugin.log("INFO", "GrimList v3.0 was released early to address the upcoming UUID necessity.");
+                    plugin.log("INFO", "I, personally, apologize for any inconvenience. GrimList 3.1 will be released soon, with full functionality.");
+                }
+                return true;
+            }
+            if (plugin.getConfig().getString("Focus").equals(s2)) {
+                if (sender instanceof Player) {
+                    sender.sendMessage(plugin.mStart + "Whitelist focus is already set to \"" + s2 + "\"!");
+                } else {
+                    plugin.log("INFO", "Whitelist focus is already set to \"" + s2 + "\"!");
+                }
+                return true;
+            }
+            plugin.getConfig().set("Focus", s2);
+            plugin.saveConfig();
+            plugin.focusOn = s2;
+            if (sender instanceof Player) {
+                sender.sendMessage(plugin.mStart + "Whitelist focus altered to \"" + s2 + "\"!");
+            } else {
+                plugin.log("INFO", "Whitelist focus altered to \"" + s2 + "\"!");
+            }
+            return true;
         }
         return true;
     }
-
 }
