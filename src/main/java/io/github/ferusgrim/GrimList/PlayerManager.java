@@ -34,7 +34,7 @@ public class PlayerManager implements Listener {
         switch (plugin.focusOn) {
             case "file":
                 plugin.filem.recordOnLogin(uuid, playerName, playerAddress);
-                denyUser = plugin.filem.isPlayerWhitelisted(uuid);
+                denyUser = !plugin.filem.isPlayerWhitelisted(uuid);
                 break;
         }
         if (denyUser) {
