@@ -9,7 +9,7 @@ Updater: true
 DebugMessages: false
 SaveQueries: true
 KickRemove: true
-AlwaysLookup: true
+AlwaysLookup: false
 Focus: 'file'
 Notify:
   Console: false
