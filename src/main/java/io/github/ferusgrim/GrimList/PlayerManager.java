@@ -33,8 +33,8 @@ public class PlayerManager implements Listener {
         boolean denyUser = false;
         switch (plugin.focusOn) {
             case "file":
-                plugin.filem.onLoginRecordUpdater(uuid, playerName, playerAddress);
-                denyUser = plugin.filem.alreadyOnWhitelist(uuid);
+                plugin.filem.recordOnLogin(uuid, playerName, playerAddress);
+                denyUser = plugin.filem.isPlayerWhitelisted(uuid);
                 break;
         }
         if (denyUser) {

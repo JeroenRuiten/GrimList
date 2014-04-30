@@ -26,33 +26,24 @@ public class GetUUID {
     public boolean run(CommandSender sender, String name) {
         switch (plugin.focusOn) {
             case "file":
-                String uuid = plugin.filem.getUUID(name);
-                if (uuid.isEmpty()) {
-                    runOperation(sender, name);
+                if (plugin.filem.isPlayersPopulated()) {
+                    String uuid = plugin.filem.getUUID(name);
+                    if (uuid.isEmpty()) {
+                        runOperation(sender, name);
+                    } else {
+                        sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "UUID of " + name + ":");
+                        sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + uuid);
+                    }
                 } else {
-                    outputText(sender, uuid, name);
+                    runOperation(sender, name);
                 }
                 break;
         }
         return true;
     }
 
-    private void outputText(CommandSender sender, String uuid, String name) {
-        if (sender instanceof Player) {
-            sender.sendMessage(plugin.mStart + "UUID of " + name + ":");
-            sender.sendMessage(plugin.mStart + uuid);
-        } else {
-            plugin.log("INFO", "UUID of " + name + ":");
-            plugin.log("INFO", uuid);
-        }
-    }
-
     private void runOperation(CommandSender sender, String name) {
-        if (sender instanceof Player) {
-            sender.sendMessage(plugin.mStart + "Looking up UUID. This can take a moment...");
-        } else {
-            plugin.log("INFO", "Looking up UUID. This can take a moment...");
-        }
+        sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Looking up UUID. This can take a moment...");
         new AsyncThenSyncOperation(plugin, true) {
             private Map<String, UUID> response = null;
 
@@ -61,7 +52,8 @@ public class GetUUID {
                 try {
                     response = new UUIDFetcher(Arrays.asList(name.toLowerCase())).call();
                 } catch (Exception e) {
-                    plugin.log("WARNING", "Exception while running UUIDFetcher!");
+                    sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Error while looking up UUID. Check Logs.");
+                    plugin.log("SEVERE", "UUID ERROR : STACK TRACE");
                     e.printStackTrace();
                 }
             }
@@ -69,31 +61,20 @@ public class GetUUID {
             @Override
             protected void execSyncThen() {
                 if (response.get(name.toLowerCase()) == null) {
-                    if (sender instanceof Player) {
-                        sender.sendMessage(plugin.mStart + "UUID Query returned null! Invalid username?");
-                    } else {
-                        plugin.log("WARNING", "UUID Query returned null! Username might not exist.?");
-                    }
+                    sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "UUID Query returned null! Invalid username?");
                     return;
                 }
                 String uuid = response.get(name.toLowerCase()).toString();
-                switch (plugin.focusOn) {
-                    case "file":
-                        if (plugin.filem.recordExists(uuid)) {
-                            outputText(sender, uuid, name);
-                        } else {
-                            if (!plugin.filem.recordExists(uuid) && plugin.getConfig().getBoolean("SaveQueries")) {
-                                plugin.filem.newPlayerRecord(uuid, name);
-                                outputText(sender, uuid, name);
-                                return;
+                sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "UUID of " + name + ":");
+                sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + uuid);
+                if (plugin.getConfig().getBoolean("SaveQueries")) {
+                    switch (plugin.focusOn) {
+                        case "file":
+                            if (!plugin.filem.doesRecordExist(uuid)) {
+                                plugin.filem.recordAfterIdLookup(uuid, name);
                             }
-                        }
-                        if (sender instanceof Player) {
-                            sender.sendMessage(plugin.mStart + "Player record not found!");
-                        } else {
-                            plugin.log("WARNING", "Player record not found!");
-                        }
-                        break;
+                            break;
+                    }
                 }
             }
         };

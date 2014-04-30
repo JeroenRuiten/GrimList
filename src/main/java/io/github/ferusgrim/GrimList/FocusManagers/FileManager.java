@@ -7,8 +7,11 @@
 package io.github.ferusgrim.GrimList.FocusManagers;
 
 import io.github.ferusgrim.GrimList.GrimList;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +20,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class FileManager {
     private GrimList plugin;
@@ -54,55 +56,21 @@ public class FileManager {
         loginCount = path + ".loginCount";
     }
 
-    public boolean alreadyOnWhitelist(String uuid) {
-        registerPaths(uuid);
-        return get().isSet(path) && get().getBoolean(isWhitelisted);
+    public boolean isPlayersPopulated() {
+        return get().getConfigurationSection("Players") != null;
     }
 
-    public boolean recordExists(String uuid) {
+    public boolean doesRecordExist(String uuid) {
         registerPaths(uuid);
         return get().isSet(path);
     }
 
-    public void deleteRecord(String uuid) {
+    public boolean isPlayerWhitelisted(String uuid) {
         registerPaths(uuid);
-        get().set(path, null);
-        save();
-    }
-
-    public List<String> setupViewPlayers(String uuid) {
-        registerPaths(uuid);
-        List<String> setupView = new ArrayList<>();
-        setupView.add(get().getString(lastUsername));
-        setupView.add(get().getBoolean(isWhitelisted) ? "Yes" : "No");
-        setupView.add(get().getString(firstLogin));
-        setupView.add(get().getString(lastLogin));
-        setupView.add(String.valueOf(get().getInt(loginCount)));
-        return setupView;
-    }
-
-    public List<String> setupPreviousUsernames(String uuid) {
-        registerPaths(uuid);
-        List<String> usernames = new ArrayList<>();
-        List<String> tmpStr = new ArrayList<>(get().getStringList(previousUsernames));
-        usernames.addAll(tmpStr.stream().collect(Collectors.toList()));
-        tmpStr.clear();
-        return usernames;
-    }
-
-    public List<String> setupPreviousAddresses(String uuid) {
-        registerPaths(uuid);
-        List<String> addresses = new ArrayList<>();
-        List<String> tmpStr = new ArrayList<>(get().getStringList(previousAddresses));
-        addresses.addAll(tmpStr.stream().collect(Collectors.toList()));
-        tmpStr.clear();
-        return addresses;
+        return isPlayersPopulated() && doesRecordExist(uuid) && get().getBoolean(isWhitelisted);
     }
 
     public String getUUID(String name) {
-        if (get().getConfigurationSection("Players") == null) {
-            return "";
-        }
         for (String uuid : get().getConfigurationSection("Players").getKeys(false)) {
             if (get().getString("Players." + uuid + ".lastUsername").equalsIgnoreCase(name)) {
                 return uuid;
@@ -111,7 +79,13 @@ public class FileManager {
         return "";
     }
 
-    public void newPlayerRecord(String uuid, String name) {
+    public void deleteRecord(String uuid) {
+        registerPaths(uuid);
+        get().set(path, null);
+        save();
+    }
+
+    public void recordAfterIdLookup(String uuid, String name) {
         registerPaths(uuid);
         get().createSection(path);
         get().set(isWhitelisted, false);
@@ -119,20 +93,63 @@ public class FileManager {
         save();
     }
 
-    public void toggleIsWhitelisted(String uuid, String name) {
+    public void addPlayerToWhitelist(String uuid, String name) {
         registerPaths(uuid);
-        if (alreadyOnWhitelist(uuid)) {
-            get().set(isWhitelisted, false);
-        } else {
-            get().set(isWhitelisted, true);
-        }
+        get().set(isWhitelisted, true);
         get().set(lastUsername, name);
         save();
     }
 
-    public void onLoginRecordUpdater(String uuid, String playerName, String playerAddress) {
+    public void removePlayerFromWhitelist(String uuid, String name) {
         registerPaths(uuid);
-        if (!get().isConfigurationSection(path)) {
+        get().set(isWhitelisted, false);
+        get().set(lastUsername, name);
+        save();
+    }
+
+    public void ViewPlayer(CommandSender sender, String uuid) {
+        registerPaths(uuid);
+        if (sender instanceof Player) {
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6*&7-- &6&l" + lastUsername + " &r&7--&6*"));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&lUUID: &r&9" + uuid));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&lWhitelisted: &r&9" + isWhitelisted));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&lPrevious Usernames:"));
+            for (String viewPU : new ArrayList<>(get().getStringList(previousUsernames))) {
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "  &a&l- &r&9" + viewPU));
+            }
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&lPrevious Addresses:"));
+            for (String viewPI : new ArrayList<>(get().getStringList(previousAddresses))) {
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "  &a&l- &r&9" + viewPI));
+            }
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&lFirst Login: &r&9" + (firstLogin == null ? "Never" : firstLogin)));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&lLast Login: &r&9" + (lastLogin == null ? "Never" : lastLogin)));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&lLogged in: &r&9" + loginCount + " times"));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6*&7-- &6&l" + lastUsername + " &r&7--&6*"));
+        } else {
+            sender.sendMessage("*-- " + lastUsername + " --*");
+            sender.sendMessage("UUID: " + uuid);
+            sender.sendMessage("Whitelisted: " + isWhitelisted);
+            sender.sendMessage("Previous Usernames:");
+            for (String viewPU : new ArrayList<>(get().getStringList(previousUsernames))) {
+                sender.sendMessage("  - " + viewPU);
+            }
+            sender.sendMessage("Previous Addresses:");
+            for (String viewPI : new ArrayList<>(get().getStringList(previousAddresses))) {
+                sender.sendMessage("  - " + viewPI);
+            }
+            sender.sendMessage("First Login: " + (firstLogin == null ? "Never" : firstLogin));
+            sender.sendMessage("Last Login: " + (lastLogin == null ? "Never" : lastLogin));
+            sender.sendMessage("Logged in: " + loginCount + " times");
+            sender.sendMessage("*-- " + lastUsername + " --*");
+        }
+    }
+
+    public void recordOnLogin(String uuid, String playerName, String playerAddress) {
+        registerPaths(uuid);
+        if (!isPlayersPopulated()) {
+            get().createSection("Players");
+        }
+        if (!doesRecordExist(uuid)) {
             get().createSection(path);
         }
         if (!get().isSet(isWhitelisted)) {
@@ -151,12 +168,10 @@ public class FileManager {
             get().set(previousAddresses, tmpAd);
         }
         SimpleDateFormat fDate = new SimpleDateFormat("MM.dd.yyyy-HH:mm:ss");
-        Date rDate = new Date();
-        String sDate = fDate.format(rDate);
         if (!get().isSet(firstLogin)) {
-            get().set(firstLogin, sDate);
+            get().set(firstLogin, fDate.format(new Date()));
         }
-        get().set(lastLogin, sDate);
+        get().set(lastLogin, fDate.format(new Date()));
         get().set(loginCount, get().getInt(loginCount) + 1);
         save();
     }

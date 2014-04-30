@@ -26,26 +26,18 @@ public class DeleteRecord {
     public boolean run(CommandSender sender, String name) {
         switch (plugin.focusOn) {
             case "file":
-                String uuid = plugin.filem.getUUID(name);
-                if (uuid.isEmpty()) {
-                    runOperation(sender, name);
-                } else {
-                    if (plugin.filem.recordExists(uuid)) {
-                        plugin.filem.deleteRecord(uuid);
-                        if (sender instanceof Player) {
-                            sender.sendMessage(plugin.mStart + "Deleted '" + name + "'s record.");
-                            sender.sendMessage(plugin.mStart + "UUID: ('" + uuid + "')");
-                        } else {
-                            plugin.log("INFO", "Deleted '" + name + "'s record.");
-                            plugin.log("INFO", "UUID: ('" + uuid + "')");
-                        }
+                if (plugin.filem.isPlayersPopulated()) {
+                    String uuid = plugin.filem.getUUID(name);
+                    if (uuid.isEmpty()) {
+                        runOperation(sender, name);
                     } else {
-                        if (sender instanceof Player) {
-                            sender.sendMessage(plugin.mStart + "Player record not found!");
-                        } else {
-                            plugin.log("INFO", "Player record not found!");
-                        }
+                        plugin.filem.deleteRecord(uuid);
+                        sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player record was deleted!");
+                        sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "UUID: (" + uuid + ")");
                     }
+                } else {
+                    sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player record doesn't exist!");
+                    return true;
                 }
                 break;
         }
@@ -53,11 +45,7 @@ public class DeleteRecord {
     }
 
     private void runOperation(CommandSender sender, String name) {
-        if (sender instanceof Player) {
-            sender.sendMessage(plugin.mStart + "Looking up UUID. This can take a moment...");
-        } else {
-            plugin.log("INFO", "Looking up UUID. This can take a moment...");
-        }
+        sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Looking up UUID. This can take a moment...");
         new AsyncThenSyncOperation(plugin, true) {
             private Map<String, UUID> response = null;
 
@@ -66,7 +54,8 @@ public class DeleteRecord {
                 try {
                     response = new UUIDFetcher(Arrays.asList(name.toLowerCase())).call();
                 } catch (Exception e) {
-                    plugin.log("WARNING", "Exception while running UUIDFetcher!");
+                    sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Error while looking up UUID. Check Logs.");
+                    plugin.log("SEVERE", "UUID ERROR : STACK TRACE");
                     e.printStackTrace();
                 }
             }
@@ -74,33 +63,21 @@ public class DeleteRecord {
             @Override
             protected void execSyncThen() {
                 if (response.get(name.toLowerCase()) == null) {
-                    if (sender instanceof Player) {
-                        sender.sendMessage(plugin.mStart + "UUID Query returned null! Invalid username?");
-                    } else {
-                        plugin.log("WARNING", "UUID Query returned null! Username might not exist.?");
-                    }
+                    sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "UUID Query returned null! Invalid username?");
                     return;
                 }
                 String uuid = response.get(name.toLowerCase()).toString();
                 switch (plugin.focusOn) {
                     case "file":
-                        if (plugin.filem.recordExists(uuid)) {
+                        if (plugin.filem.doesRecordExist(uuid)) {
                             plugin.filem.deleteRecord(uuid);
-                            if (sender instanceof Player) {
-                                sender.sendMessage(plugin.mStart + "Deleted '" + name + "'s record.");
-                                sender.sendMessage(plugin.mStart + "UUID: ('" + uuid + "')");
-                            } else {
-                                plugin.log("INFO", "Deleted '" + name + "'s record.");
-                                plugin.log("INFO", "UUID: ('" + uuid + "')");
-                            }
+                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player record was deleted!");
+                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "UUID: (" + uuid + ")");
                         } else {
-                            if (sender instanceof Player) {
-                                sender.sendMessage(plugin.mStart + "Player record not found!");
-                            } else {
-                                plugin.log("INFO", "Player record not found!");
-                            }
+                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player record doesn't exist!");
+                            return;
                         }
-                        break;
+                        return;
                 }
             }
         };

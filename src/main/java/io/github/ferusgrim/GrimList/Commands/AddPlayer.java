@@ -26,24 +26,20 @@ public class AddPlayer {
     public boolean run(CommandSender sender, String name) {
         switch (plugin.focusOn) {
             case "file":
-                String uuid = plugin.filem.getUUID(name);
-                if (uuid.isEmpty()) {
-                    runOperation(sender, name);
-                } else {
-                    if (plugin.filem.alreadyOnWhitelist(uuid)) {
-                        if (sender instanceof Player) {
-                            sender.sendMessage(plugin.mStart + "'" + name + "' is already whitelisted!");
-                        } else {
-                            plugin.log("WARNING", "'" + name + "' is already whitelisted!");
-                        }
+                if (plugin.filem.isPlayersPopulated()) {
+                    String uuid = plugin.filem.getUUID(name);
+                    if (uuid.isEmpty()) {
+                        runOperation(sender, name);
                     } else {
-                        plugin.filem.toggleIsWhitelisted(uuid, name);
-                        if (sender instanceof Player) {
-                            sender.sendMessage(plugin.mStart + "'" + name + "' was added to the whitelist!");
+                        if (plugin.filem.isPlayerWhitelisted(uuid)) {
+                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "'" + name + "' is already whitelisted!");
                         } else {
-                            plugin.log("INFO", "'" + name + "' was added to the whitelist!");
+                            plugin.filem.addPlayerToWhitelist(uuid, name);
+                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "'" + name + "' was whitelisted!");
                         }
                     }
+                } else {
+                    runOperation(sender, name);
                 }
                 break;
         }
@@ -51,11 +47,7 @@ public class AddPlayer {
     }
 
     private void runOperation(CommandSender sender, String name) {
-        if (sender instanceof Player) {
-            sender.sendMessage(plugin.mStart + "Looking up UUID. This can take a moment...");
-        } else {
-            plugin.log("INFO", "Looking up UUID. This can take a moment...");
-        }
+        sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Looking up UUID. This can take a moment...");
         new AsyncThenSyncOperation(plugin, true) {
             private Map<String, UUID> response = null;
 
@@ -64,7 +56,8 @@ public class AddPlayer {
                 try {
                     response = new UUIDFetcher(Arrays.asList(name.toLowerCase())).call();
                 } catch (Exception e) {
-                    plugin.log("WARNING", "Exception while running UUIDFetcher!");
+                    sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Error while looking up UUID. Check Logs.");
+                    plugin.log("SEVERE", "UUID ERROR : STACK TRACE");
                     e.printStackTrace();
                 }
             }
@@ -72,29 +65,17 @@ public class AddPlayer {
             @Override
             protected void execSyncThen() {
                 if (response.get(name.toLowerCase()) == null) {
-                    if (sender instanceof Player) {
-                        sender.sendMessage(plugin.mStart + "UUID Query returned null! Invalid username?");
-                    } else {
-                        plugin.log("WARNING", "UUID Query returned null! Username might not exist.?");
-                    }
+                    sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "UUID Query returned null! Invalid username?");
                     return;
                 }
                 String uuid = response.get(name.toLowerCase()).toString();
                 switch (plugin.focusOn) {
                     case "file":
-                        if (plugin.filem.alreadyOnWhitelist(uuid)) {
-                            if (sender instanceof Player) {
-                                sender.sendMessage(plugin.mStart + "'" + name + "' is already whitelisted!");
-                            } else {
-                                plugin.log("WARNING", "'" + name + "' is already whitelisted!");
-                            }
+                        if (plugin.filem.isPlayerWhitelisted(uuid)) {
+                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "'" + name + "' is already whitelisted!");
                         } else {
-                            plugin.filem.toggleIsWhitelisted(uuid, name);
-                            if (sender instanceof Player) {
-                                sender.sendMessage(plugin.mStart + "'" + name + "' was added to the whitelist!");
-                            } else {
-                                plugin.log("INFO", "'" + name + "' was added to the whitelist!");
-                            }
+                            plugin.filem.addPlayerToWhitelist(uuid, name);
+                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "'" + name + "' was whitelisted!");
                         }
                         break;
                 }
