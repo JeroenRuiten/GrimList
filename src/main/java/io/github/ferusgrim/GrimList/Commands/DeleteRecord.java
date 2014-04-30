@@ -32,12 +32,14 @@ public class DeleteRecord {
                         runOperation(sender, name);
                     } else {
                         plugin.filem.deleteRecord(uuid);
+                        if (plugin.getConfig().getBoolean("KickRemove") && plugin.getServer().getPlayerExact(name) != null) {
+                            plugin.getServer().getPlayerExact(name).kickPlayer(plugin.mStart + "You were removed from the whitelist!");
+                        }
                         sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player record was deleted!");
                         sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "UUID: (" + uuid + ")");
                     }
                 } else {
                     sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player record doesn't exist!");
-                    return true;
                 }
                 break;
         }
@@ -71,6 +73,9 @@ public class DeleteRecord {
                     case "file":
                         if (plugin.filem.doesRecordExist(uuid)) {
                             plugin.filem.deleteRecord(uuid);
+                            if (plugin.getConfig().getBoolean("KickRemove") && plugin.getServer().getPlayerExact(name) != null) {
+                                plugin.getServer().getPlayerExact(name).kickPlayer(plugin.mStart + "You were removed from the whitelist!");
+                            }
                             sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player record was deleted!");
                             sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "UUID: (" + uuid + ")");
                         } else {

@@ -8,6 +8,7 @@ Metrics: true
 Updater: true
 DebugMessages: false
 SaveQueries: true
+KickRemove: true
 Focus: 'file'
 Notify:
   Console: false

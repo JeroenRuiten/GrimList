@@ -20,12 +20,15 @@ public class SetConfig {
 
     public boolean run(CommandSender sender, String[] args) {
         String s1 = WordUtils.capitalize(args[1].toLowerCase());
-        if (s1.equals("Whitelist") || s1.equals("Metrics") || s1.equals("Updater") || s1.equals("Debugmessages") || s1.equals("Savequeries")) {
+        if (s1.equals("Whitelist") || s1.equals("Metrics") || s1.equals("Updater") || s1.equals("Debugmessages") || s1.equals("Savequeries") || s1.equals("Kickremove")) {
             if (s1.equals("Debugmessages")) {
                 s1 = "DebugMessages";
             }
             if (s1.equals("Savequeries")) {
                 s1 = "SaveQueries";
+            }
+            if (s1.equals("Kickremove")) {
+                s1 = "KickRemove";
             }
             if (!args[2].equalsIgnoreCase("true") && !args[2].equalsIgnoreCase("false")) {
                 sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Please select between true or false!");
