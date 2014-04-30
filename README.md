@@ -22,14 +22,14 @@ alternate thread, leaving your server unaffected!
 In short, GrimList is the premier whitelisting plugin. I challenge you to find an easier to use, or better designed solution.
 
 ### About the YMLs:
-[config.yml](https://github.com/FerusGrim/GrimList/wiki/Configuration "Configuration Wiki")
-[playerdata.yml](https://github.com/FerusGrim/GrimList/wiki/PlayerData "PlayerData Wiki")
+[config.yml](https://github.com/FerusGrim/GrimList/wiki/Configuration "Configuration Wiki") - _The config.yml is intended to be streamlined for use!_
+[playerdata.yml](https://github.com/FerusGrim/GrimList/wiki/PlayerData "PlayerData Wiki") - _Be careful if you want to edit this! I've warned you!_
 
 ### Commands and Permissions:
-[Commands](https://github.com/FerusGrim/GrimList/wiki/Commands "Commands Wiki")
+[Commands](https://github.com/FerusGrim/GrimList/wiki/Commands "Commands Wiki") - _There are more commands than you might think. Take a look!_
 
 Permissions | Functions
-:-: | :-:
+:-: | :--
 grimlist.* | _Grants all permissions._
 grimlist.add | _Allows player to add others to the whitelist._
 grimlist.remove | _Allows player to remove others from the whitelist._
@@ -42,4 +42,4 @@ grimlist.update | _Shows notification of update on join._
 grimlist.notify | _Notifies player on failed join attempt._
 
 ### Other Stuff!:
-[Dynamic Effect Whitelist](http://dev.bukkit.org/bukkit-plugins/dynamic-effect-whitelist/ "Dynamic Effect Whitelist")
+[Dynamic Effect Whitelist](http://dev.bukkit.org/bukkit-plugins/dynamic-effect-whitelist/ "Dynamic Effect Whitelist") - _DEW inspired GrimList. No code from DEW is used in GrimList, anymore._
