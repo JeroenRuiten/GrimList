@@ -20,7 +20,6 @@ public class SetConfig {
 
     public boolean run(CommandSender sender, String[] args) {
         String s1 = WordUtils.capitalize(args[1].toLowerCase());
-        String s2 = args[2].toLowerCase();
         if (s1.equals("Whitelist") || s1.equals("Metrics") || s1.equals("Updater") || s1.equals("Debugmessages") || s1.equals("Savequeries")) {
             if (s1.equals("Debugmessages")) {
                 s1 = "DebugMessages";
@@ -28,11 +27,11 @@ public class SetConfig {
             if (s1.equals("Savequeries")) {
                 s1 = "SaveQueries";
             }
-            if (!s2.equals("true") && !s2.equals("false")) {
+            if (!args[2].equalsIgnoreCase("true") && !args[2].equalsIgnoreCase("false")) {
                 sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Please select between true or false!");
                 return true;
             }
-            boolean newBoolean = Boolean.parseBoolean(s2);
+            boolean newBoolean = Boolean.parseBoolean(args[2]);
             if (plugin.getConfig().getBoolean(s1) == newBoolean) {
                 sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + s1 + " is already " + (newBoolean ? "enabled" : "disabled") + "!");
                 return true;
@@ -42,7 +41,26 @@ public class SetConfig {
             sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + s1 + " has been " + (newBoolean ? "enabled" : "disabled") + "!");
             return true;
         }
+        if (s1.equals("Notify")) {
+            String s2 = WordUtils.capitalize(args[2].toLowerCase());
+            if(s2.equals("Console") || s2.equals("Player")) {
+                if (args.length < 4 || (args[3].equalsIgnoreCase("true")) && (args[3].equalsIgnoreCase("false"))) {
+                    sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Please select between true or false!");
+                    return true;
+                }
+                boolean newBoolean = Boolean.parseBoolean(args[3]);
+                if (plugin.getConfig().getBoolean(s1 + "." + s2)) {
+                    sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + s1 + "." + s2 + " is already " + (newBoolean ? "enabled" : "disabled") + "!");
+                    return true;
+                }
+                plugin.getConfig().set(s1 + "." + s2, newBoolean);
+                plugin.saveConfig();
+                sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + s1 + "." + s2 + " has been " + (newBoolean ? "enabled" : "disabled") + "!");
+                return true;
+            }
+        }
         if (s1.equals("Focus")) {
+            String s2 = args[2].toLowerCase();
             if (!s2.equals("file") && !s2.equals("mysql") && !s2.equals("sqlite") && !s2.equals("url")) {
                 sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "The focus you selected, \"" + s2 + "\", isn't a valid focus.");
                 return true;
@@ -64,7 +82,7 @@ public class SetConfig {
             sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Whitelist focus altered to \"" + s2 + "\"!");
             return true;
         }
-        sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Config setting either doesn't exist, or can't be modified in-game.");
+        sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Config setting doesn't exist, or can't be modified in-game.");
         return true;
     }
 }
