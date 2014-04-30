@@ -29,71 +29,42 @@ public class SetConfig {
                 s1 = "SaveQueries";
             }
             if (!s2.equals("true") && !s2.equals("false")) {
-                if (sender instanceof Player) {
-                    sender.sendMessage(plugin.mStart + "Please select between true or false!");
-                } else {
-                    plugin.log("INFO", "Please select between true of false!");
-                }
+                sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Please select between true or false!");
                 return true;
             }
             boolean newBoolean = Boolean.parseBoolean(s2);
             if (plugin.getConfig().getBoolean(s1) == newBoolean) {
-                if (sender instanceof Player) {
-                    sender.sendMessage(plugin.mStart + s1 + " is already " + (newBoolean ? "enabled" : "disabled") + "!");
-                } else {
-                    plugin.log("INFO", s1 + " is already " + (newBoolean ? "enabled" : "disabled") + "!");
-                }
+                sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + s1 + " is already " + (newBoolean ? "enabled" : "disabled") + "!");
                 return true;
             }
             plugin.getConfig().set(s1, newBoolean);
             plugin.saveConfig();
-            if (sender instanceof Player) {
-                sender.sendMessage(plugin.mStart + s1 + " has been " + (newBoolean ? "enabled" : "disabled") + "!");
-            } else {
-                plugin.log("INFO", s1 + " has been " + (newBoolean ? "enabled" : "disabled") + "!");
-            }
+            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + s1 + " has been " + (newBoolean ? "enabled" : "disabled") + "!");
             return true;
         }
         if (s1.equals("Focus")) {
             if (!s2.equals("file") && !s2.equals("mysql") && !s2.equals("sqlite") && !s2.equals("url")) {
-                if (sender instanceof Player) {
-                    sender.sendMessage(plugin.mStart + "The focus you selected, \"" + s2 + "\", isn't a valid focus.");
-                } else {
-                    plugin.log("INFO", "The focus you selected, '\"" + s2 + "\"', isn't a valid focus.");
-                }
+                sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "The focus you selected, \"" + s2 + "\", isn't a valid focus.");
                 return true;
             }
             //TODO - Remove the below if statements as more methods are added.
             if (s2.equals("mysql") || s2.equals("sqlite") || s2.equals("url")) {
-                if (sender instanceof Player) {
-                    sender.sendMessage(plugin.mStart + "Currently, GrimList only supports \"file\" as a whitelist focus.");
-                    sender.sendMessage(plugin.mStart + "GrimList v3.0 was released early to address the upcoming UUID necessity.");
-                    sender.sendMessage(plugin.mStart + "I, personally, apologize for any inconvenience. GrimList 3.1 will be released soon, with full functionality.");
-                } else {
-                    plugin.log("INFO", "Currently, GrimList only supports \"file\" as a whitelist focus.");
-                    plugin.log("INFO", "GrimList v3.0 was released early to address the upcoming UUID necessity.");
-                    plugin.log("INFO", "I, personally, apologize for any inconvenience. GrimList 3.1 will be released soon, with full functionality.");
-                }
+                sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Currently, GrimList only supports \"file\" as a whitelist focus.");
+                sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "GrimList v3.0 was released early to address the upcoming UUID necessity.");
+                sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "I, personally, apologize for any inconvenience. GrimList 3.1 will be released soon, with full functionality.");
                 return true;
             }
             if (plugin.getConfig().getString("Focus").equals(s2)) {
-                if (sender instanceof Player) {
-                    sender.sendMessage(plugin.mStart + "Whitelist focus is already set to \"" + s2 + "\"!");
-                } else {
-                    plugin.log("INFO", "Whitelist focus is already set to \"" + s2 + "\"!");
-                }
+                sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Whitelist focus is already set to \"" + s2 + "\"!");
                 return true;
             }
             plugin.getConfig().set("Focus", s2);
             plugin.saveConfig();
             plugin.focusOn = s2;
-            if (sender instanceof Player) {
-                sender.sendMessage(plugin.mStart + "Whitelist focus altered to \"" + s2 + "\"!");
-            } else {
-                plugin.log("INFO", "Whitelist focus altered to \"" + s2 + "\"!");
-            }
+            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Whitelist focus altered to \"" + s2 + "\"!");
             return true;
         }
+        sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Config setting either doesn't exist, or can't be modified in-game.");
         return true;
     }
 }
