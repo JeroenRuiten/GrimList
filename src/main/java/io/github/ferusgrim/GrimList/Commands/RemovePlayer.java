@@ -72,8 +72,12 @@ public class RemovePlayer {
                 switch (plugin.focusOn) {
                     case "file":
                         if (plugin.filem.doesRecordExist(uuid)) {
-                            plugin.filem.removePlayerFromWhitelist(uuid, name);
-                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player has been removed from the whitelist!");
+                            if (plugin.filem.isPlayerWhitelisted(uuid)) {
+                                plugin.filem.removePlayerFromWhitelist(uuid, name);
+                                sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player has been removed from the whitelist!");
+                            } else {
+                                sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player isn't whitelisted!");
+                            }
                         } else {
                             sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player isn't whitelisted!");
                             if (plugin.getConfig().getBoolean("SaveQueries")) {
