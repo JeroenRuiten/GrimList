@@ -1,4 +1,4 @@
-!(https://raw.githubusercontent.com/FerusGrim/GrimList/master/grimlistv3.png "GrimList v3!")
+![Logo](https://raw.githubusercontent.com/FerusGrim/GrimList/master/grimlistv3.png "GrimList v3!")
 
 # GrimList
 
@@ -30,17 +30,16 @@ In short, GrimList is the premier whitelisting plugin. I challenge you to find a
 
 Permissions | Functions
 :-: | :-:
-*Still* | `renders`
-grimlist.* | Grants all permissions.
-grimlist.add | Allows player to add others to the whitelist.
-grimlist.remove | Allows player to remove others from the whitelist.
-grimlist.delete | Allows player to completely delete another player record.
-grimlist.view | Allows a player to view another player's player data.
-grimlist.getid | Allows a player to gather another player's UUID.
-grimlist.set | Allows a player to change configuration in-game.
-grimlist.help | Allows a player to view the help menu.
-grimlist.update | Shows notification of update on join.
-grimlist.notify | Notifies player on failed join attempt.
+grimlist.* | _Grants all permissions._
+grimlist.add | _Allows player to add others to the whitelist._
+grimlist.remove | _Allows player to remove others from the whitelist._
+grimlist.delete | _Allows player to completely delete another player record._
+grimlist.view | _Allows a player to view another player's player data._
+grimlist.getid | _Allows a player to gather another player's UUID._
+grimlist.set | _Allows a player to change configuration in-game._
+grimlist.help | _Allows a player to view the help menu._
+grimlist.update | _Shows notification of update on join._
+grimlist.notify | _Notifies player on failed join attempt._
 
 ### Other Stuff!:
 [Dynamic Effect Whitelist](http://dev.bukkit.org/bukkit-plugins/dynamic-effect-whitelist/ "Dynamic Effect Whitelist")
