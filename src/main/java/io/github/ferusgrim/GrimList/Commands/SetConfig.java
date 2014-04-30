@@ -37,43 +37,23 @@ public class SetConfig {
                 }
                 return true;
             }
-            if (s2.equals("true")) {
-                if (plugin.getConfig().getBoolean(s1)) {
-                    if (sender instanceof Player) {
-                        sender.sendMessage(plugin.mStart + s1 + " is already enabled!");
-                    } else {
-                        plugin.log("INFO", s1 + " is already enabled!");
-                    }
-                    return true;
-                }
-                plugin.getConfig().set(s1, true);
-                plugin.saveConfig();
+            boolean newBoolean = Boolean.parseBoolean(s2);
+            if (plugin.getConfig().getBoolean(s1) == newBoolean) {
                 if (sender instanceof Player) {
-                    sender.sendMessage(plugin.mStart + s1 + " has been enabled!");
+                    sender.sendMessage(plugin.mStart + s1 + " is already " + (newBoolean? "enabled" : "disabled") + "!");
                 } else {
-                    plugin.log("INFO", s1 + " has been enabled!");
+                    plugin.log("INFO", s1 + " is already " + (newBoolean? "enabled" : "disabled") + "!");
                 }
                 return true;
             }
-            if (s2.equals("false")) {
-                if (!plugin.getConfig().getBoolean(s1)) {
-                    if (sender instanceof Player) {
-                        sender.sendMessage(plugin.mStart + s1 + " is already disabled!");
-                    } else {
-                        plugin.log("INFO", s1 + " is already disabled!");
-                    }
-                    return true;
-                }
-                plugin.getConfig().set(s1, false);
-                plugin.saveConfig();
-                if (sender instanceof Player) {
-                    sender.sendMessage(plugin.mStart + s1 + " has been disabled!");
-                } else {
-                    plugin.log("INFO", s1 + " has been disabled!");
-                }
-                return true;
+            plugin.getConfig().set(s1, newBoolean);
+            plugin.saveConfig();
+            if (sender instanceof Player) {
+                sender.sendMessage(plugin.mStart + s1 + " has been " + (newBoolean? "enabled" : "disabled") + "!");
+            } else {
+                plugin.log("INFO", s1 + " has been " + (newBoolean? "enabled" : "disabled") + "!");
             }
-
+            return true;
         }
         if (s1.equals("Focus")) {
             if (!s2.equals("file") && !s2.equals("mysql") && !s2.equals("sqlite") && !s2.equals("url")) {
