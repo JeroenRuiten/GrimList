@@ -42,5 +42,9 @@ grimlist.help | _Allows a player to view the help menu._
 grimlist.update | _Shows notification of update on join._
 grimlist.notify | _Notifies player on failed join attempt._
 
-### Other Stuff!:
+### Take a look at this other stuff!:
+[GrimList BukkitDev](http://dev.bukkit.org/bukkit-plugins/grimlist/ "GrimList BukkitDev") - _For better support, check this out!_
+
+[EsperNet](http://webchat.esper.net/ "EsperNet") - _If you need any help not related to my plugin, check out the #bukkithelp channel! Or, if you're an aspiring programmer, #bukkitdev._
+
 [Dynamic Effect Whitelist](http://dev.bukkit.org/bukkit-plugins/dynamic-effect-whitelist/ "Dynamic Effect Whitelist") - _DEW inspired GrimList. No code from DEW is used in GrimList, anymore._
