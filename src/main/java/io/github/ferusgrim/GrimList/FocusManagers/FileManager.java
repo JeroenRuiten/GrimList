@@ -109,6 +109,11 @@ public class FileManager {
 
     public void ViewPlayer(CommandSender sender, String uuid) {
         registerPaths(uuid);
+        String lastUsername = get().getString(this.lastUsername);
+        String isWhitelisted = get().getBoolean(this.isWhitelisted) ? "Yes" : "No";
+        String firstLogin = get().getString(this.firstLogin);
+        String lastLogin = get().getString(this.lastLogin);
+        String loginCount = String.valueOf(get().getString(this.loginCount));
         if (sender instanceof Player) {
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6*&7-- &6&l" + lastUsername + " &r&7--&6*"));
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&lUUID: &r&9" + uuid));
