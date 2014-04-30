@@ -7,18 +7,17 @@
 package io.github.ferusgrim.GrimList;
 
 import io.github.ferusgrim.GrimList.FocusManagers.FileManager;
-
-import java.io.File;
-import java.util.logging.Level;
-
 import net.gravitydevelopment.updater.Updater;
-
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+import java.util.logging.Level;
+
 /**
  * Copyright (C) 2014 Nicholas Badger
+ *
  * @author FerusGrim
  */
 
@@ -30,17 +29,17 @@ public class GrimList extends JavaPlugin {
     public String version = "";
     public String link = "";
     public String focusOn;
-    
+
     @Override
-    public void onEnable(){
-        if(!new File(getDataFolder(), "config.yml").exists()){
+    public void onEnable() {
+        if (!new File(getDataFolder(), "config.yml").exists()) {
             saveDefaultConfig();
         }
-        if(!getConfig().getBoolean("Whitelist")){
+        if (!getConfig().getBoolean("Whitelist")) {
             log("WARNING", "The whitelist has been disabled! Why do you even want me? :(");
         }
         focusOn = getConfig().getString("Focus");
-        switch(focusOn){
+        switch (focusOn) {
             case "file":
                 filem = new FileManager(this);
                 playerData = new PlayerData(this);
@@ -78,18 +77,18 @@ public class GrimList extends JavaPlugin {
                 filem = new FileManager(this);
                 break;
         }
-        if(getConfig().getBoolean("Updater")){
+        if (getConfig().getBoolean("Updater")) {
             Updater updater = new Updater(this, 65828, this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false);
             isUpdateAvailable = updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE;
             version = updater.getLatestName();
             link = updater.getLatestFileLink();
         }
-        if(focusOn.equals("file")){
-            if(!new File(getDataFolder(), "playerdata.yml").exists()){
+        if (focusOn.equals("file")) {
+            if (!new File(getDataFolder(), "playerdata.yml").exists()) {
                 playerData.saveDefault();
             }
         }
-        if(getConfig().getBoolean("Metrics")){
+        if (getConfig().getBoolean("Metrics")) {
             MetricManager mm = new MetricManager(this);
             mm.setupMetric();
         }
@@ -98,9 +97,9 @@ public class GrimList extends JavaPlugin {
         getCommand("whitelist").setExecutor(new Executor(this));
     }
 
-    public void log(String lvl, String MSG){
-        if(lvl.equals("DEBUG")){
-            if(!getConfig().getBoolean("DebugMessages")){
+    public void log(String lvl, String MSG) {
+        if (lvl.equals("DEBUG")) {
+            if (!getConfig().getBoolean("DebugMessages")) {
                 return;
             }
             MSG = "Debug!: " + MSG;

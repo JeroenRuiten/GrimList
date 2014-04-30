@@ -7,13 +7,12 @@
 package io.github.ferusgrim.GrimList.Commands;
 
 import io.github.ferusgrim.GrimList.GrimList;
-
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class SetConfig {
-    private GrimList plugin;
+    private final GrimList plugin;
 
     public SetConfig(GrimList plugin) {
         this.plugin = plugin;
@@ -40,18 +39,18 @@ public class SetConfig {
             boolean newBoolean = Boolean.parseBoolean(s2);
             if (plugin.getConfig().getBoolean(s1) == newBoolean) {
                 if (sender instanceof Player) {
-                    sender.sendMessage(plugin.mStart + s1 + " is already " + (newBoolean? "enabled" : "disabled") + "!");
+                    sender.sendMessage(plugin.mStart + s1 + " is already " + (newBoolean ? "enabled" : "disabled") + "!");
                 } else {
-                    plugin.log("INFO", s1 + " is already " + (newBoolean? "enabled" : "disabled") + "!");
+                    plugin.log("INFO", s1 + " is already " + (newBoolean ? "enabled" : "disabled") + "!");
                 }
                 return true;
             }
             plugin.getConfig().set(s1, newBoolean);
             plugin.saveConfig();
             if (sender instanceof Player) {
-                sender.sendMessage(plugin.mStart + s1 + " has been " + (newBoolean? "enabled" : "disabled") + "!");
+                sender.sendMessage(plugin.mStart + s1 + " has been " + (newBoolean ? "enabled" : "disabled") + "!");
             } else {
-                plugin.log("INFO", s1 + " has been " + (newBoolean? "enabled" : "disabled") + "!");
+                plugin.log("INFO", s1 + " has been " + (newBoolean ? "enabled" : "disabled") + "!");
             }
             return true;
         }

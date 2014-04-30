@@ -13,10 +13,10 @@ import org.bukkit.entity.Player;
 public class Helper {
 
     public boolean run(CommandSender sender, String[] args) {
-        if(sender instanceof Player){
+        if (sender instanceof Player) {
             return runPlayer(sender, args);
         }
-        if(args.length < 2){
+        if (args.length < 2) {
             sender.sendMessage("*--------------------------------------------*");
             sender.sendMessage("|             GrimList Help Menu             |");
             sender.sendMessage("|                                            |");
@@ -32,7 +32,7 @@ public class Helper {
             sender.sendMessage("*--------------------------------------------*");
             return true;
         }
-        switch(args[1]){
+        switch (args[1]) {
             case "add":
                 sender.sendMessage("*--------------------------------------------*");
                 sender.sendMessage("|             GrimList Help Menu             |");
@@ -101,8 +101,8 @@ public class Helper {
         return true;
     }
 
-    private boolean runPlayer(CommandSender sender, String[] args){
-        if(args.length < 2){
+    private boolean runPlayer(CommandSender sender, String[] args) {
+        if (args.length < 2) {
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6*&7----------------------------------&6*"));
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6|  &lGrimList Help Menu&r"));
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6|  &9/wl help <topic>"));
@@ -116,7 +116,7 @@ public class Helper {
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6*&7----------------------------------&6*"));
             return true;
         }
-        switch(args[1]){
+        switch (args[1]) {
             case "add":
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6*&7----------------------------------&6*"));
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6|  &lGrimList Help Menu&r"));

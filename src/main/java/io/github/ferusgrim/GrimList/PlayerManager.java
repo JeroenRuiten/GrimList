@@ -16,14 +16,14 @@ import org.bukkit.event.player.PlayerLoginEvent.Result;
 
 public class PlayerManager implements Listener {
     private GrimList plugin;
-    
-    public PlayerManager(GrimList plugin){
+
+    public PlayerManager(GrimList plugin) {
         this.plugin = plugin;
     }
-    
+
     @EventHandler(priority = EventPriority.HIGH)
-    public void onPlayerLogin(PlayerLoginEvent event){
-        if(!plugin.getConfig().getBoolean("Whitelist")){
+    public void onPlayerLogin(PlayerLoginEvent event) {
+        if (!plugin.getConfig().getBoolean("Whitelist")) {
             return;
         }
         Player player = event.getPlayer();
@@ -31,28 +31,28 @@ public class PlayerManager implements Listener {
         String playerName = player.getName();
         String playerAddress = event.getAddress().getHostAddress();
         boolean denyUser = false;
-        switch(plugin.focusOn){
-        case "file":
-            plugin.filem.onLoginRecordUpdater(uuid, playerName, playerAddress);
-            denyUser = plugin.filem.alreadyOnWhitelist(uuid);
-            break;
+        switch (plugin.focusOn) {
+            case "file":
+                plugin.filem.onLoginRecordUpdater(uuid, playerName, playerAddress);
+                denyUser = plugin.filem.alreadyOnWhitelist(uuid);
+                break;
         }
-        if(denyUser){
+        if (denyUser) {
             event.setKickMessage(plugin.mStart + "You're not whitelisted!");
             event.setResult(Result.KICK_WHITELIST);
-            if(plugin.getConfig().getBoolean("Notify.Console")){
+            if (plugin.getConfig().getBoolean("Notify.Console")) {
                 plugin.log("INFO", "User was denied access!: " + playerName);
             }
-            if(plugin.getConfig().getBoolean("Notify.Player")){
+            if (plugin.getConfig().getBoolean("Notify.Player")) {
                 plugin.getServer().broadcast(plugin.mStart + "User was denied access!: " + playerName, "grimlist.notify");
             }
         }
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void onPlayerJoin(PlayerJoinEvent event){
+    public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        if(!plugin.getConfig().getBoolean("Updater") || !plugin.isUpdateAvailable || !player.hasPermission("grimlist.update")){
+        if (!plugin.getConfig().getBoolean("Updater") || !plugin.isUpdateAvailable || !player.hasPermission("grimlist.update")) {
             return;
         }
         player.sendMessage(plugin.mStart + plugin.version + " available!");

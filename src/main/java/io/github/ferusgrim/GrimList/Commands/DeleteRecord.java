@@ -7,7 +7,6 @@
 package io.github.ferusgrim.GrimList.Commands;
 
 import io.github.ferusgrim.GrimList.GrimList;
-
 import io.github.ferusgrim.GrimList.utils.AsyncThenSyncOperation;
 import io.github.ferusgrim.GrimList.utils.UUIDFetcher;
 import org.bukkit.command.CommandSender;
@@ -25,25 +24,25 @@ public class DeleteRecord {
     }
 
     public boolean run(CommandSender sender, String name) {
-        switch(plugin.focusOn){
+        switch (plugin.focusOn) {
             case "file":
                 String uuid = plugin.filem.getUUID(name);
-                if(uuid.isEmpty()){
+                if (uuid.isEmpty()) {
                     runOperation(sender, name);
-                }else{
-                    if(plugin.filem.recordExists(uuid)){
+                } else {
+                    if (plugin.filem.recordExists(uuid)) {
                         plugin.filem.deleteRecord(uuid);
-                        if(sender instanceof Player){
+                        if (sender instanceof Player) {
                             sender.sendMessage(plugin.mStart + "Deleted '" + name + "'s record.");
                             sender.sendMessage(plugin.mStart + "UUID: ('" + uuid + "')");
-                        }else{
+                        } else {
                             plugin.log("INFO", "Deleted '" + name + "'s record.");
                             plugin.log("INFO", "UUID: ('" + uuid + "')");
                         }
-                    }else{
-                        if(sender instanceof Player){
+                    } else {
+                        if (sender instanceof Player) {
                             sender.sendMessage(plugin.mStart + "Player record not found!");
-                        }else{
+                        } else {
                             plugin.log("INFO", "Player record not found!");
                         }
                     }
@@ -85,19 +84,19 @@ public class DeleteRecord {
                 String uuid = response.get(name.toLowerCase()).toString();
                 switch (plugin.focusOn) {
                     case "file":
-                        if(plugin.filem.recordExists(uuid)){
+                        if (plugin.filem.recordExists(uuid)) {
                             plugin.filem.deleteRecord(uuid);
-                            if(sender instanceof Player){
+                            if (sender instanceof Player) {
                                 sender.sendMessage(plugin.mStart + "Deleted '" + name + "'s record.");
                                 sender.sendMessage(plugin.mStart + "UUID: ('" + uuid + "')");
-                            }else{
+                            } else {
                                 plugin.log("INFO", "Deleted '" + name + "'s record.");
                                 plugin.log("INFO", "UUID: ('" + uuid + "')");
                             }
-                        }else{
-                            if(sender instanceof Player){
+                        } else {
+                            if (sender instanceof Player) {
                                 sender.sendMessage(plugin.mStart + "Player record not found!");
-                            }else{
+                            } else {
                                 plugin.log("INFO", "Player record not found!");
                             }
                         }

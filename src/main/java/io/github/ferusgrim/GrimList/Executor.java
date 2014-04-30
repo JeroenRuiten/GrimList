@@ -7,8 +7,6 @@
 package io.github.ferusgrim.GrimList;
 
 import io.github.ferusgrim.GrimList.Commands.*;
-import io.github.ferusgrim.GrimList.Commands.DeleteRecord;
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,20 +14,20 @@ import org.bukkit.entity.Player;
 
 public class Executor implements CommandExecutor {
     private GrimList plugin;
-    
-    public Executor(GrimList plugin){
+
+    public Executor(GrimList plugin) {
         this.plugin = plugin;
     }
 
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args){
-        if(args.length < 1){
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (args.length < 1) {
             args = new String[]{"help"};
         }
         String function = inferAlias(args[0].toLowerCase());
-        if(containsError(sender, args)){
+        if (containsError(sender, args)) {
             return true;
         }
-        switch(function){
+        switch (function) {
             case "help":
                 Helper hlp = new Helper();
                 return hlp.run(sender, args);
@@ -52,40 +50,40 @@ public class Executor implements CommandExecutor {
                 SetConfig sc = new SetConfig(plugin);
                 return sc.run(sender, args);
             default:
-                if(sender instanceof Player){
-                    sender.sendMessage(plugin.mStart +  "Unknown or invalid command!");
-                }else{
+                if (sender instanceof Player) {
+                    sender.sendMessage(plugin.mStart + "Unknown or invalid command!");
+                } else {
                     plugin.log("WARNING", "Unknown or invalid command!");
                 }
                 return true;
         }
     }
 
-    private boolean containsError(CommandSender sender, String[] args){
-        if(!sender.hasPermission("grimlist." + args[0])){
+    private boolean containsError(CommandSender sender, String[] args) {
+        if (!sender.hasPermission("grimlist." + args[0])) {
             sender.sendMessage(plugin.mStart + "Insufficient privileges!");
             return true;
         }
-        if(args[0].equals("add") || args[0].equals("remove") || args[0].equals("delete") || args[0].equals("view") || args[0].equals("getid")){
-            if(args.length < 2){
-                if(sender instanceof Player){
+        if (args[0].equals("add") || args[0].equals("remove") || args[0].equals("delete") || args[0].equals("view") || args[0].equals("getid")) {
+            if (args.length < 2) {
+                if (sender instanceof Player) {
                     sender.sendMessage(plugin.mStart + "Missing username!");
-                }else{
+                } else {
                     plugin.log("WARNING", "Missing username!");
                 }
                 return true;
             }
-            if(!args[1].matches("[a-zA-Z0-9_]{3,16}")){
-                if(sender instanceof Player){
+            if (!args[1].matches("[a-zA-Z0-9_]{3,16}")) {
+                if (sender instanceof Player) {
                     sender.sendMessage(plugin.mStart + "Invalid username!");
-                }else{
+                } else {
                     plugin.log("WARNING", "Invalid username!");
                 }
                 return true;
             }
         }
-        if(args[0].equals("set")){
-            if(args.length < 3) {
+        if (args[0].equals("set")) {
+            if (args.length < 3) {
                 if (sender instanceof Player) {
                     sender.sendMessage(plugin.mStart + "Not enough arguments to use this command!");
                 } else {
@@ -96,8 +94,9 @@ public class Executor implements CommandExecutor {
         }
         return false;
     }
-    private String inferAlias(String function){
-        switch(function){
+
+    private String inferAlias(String function) {
+        switch (function) {
             case "-h":
                 function = "help";
                 break;

@@ -6,12 +6,12 @@
 
 package io.github.ferusgrim.GrimList;
 
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 public class PlayerData {
     private GrimList plugin;
@@ -22,41 +22,41 @@ public class PlayerData {
         this.plugin = plugin;
     }
 
-    public void reload(){
-        if(playerDataF == null){
+    public void reload() {
+        if (playerDataF == null) {
             playerDataF = new File(plugin.getDataFolder(), "playerdata.yml");
         }
         playerData = YamlConfiguration.loadConfiguration(playerDataF);
         InputStream pDataStream = plugin.getResource("playerdata.yml");
-        if(pDataStream != null){
+        if (pDataStream != null) {
             YamlConfiguration pDataDef = YamlConfiguration.loadConfiguration(pDataStream);
             playerData.setDefaults(pDataDef);
         }
     }
-    
-    public void save(){
-        if(playerData == null || playerDataF == null){
+
+    public void save() {
+        if (playerData == null || playerDataF == null) {
             return;
         }
-        try{
+        try {
             get().save(playerDataF);
-        }catch(IOException e){
+        } catch (IOException e) {
             plugin.log("SEVERE", "Couldn't save playerdata configuration!");
         }
     }
-    
-    public FileConfiguration get(){
-        if(playerData == null){
+
+    public FileConfiguration get() {
+        if (playerData == null) {
             reload();
         }
         return playerData;
     }
-    
-    public void saveDefault(){
-        if(playerDataF == null){
+
+    public void saveDefault() {
+        if (playerDataF == null) {
             playerDataF = new File(plugin.getDataFolder(), "playerdata.yml");
         }
-        if(!playerDataF.exists()){
+        if (!playerDataF.exists()) {
             plugin.saveResource("playerdata.yml", false);
         }
     }

@@ -6,12 +6,11 @@
 
 package io.github.ferusgrim.GrimList.Commands;
 
-import io.github.ferusgrim.GrimList.utils.UUIDFetcher;
+import io.github.ferusgrim.GrimList.GrimList;
 import io.github.ferusgrim.GrimList.utils.AsyncThenSyncOperation;
+import io.github.ferusgrim.GrimList.utils.UUIDFetcher;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import io.github.ferusgrim.GrimList.GrimList;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -24,8 +23,8 @@ public class AddPlayer {
         this.plugin = plugin;
     }
 
-    public boolean run(CommandSender sender, String name){
-        switch(plugin.focusOn) {
+    public boolean run(CommandSender sender, String name) {
+        switch (plugin.focusOn) {
             case "file":
                 String uuid = plugin.filem.getUUID(name);
                 if (uuid.isEmpty()) {
@@ -39,9 +38,9 @@ public class AddPlayer {
                         }
                     } else {
                         plugin.filem.toggleIsWhitelisted(uuid, name);
-                        if(sender instanceof Player){
+                        if (sender instanceof Player) {
                             sender.sendMessage(plugin.mStart + "'" + name + "' was added to the whitelist!");
-                        }else{
+                        } else {
                             plugin.log("INFO", "'" + name + "' was added to the whitelist!");
                         }
                     }
@@ -51,20 +50,20 @@ public class AddPlayer {
         return true;
     }
 
-    private void runOperation(CommandSender sender, String name){
+    private void runOperation(CommandSender sender, String name) {
         if (sender instanceof Player) {
             sender.sendMessage(plugin.mStart + "Looking up UUID. This can take a moment...");
         } else {
             plugin.log("INFO", "Looking up UUID. This can take a moment...");
         }
-        new AsyncThenSyncOperation(plugin, true){
+        new AsyncThenSyncOperation(plugin, true) {
             private Map<String, UUID> response = null;
 
             @Override
             protected void execAsyncFirst() {
-                try{
+                try {
                     response = new UUIDFetcher(Arrays.asList(name.toLowerCase())).call();
-                }catch(Exception e){
+                } catch (Exception e) {
                     plugin.log("WARNING", "Exception while running UUIDFetcher!");
                     e.printStackTrace();
                 }
@@ -72,28 +71,28 @@ public class AddPlayer {
 
             @Override
             protected void execSyncThen() {
-                if(response.get(name.toLowerCase()) == null){
-                    if(sender instanceof Player){
+                if (response.get(name.toLowerCase()) == null) {
+                    if (sender instanceof Player) {
                         sender.sendMessage(plugin.mStart + "UUID Query returned null! Invalid username?");
-                    }else{
+                    } else {
                         plugin.log("WARNING", "UUID Query returned null! Username might not exist.?");
                     }
                     return;
                 }
                 String uuid = response.get(name.toLowerCase()).toString();
-                switch(plugin.focusOn) {
+                switch (plugin.focusOn) {
                     case "file":
-                        if(plugin.filem.alreadyOnWhitelist(uuid)){
-                            if(sender instanceof Player){
+                        if (plugin.filem.alreadyOnWhitelist(uuid)) {
+                            if (sender instanceof Player) {
                                 sender.sendMessage(plugin.mStart + "'" + name + "' is already whitelisted!");
-                            }else{
+                            } else {
                                 plugin.log("WARNING", "'" + name + "' is already whitelisted!");
                             }
-                        }else{
+                        } else {
                             plugin.filem.toggleIsWhitelisted(uuid, name);
-                            if(sender instanceof Player){
+                            if (sender instanceof Player) {
                                 sender.sendMessage(plugin.mStart + "'" + name + "' was added to the whitelist!");
-                            }else{
+                            } else {
                                 plugin.log("INFO", "'" + name + "' was added to the whitelist!");
                             }
                         }

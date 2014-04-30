@@ -19,12 +19,12 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public abstract class AsyncThenSyncOperation {
 
-    private final Plugin  plugin;
-    private       boolean ran;
+    private final Plugin plugin;
+    private boolean ran;
 
     /**
      * Builds an AsyncThenSyncOperation.
-     * <p>
+     * <p/>
      * Call {@link #run()} to launch the operation.
      *
      * @param plugin the plugin instance to link BukkitRunnables to
@@ -35,7 +35,7 @@ public abstract class AsyncThenSyncOperation {
 
     /**
      * Builds an AsyncThenSyncOperation.
-     * <p>
+     * <p/>
      * If you set the runNow parameter to false, call {@link #run()} later to
      * launch the operation.
      *

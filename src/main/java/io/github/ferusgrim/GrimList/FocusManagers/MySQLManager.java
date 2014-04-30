@@ -11,13 +11,20 @@ import io.github.ferusgrim.GrimList.GrimList;
 
 public class MySQLManager {
     private GrimList plugin;
-    
-    public MySQLManager(GrimList plugin){
+
+    public MySQLManager(GrimList plugin) {
         this.plugin = plugin;
     }
 
-    public void setupSQL() {
-        // TODO Auto-generated method stub
-        
+    public boolean doesRecordExist(String uuid) {
+        return false;
+    }
+
+    public boolean isPlayerWhitelisted(String uuid) {
+        return false;
+    }
+
+    public boolean getUUID(String uuid) {
+        return false;
     }
 }

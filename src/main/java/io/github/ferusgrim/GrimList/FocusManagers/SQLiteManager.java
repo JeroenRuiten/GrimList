@@ -11,7 +11,7 @@ import io.github.ferusgrim.GrimList.GrimList;
 public class SQLiteManager {
     private GrimList plugin;
 
-    public SQLiteManager(GrimList plugin){
+    public SQLiteManager(GrimList plugin) {
         this.plugin = plugin;
     }
 }

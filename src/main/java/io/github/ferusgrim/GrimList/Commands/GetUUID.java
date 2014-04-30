@@ -19,17 +19,17 @@ import java.util.UUID;
 public class GetUUID {
     private GrimList plugin;
 
-    public GetUUID(GrimList plugin){
+    public GetUUID(GrimList plugin) {
         this.plugin = plugin;
     }
 
-    public boolean run(CommandSender sender, String name){
-        switch(plugin.focusOn){
+    public boolean run(CommandSender sender, String name) {
+        switch (plugin.focusOn) {
             case "file":
                 String uuid = plugin.filem.getUUID(name);
-                if(uuid.isEmpty()){
+                if (uuid.isEmpty()) {
                     runOperation(sender, name);
-                }else{
+                } else {
                     outputText(sender, uuid, name);
                 }
                 break;
@@ -37,8 +37,8 @@ public class GetUUID {
         return true;
     }
 
-    public void outputText(CommandSender sender, String uuid, String name){
-        if (sender instanceof Player){
+    private void outputText(CommandSender sender, String uuid, String name) {
+        if (sender instanceof Player) {
             sender.sendMessage(plugin.mStart + "UUID of " + name + ":");
             sender.sendMessage(plugin.mStart + uuid);
         } else {
@@ -47,18 +47,18 @@ public class GetUUID {
         }
     }
 
-    public void runOperation(CommandSender sender, String name){
+    private void runOperation(CommandSender sender, String name) {
         if (sender instanceof Player) {
             sender.sendMessage(plugin.mStart + "Looking up UUID. This can take a moment...");
         } else {
             plugin.log("INFO", "Looking up UUID. This can take a moment...");
         }
-        new AsyncThenSyncOperation(plugin, true){
+        new AsyncThenSyncOperation(plugin, true) {
             private Map<String, UUID> response = null;
 
             @Override
             protected void execAsyncFirst() {
-                try{
+                try {
                     response = new UUIDFetcher(Arrays.asList(name.toLowerCase())).call();
                 } catch (Exception e) {
                     plugin.log("WARNING", "Exception while running UUIDFetcher!");
@@ -77,7 +77,7 @@ public class GetUUID {
                     return;
                 }
                 String uuid = response.get(name.toLowerCase()).toString();
-                switch(plugin.focusOn){
+                switch (plugin.focusOn) {
                     case "file":
                         if (plugin.filem.recordExists(uuid)) {
                             outputText(sender, uuid, name);
@@ -90,7 +90,7 @@ public class GetUUID {
                         }
                         if (sender instanceof Player) {
                             sender.sendMessage(plugin.mStart + "Player record not found!");
-                        }else{
+                        } else {
                             plugin.log("WARNING", "Player record not found!");
                         }
                         break;
