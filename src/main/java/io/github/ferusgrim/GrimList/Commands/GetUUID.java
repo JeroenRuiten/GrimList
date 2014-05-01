@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class GetUUID {
-    private GrimList plugin;
+    private final GrimList plugin;
 
     public GetUUID(GrimList plugin) {
         this.plugin = plugin;
@@ -41,6 +41,16 @@ public class GetUUID {
                         runOperation(sender, name);
                     }
                     break;
+                case "mysql":
+                    if (plugin.mysqlm.doesRecordExistUnderName(name)) {
+                        String uuid = plugin.mysqlm.getUUID(name);
+                        if (uuid.isEmpty()) {
+                            runOperation(sender, name);
+                        } else {
+                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "UUID of " + name + ":");
+                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + uuid);
+                        }
+                    }
             }
         }
         return true;
@@ -76,6 +86,11 @@ public class GetUUID {
                         case "file":
                             if (!plugin.filem.doesRecordExist(uuid)) {
                                 plugin.filem.recordAfterIdLookup(uuid, name);
+                            }
+                            break;
+                        case "mysql":
+                            if (!plugin.mysqlm.doesRecordExistUnderUUID(uuid)) {
+                                plugin.mysqlm.createRecordFromQuery(uuid, name);
                             }
                             break;
                     }

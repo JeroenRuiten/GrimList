@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class DeleteRecord {
-    private GrimList plugin;
+    private final GrimList plugin;
 
     public DeleteRecord(GrimList plugin) {
         this.plugin = plugin;
@@ -35,6 +35,9 @@ public class DeleteRecord {
                             runOperation(sender, name);
                         } else {
                             plugin.filem.deleteRecord(uuid);
+                            if (plugin.getConfig().getBoolean("LogUsage.Delete")) {
+                                plugin.mysqlm.addCommandLog(name, uuid, "/whitelist delete " + name, (sender instanceof Player ? plugin.getServer().getPlayerExact(sender.getName()).getUniqueId().toString() : "CONSOLE"), sender.getName());
+                            }
                             if (plugin.getConfig().getBoolean("KickRemove") && plugin.getServer().getPlayerExact(name) != null) {
                                 plugin.getServer().getPlayerExact(name).kickPlayer(plugin.mStart + "You were removed from the whitelist!");
                             }
@@ -43,6 +46,20 @@ public class DeleteRecord {
                         }
                     } else {
                         sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player record doesn't exist!");
+                    }
+                    break;
+                case "mysql":
+                    if (plugin.mysqlm.doesRecordExistUnderName(name)) {
+                        String uuid = plugin.mysqlm.getUUID(name);
+                        if (uuid.isEmpty()) {
+                            runOperation(sender, name);
+                        } else {
+                            plugin.mysqlm.deletePlayerFromRecord(uuid);
+                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player record was deleted!");
+                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "UUID: (" + uuid + ")");
+                        }
+                    } else {
+                        runOperation(sender, name);
                     }
                     break;
             }
@@ -77,6 +94,9 @@ public class DeleteRecord {
                     case "file":
                         if (plugin.filem.doesRecordExist(uuid)) {
                             plugin.filem.deleteRecord(uuid);
+                            if (plugin.getConfig().getBoolean("LogUsage.Delete")) {
+                                plugin.mysqlm.addCommandLog(name, uuid, "/whitelist delete " + name, (sender instanceof Player ? plugin.getServer().getPlayerExact(sender.getName()).getUniqueId().toString() : "CONSOLE"), sender.getName());
+                            }
                             if (plugin.getConfig().getBoolean("KickRemove") && plugin.getServer().getPlayerExact(name) != null) {
                                 plugin.getServer().getPlayerExact(name).kickPlayer(plugin.mStart + "You were removed from the whitelist!");
                             }
@@ -84,9 +104,16 @@ public class DeleteRecord {
                             sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "UUID: (" + uuid + ")");
                         } else {
                             sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player record doesn't exist!");
-                            return;
                         }
-                        return;
+                        break;
+                    case "mysql":
+                        if (plugin.mysqlm.doesRecordExistUnderUUID(uuid)) {
+                            plugin.mysqlm.deletePlayerFromRecord(uuid);
+                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player record was deleted!");
+                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "UUID: (" + uuid + ")");
+                        } else {
+                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player record doesn't exist!");
+                        }
                 }
             }
         };

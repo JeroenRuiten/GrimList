@@ -8,8 +8,8 @@ package io.github.ferusgrim.GrimList.FocusManagers;
 
 import io.github.ferusgrim.GrimList.GrimList;
 
-public class SQLiteManager {
-    private GrimList plugin;
+class SQLiteManager {
+    private final GrimList plugin;
 
     public SQLiteManager(GrimList plugin) {
         this.plugin = plugin;

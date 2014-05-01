@@ -46,7 +46,7 @@ public class SetConfig {
         }
         if (s1.equals("Notify")) {
             String s2 = WordUtils.capitalize(args[2].toLowerCase());
-            if(s2.equals("Console") || s2.equals("Player")) {
+            if (s2.equals("Console") || s2.equals("Player")) {
                 if (args.length < 4 || (args[3].equalsIgnoreCase("true")) && (args[3].equalsIgnoreCase("false"))) {
                     sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Please select between true or false!");
                     return true;

@@ -8,8 +8,8 @@ package io.github.ferusgrim.GrimList.FocusManagers;
 
 import io.github.ferusgrim.GrimList.GrimList;
 
-public class URLManager {
-    private GrimList plugin;
+class URLManager {
+    private final GrimList plugin;
 
     public URLManager(GrimList plugin) {
         this.plugin = plugin;

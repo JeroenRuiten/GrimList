@@ -7,6 +7,7 @@
 package io.github.ferusgrim.GrimList;
 
 import io.github.ferusgrim.GrimList.FocusManagers.FileManager;
+import io.github.ferusgrim.GrimList.FocusManagers.MySQLManager;
 import net.gravitydevelopment.updater.Updater;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginManager;
@@ -24,7 +25,8 @@ import java.util.logging.Level;
 public class GrimList extends JavaPlugin {
     public boolean isUpdateAvailable;
     public FileManager filem;
-    public String mStart = ChatColor.translateAlternateColorCodes('&', "&a&l[GrimList]&r&e ");
+    public MySQLManager mysqlm;
+    public final String mStart = ChatColor.translateAlternateColorCodes('&', "&a&l[GrimList]&r&e ");
     public String version = "";
     public String link = "";
     public String focusOn;
@@ -43,14 +45,8 @@ public class GrimList extends JavaPlugin {
                 filem = new FileManager(this);
                 break;
             case "mysql":
-                log("SEVERE", "GrimList is released, right now, to prepare users for the UUID changes. Right now, \"file\" is the only supported whitelist format.");
-                log("SEVERE", "GrimList will be updated as soon as possible to include MySQL support, SQLite support, as well as URL support. I apologize for the inconvenience.");
-                log("SEVERE", "Defaulting to \"file\" focus format.");
-                filem = new FileManager(this);
-                /*
                 mysqlm = new MySQLManager(this);
                 break;
-            */
             case "sqlite":
                 log("SEVERE", "GrimList is released, right now, to prepare users for the UUID changes. Right now, \"file\" is the only supported whitelist format.");
                 log("SEVERE", "GrimList will be updated as soon as possible to include MySQL support, SQLite support, as well as URL support. I apologize for the inconvenience.");

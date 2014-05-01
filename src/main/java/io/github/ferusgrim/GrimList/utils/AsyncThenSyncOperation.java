@@ -54,7 +54,7 @@ public abstract class AsyncThenSyncOperation {
     /**
      * Actually runs the Operation. Can't be called multiple times.
      */
-    public void run() {
+    void run() {
         if (ran) {
             throw new IllegalStateException("Can only run once.");
         }

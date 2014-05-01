@@ -11,6 +11,11 @@ SaveQueries: true
 KickRemove: true
 AlwaysLookup: false
 Focus: 'file'
+LogUsage:
+  Add: false
+  Remove: false
+  Delete: false
+  View: false
 Notify:
   Console: false
   Player: true

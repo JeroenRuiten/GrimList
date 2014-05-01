@@ -9,14 +9,15 @@ package io.github.ferusgrim.GrimList.Commands;
 import io.github.ferusgrim.GrimList.GrimList;
 import io.github.ferusgrim.GrimList.utils.AsyncThenSyncOperation;
 import io.github.ferusgrim.GrimList.utils.UUIDFetcher;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.UUID;
 
 public class ViewPlayer {
-    private GrimList plugin;
+    private final GrimList plugin;
 
     public ViewPlayer(GrimList plugin) {
         this.plugin = plugin;
@@ -34,6 +35,25 @@ public class ViewPlayer {
                             runOperation(sender, name);
                         } else {
                             plugin.filem.ViewPlayer(sender, uuid);
+                        }
+                    } else {
+                        if (plugin.getConfig().getBoolean("SaveQueries")) {
+                            runOperation(sender, name);
+                        } else {
+                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player record doesn't exist!");
+                        }
+                    }
+                    break;
+                case "mysql":
+                    if (plugin.mysqlm.doesRecordExistUnderName(name)) {
+                        String uuid = plugin.mysqlm.getUUID(name);
+                        if (uuid.isEmpty()) {
+                            runOperation(sender, name);
+                        } else {
+                            plugin.mysqlm.doViewPlayer(sender, uuid);
+                            if (plugin.getConfig().getBoolean("LogUsage.View")) {
+                                plugin.mysqlm.addCommandLog(name, uuid, "/whitelist view " + name, (sender instanceof Player ? plugin.getServer().getPlayerExact(sender.getName()).getUniqueId().toString() : "CONSOLE"), sender.getName());
+                            }
                         }
                     } else {
                         if (plugin.getConfig().getBoolean("SaveQueries")) {
@@ -84,6 +104,23 @@ public class ViewPlayer {
                             }
                         }
                         break;
+                    case "mysql":
+                        if (plugin.mysqlm.doesRecordExistUnderUUID(uuid)) {
+                            plugin.mysqlm.doViewPlayer(sender, uuid);
+                            if (plugin.getConfig().getBoolean("LogUsage.View")) {
+                                plugin.mysqlm.addCommandLog(name, uuid, "/whitelist view " + name, (sender instanceof Player ? plugin.getServer().getPlayerExact(sender.getName()).getUniqueId().toString() : "CONSOLE"), sender.getName());
+                            }
+                        } else {
+                            if (plugin.getConfig().getBoolean("SaveQueries")) {
+                                plugin.mysqlm.createRecordFromQuery(uuid, name);
+                                plugin.mysqlm.doViewPlayer(sender, uuid);
+                                if (plugin.getConfig().getBoolean("LogUsage.View")) {
+                                    plugin.mysqlm.addCommandLog(name, uuid, "/whitelist view " + name, (sender instanceof Player ? plugin.getServer().getPlayerExact(sender.getName()).getUniqueId().toString() : "CONSOLE"), sender.getName());
+                                }
+                            } else {
+                                sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player record doesn't exist!");
+                            }
+                        }
                 }
             }
         };

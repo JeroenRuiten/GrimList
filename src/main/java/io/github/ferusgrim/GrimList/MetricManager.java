@@ -12,7 +12,7 @@ import org.mcstats.Metrics.Graph;
 import java.io.IOException;
 
 public class MetricManager {
-    private GrimList plugin;
+    private final GrimList plugin;
 
     public MetricManager(GrimList plugin) {
         this.plugin = plugin;

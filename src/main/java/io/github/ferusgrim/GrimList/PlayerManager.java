@@ -14,8 +14,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 
-public class PlayerManager implements Listener {
-    private GrimList plugin;
+class PlayerManager implements Listener {
+    private final GrimList plugin;
 
     public PlayerManager(GrimList plugin) {
         this.plugin = plugin;
@@ -35,6 +35,13 @@ public class PlayerManager implements Listener {
             case "file":
                 plugin.filem.recordOnLogin(uuid, playerName, playerAddress);
                 denyUser = !plugin.filem.isPlayerWhitelisted(uuid);
+                break;
+            case "mysql":
+                if (plugin.mysqlm.doesRecordExistUnderUUID(uuid)) {
+                    plugin.mysqlm.alterRecordOnLogin(uuid, playerName, playerAddress);
+                } else {
+                    plugin.mysqlm.createRecordFromLogin(uuid, playerName, playerAddress);
+                }
                 break;
         }
         if (denyUser) {

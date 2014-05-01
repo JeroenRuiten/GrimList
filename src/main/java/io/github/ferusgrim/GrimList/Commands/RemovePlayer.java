@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class RemovePlayer {
-    private GrimList plugin;
+    private final GrimList plugin;
 
     public RemovePlayer(GrimList plugin) {
         this.plugin = plugin;
@@ -36,6 +36,37 @@ public class RemovePlayer {
                         } else {
                             if (plugin.filem.isPlayerWhitelisted(uuid)) {
                                 plugin.filem.removePlayerFromWhitelist(uuid, name);
+                                if (plugin.getConfig().getBoolean("KickRemove") && plugin.getServer().getPlayerExact(name) != null) {
+                                    plugin.getServer().getPlayerExact(name).kickPlayer(plugin.mStart + "You were removed from the whitelist!");
+                                }
+                                sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player has been removed from the whitelist!");
+                            } else {
+                                sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player isn't whitelisted!");
+                            }
+                        }
+                    } else {
+                        if (plugin.getConfig().getBoolean("SaveQueries")) {
+                            runOperation(sender, name);
+                        } else {
+                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player isn't whitelisted!");
+                        }
+                    }
+                    break;
+                case "mysql":
+                    if (plugin.mysqlm.doesRecordExistUnderName(name)) {
+                        String uuid = plugin.mysqlm.getUUID(name);
+                        if (uuid.isEmpty()) {
+                            if (plugin.getConfig().getBoolean("SaveQueries")) {
+                                runOperation(sender, name);
+                            } else {
+                                sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player isn't whitelisted!");
+                            }
+                        } else {
+                            if (plugin.mysqlm.isPlayerWhitelisted(uuid)) {
+                                plugin.mysqlm.removePlayerFromWhitelist(uuid, name);
+                                if (plugin.getConfig().getBoolean("LogUsage.Remove")) {
+                                    plugin.mysqlm.addCommandLog(name, uuid, "/whitelist remove " + name, (sender instanceof Player ? plugin.getServer().getPlayerExact(sender.getName()).getUniqueId().toString() : "CONSOLE"), sender.getName());
+                                }
                                 if (plugin.getConfig().getBoolean("KickRemove") && plugin.getServer().getPlayerExact(name) != null) {
                                     plugin.getServer().getPlayerExact(name).kickPlayer(plugin.mStart + "You were removed from the whitelist!");
                                 }
@@ -93,10 +124,31 @@ public class RemovePlayer {
                                 sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player isn't whitelisted!");
                             }
                         } else {
-                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player isn't whitelisted!");
                             if (plugin.getConfig().getBoolean("SaveQueries")) {
                                 plugin.filem.recordAfterIdLookup(uuid, name);
                             }
+                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player isn't whitelisted!");
+                        }
+                        break;
+                    case "mysql":
+                        if (plugin.mysqlm.doesRecordExistUnderUUID(uuid)) {
+                            if (plugin.mysqlm.isPlayerWhitelisted(uuid)) {
+                                plugin.mysqlm.removePlayerFromWhitelist(uuid, name);
+                                if (plugin.getConfig().getBoolean("LogUsage.Remove")) {
+                                    plugin.mysqlm.addCommandLog(name, uuid, "/whitelist remove " + name, (sender instanceof Player ? plugin.getServer().getPlayerExact(sender.getName()).getUniqueId().toString() : "CONSOLE"), sender.getName());
+                                }
+                                if (plugin.getConfig().getBoolean("KickRemove") && plugin.getServer().getPlayerExact(name) != null) {
+                                    plugin.getServer().getPlayerExact(name).kickPlayer(plugin.mStart + "You were removed from the whitelist!");
+                                }
+                                sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player has been removed from the whitelist!");
+                            } else {
+                                sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player isn't whitelisted!");
+                            }
+                        } else {
+                            if (plugin.getConfig().getBoolean("SaveQueries")) {
+                                plugin.mysqlm.createRecordFromQuery(uuid, name);
+                            }
+                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player isn't whitelisted!");
                         }
                         break;
                 }

@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 public class FileManager {
-    private GrimList plugin;
+    private final GrimList plugin;
 
     private FileConfiguration playerData = null;
     private File playerDataF = null;
@@ -116,19 +116,19 @@ public class FileManager {
         String loginCount = String.valueOf(get().getString(this.loginCount));
         if (sender instanceof Player) {
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6*&7-- &6&l" + lastUsername + " &r&7--&6*"));
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&lUUID: &r&9" + uuid));
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&lWhitelisted: &r&9" + isWhitelisted));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&lUUID: &r&e" + uuid));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&lWhitelisted: &r&e" + isWhitelisted));
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&lPrevious Usernames:"));
             for (String viewPU : new ArrayList<>(get().getStringList(previousUsernames))) {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "  &a&l- &r&9" + viewPU));
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "  &a&l- &r&e" + viewPU));
             }
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&lPrevious Addresses:"));
             for (String viewPI : new ArrayList<>(get().getStringList(previousAddresses))) {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "  &a&l- &r&9" + viewPI));
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "  &a&l- &r&e" + viewPI));
             }
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&lFirst Login: &r&9" + (firstLogin == null ? "Never" : firstLogin)));
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&lLast Login: &r&9" + (lastLogin == null ? "Never" : lastLogin)));
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&lLogged in: &r&9" + loginCount + " times"));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&lFirst Login: &r&e" + (firstLogin == null ? "Never" : firstLogin)));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&lLast Login: &r&e" + (lastLogin == null ? "Never" : lastLogin)));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&lLogged in: &r&e" + loginCount + " times"));
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6*&7-- &6&l" + lastUsername + " &r&7--&6*"));
         } else {
             sender.sendMessage("*-- " + lastUsername + " --*");

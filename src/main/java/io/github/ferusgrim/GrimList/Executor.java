@@ -13,7 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class Executor implements CommandExecutor {
-    private GrimList plugin;
+    private final GrimList plugin;
 
     public Executor(GrimList plugin) {
         this.plugin = plugin;
