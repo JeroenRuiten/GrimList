@@ -104,8 +104,10 @@ public class SetConfig {
                     return true;
                 } else {
                     plugin.getConfig().set("MySQL." + s2, args[3]);
+                    plugin.saveConfig();
                     sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "MySQL " + WordUtils.capitalize(s2) + " was altered to : " + args[3]);
                 }
+                return true;
             }
             if (s2.equals("port")) {
                 int s3I;
@@ -119,8 +121,10 @@ public class SetConfig {
                         sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "MySQL Port is already set to : " + s3I);
                     } else {
                         plugin.getConfig().set("MySQL.port", s3I);
+                        plugin.saveConfig();
                         sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "MySQL Port altered to : " + s3I);
                     }
+                    return true;
                 }
             }
         }
