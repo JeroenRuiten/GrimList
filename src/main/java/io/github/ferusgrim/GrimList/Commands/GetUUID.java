@@ -42,14 +42,12 @@ public class GetUUID {
                     }
                     break;
                 case "mysql":
-                    if (plugin.mysqlm.doesRecordExistUnderName(name)) {
-                        String uuid = plugin.mysqlm.getUUID(name);
-                        if (uuid.isEmpty()) {
-                            runOperation(sender, name);
-                        } else {
-                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "UUID of " + name + ":");
-                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + uuid);
-                        }
+                    String uuid = plugin.mysqlm.getUUID(name);
+                    if (uuid.isEmpty()) {
+                        runOperation(sender, name);
+                    } else {
+                        sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "UUID of " + name + ":");
+                        sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + uuid);
                     }
             }
         }
@@ -89,7 +87,7 @@ public class GetUUID {
                             }
                             break;
                         case "mysql":
-                            if (!plugin.mysqlm.doesRecordExistUnderUUID(uuid)) {
+                            if (!plugin.mysqlm.doesRecordExist(uuid)) {
                                 plugin.mysqlm.createRecordFromQuery(uuid, name);
                             }
                             break;

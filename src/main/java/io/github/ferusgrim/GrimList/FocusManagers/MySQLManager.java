@@ -210,34 +210,7 @@ public class MySQLManager {
         executeUpdate(sql);
     }
 
-    public boolean doesRecordExistUnderName(String name) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        try {
-            conn = sqlConnection();
-            ps = conn.prepareStatement("SELECT COUNT(*) FROM `" + database + "`.`playerdata` WHERE `playerdata`.`uuid` = ?;");
-            ps.setString(1, name);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                if (rs.getInt(1) > 1) {
-                    plugin.log("WARNING", "Discovered multiple UUIDs with the same lastUsername!");
-                }
-                if (rs.getInt(1) < 1) {
-                    clean(conn, ps);
-                    return false;
-                }
-            } else {
-                clean(conn, ps);
-                return false;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        clean(conn, ps);
-        return true;
-    }
-
-    public boolean doesRecordExistUnderUUID(String uuid) {
+    public boolean doesRecordExist(String uuid) {
         Connection conn = null;
         PreparedStatement ps = null;
         try {

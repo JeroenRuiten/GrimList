@@ -49,17 +49,13 @@ public class DeleteRecord {
                     }
                     break;
                 case "mysql":
-                    if (plugin.mysqlm.doesRecordExistUnderName(name)) {
-                        String uuid = plugin.mysqlm.getUUID(name);
-                        if (uuid.isEmpty()) {
-                            runOperation(sender, name);
-                        } else {
-                            plugin.mysqlm.deletePlayerFromRecord(uuid);
-                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player record was deleted!");
-                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "UUID: (" + uuid + ")");
-                        }
-                    } else {
+                    String uuid = plugin.mysqlm.getUUID(name);
+                    if (uuid.isEmpty()) {
                         runOperation(sender, name);
+                    } else {
+                        plugin.mysqlm.deletePlayerFromRecord(uuid);
+                        sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player record was deleted!");
+                        sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "UUID: (" + uuid + ")");
                     }
                     break;
             }
@@ -107,7 +103,7 @@ public class DeleteRecord {
                         }
                         break;
                     case "mysql":
-                        if (plugin.mysqlm.doesRecordExistUnderUUID(uuid)) {
+                        if (plugin.mysqlm.doesRecordExist(uuid)) {
                             plugin.mysqlm.deletePlayerFromRecord(uuid);
                             sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player record was deleted!");
                             sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "UUID: (" + uuid + ")");

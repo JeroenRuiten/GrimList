@@ -45,21 +45,13 @@ public class ViewPlayer {
                     }
                     break;
                 case "mysql":
-                    if (plugin.mysqlm.doesRecordExistUnderName(name)) {
-                        String uuid = plugin.mysqlm.getUUID(name);
-                        if (uuid.isEmpty()) {
-                            runOperation(sender, name);
-                        } else {
-                            plugin.mysqlm.doViewPlayer(sender, uuid);
-                            if (plugin.getConfig().getBoolean("LogUsage.View")) {
-                                plugin.mysqlm.addCommandLog(name, uuid, "/whitelist view " + name, (sender instanceof Player ? plugin.getServer().getPlayerExact(sender.getName()).getUniqueId().toString() : "CONSOLE"), sender.getName());
-                            }
-                        }
+                    String uuid = plugin.mysqlm.getUUID(name);
+                    if (uuid.isEmpty()) {
+                        runOperation(sender, name);
                     } else {
-                        if (plugin.getConfig().getBoolean("SaveQueries")) {
-                            runOperation(sender, name);
-                        } else {
-                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player record doesn't exist!");
+                        plugin.mysqlm.doViewPlayer(sender, uuid);
+                        if (plugin.getConfig().getBoolean("LogUsage.View")) {
+                            plugin.mysqlm.addCommandLog(name, uuid, "/whitelist view " + name, (sender instanceof Player ? plugin.getServer().getPlayerExact(sender.getName()).getUniqueId().toString() : "CONSOLE"), sender.getName());
                         }
                     }
                     break;
@@ -105,7 +97,7 @@ public class ViewPlayer {
                         }
                         break;
                     case "mysql":
-                        if (plugin.mysqlm.doesRecordExistUnderUUID(uuid)) {
+                        if (plugin.mysqlm.doesRecordExist(uuid)) {
                             plugin.mysqlm.doViewPlayer(sender, uuid);
                             if (plugin.getConfig().getBoolean("LogUsage.View")) {
                                 plugin.mysqlm.addCommandLog(name, uuid, "/whitelist view " + name, (sender instanceof Player ? plugin.getServer().getPlayerExact(sender.getName()).getUniqueId().toString() : "CONSOLE"), sender.getName());

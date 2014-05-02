@@ -46,23 +46,19 @@ public class AddPlayer {
                     }
                     break;
                 case "mysql":
-                    if (plugin.mysqlm.doesRecordExistUnderName(name)) {
-                        String uuid = plugin.mysqlm.getUUID(name);
-                        if (uuid.isEmpty()) {
-                            runOperation(sender, name);
-                        } else {
-                            if (plugin.mysqlm.isPlayerWhitelisted(uuid)) {
-                                sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player is already whitelisted!");
-                            } else {
-                                plugin.mysqlm.addPlayerToWhitelist(uuid, name);
-                                if (plugin.getConfig().getBoolean("LogUsage.Add")) {
-                                    plugin.mysqlm.addCommandLog(name, uuid, "/whitelist add " + name, (sender instanceof Player ? plugin.getServer().getPlayerExact(sender.getName()).getUniqueId().toString() : "CONSOLE"), sender.getName());
-                                }
-                                sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player was added to the whitelist!");
-                            }
-                        }
-                    } else {
+                    String uuid = plugin.mysqlm.getUUID(name);
+                    if (uuid.isEmpty()) {
                         runOperation(sender, name);
+                    } else {
+                        if (plugin.mysqlm.isPlayerWhitelisted(uuid)) {
+                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player is already whitelisted!");
+                        } else {
+                            plugin.mysqlm.addPlayerToWhitelist(uuid, name);
+                            if (plugin.getConfig().getBoolean("LogUsage.Add")) {
+                                plugin.mysqlm.addCommandLog(name, uuid, "/whitelist add " + name, (sender instanceof Player ? plugin.getServer().getPlayerExact(sender.getName()).getUniqueId().toString() : "CONSOLE"), sender.getName());
+                            }
+                            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player was added to the whitelist!");
+                        }
                     }
                     break;
             }
@@ -103,7 +99,7 @@ public class AddPlayer {
                         }
                         break;
                     case "mysql":
-                        if (plugin.mysqlm.doesRecordExistUnderUUID(uuid)) {
+                        if (plugin.mysqlm.doesRecordExist(uuid)) {
                             if (plugin.mysqlm.isPlayerWhitelisted(uuid)) {
                                 sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player is already whitelisted!");
                             } else {
