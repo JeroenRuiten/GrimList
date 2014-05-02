@@ -69,8 +69,8 @@ public class SetConfig {
                 return true;
             }
             //TODO - Remove the below if statements as more methods are added.
-            if (s2.equals("mysql") || s2.equals("sqlite") || s2.equals("url")) {
-                sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Currently, GrimList only supports \"file\" as a whitelist focus.");
+            if (s2.equals("sqlite") || s2.equals("url")) {
+                sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Currently, GrimList only supports \"file\" and \"mysql\" as a whitelist focus.");
                 sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "GrimList v3.0 was released early to address the upcoming UUID necessity.");
                 sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "I, personally, apologize for any inconvenience. GrimList 3.1 will be released soon, with full functionality.");
                 return true;
@@ -82,6 +82,7 @@ public class SetConfig {
             plugin.getConfig().set("Focus", s2);
             plugin.saveConfig();
             plugin.focusOn = s2;
+            plugin.updateFocus(s2);
             sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Whitelist focus altered to \"" + s2 + "\"!");
             return true;
         }

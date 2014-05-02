@@ -86,6 +86,40 @@ public class GrimList extends JavaPlugin {
         getCommand("whitelist").setExecutor(new Executor(this));
     }
 
+    public void updateFocus(String focus) {
+        switch (focus) {
+            case "file":
+                filem = new FileManager(this);
+                break;
+            case "mysql":
+                mysqlm = new MySQLManager(this);
+                break;
+            case "sqlite":
+                log("SEVERE", "GrimList is released, right now, to prepare users for the UUID changes. Right now, \"file\" is the only supported whitelist format.");
+                log("SEVERE", "GrimList will be updated as soon as possible to include MySQL support, SQLite support, as well as URL support. I apologize for the inconvenience.");
+                log("SEVERE", "Defaulting to \"file\" focus format.");
+                filem = new FileManager(this);
+                /*
+                sqlitem = new SQLiteManager(this);
+                break;
+            */
+            case "url":
+                log("SEVERE", "GrimList is released, right now, to prepare users for the UUID changes. Right now, \"file\" is the only supported whitelist format.");
+                log("SEVERE", "GrimList will be updated as soon as possible to include MySQL support, SQLite support, as well as URL support. I apologize for the inconvenience.");
+                log("SEVERE", "Defaulting to \"file\" focus format.");
+                filem = new FileManager(this);
+                /*
+                urlm = new URLManager(this);
+                break;
+            */
+            default:
+                log("SEVERE", "Whitelist focus is invalid, or blank! Defaulting to 'file'!");
+                focusOn = "file";
+                filem = new FileManager(this);
+                break;
+        }
+    }
+
     public void log(String lvl, String MSG) {
         if (lvl.equals("DEBUG")) {
             if (!getConfig().getBoolean("DebugMessages")) {
