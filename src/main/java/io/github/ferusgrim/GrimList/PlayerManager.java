@@ -42,6 +42,7 @@ class PlayerManager implements Listener {
                 } else {
                     plugin.mysqlm.createRecordFromLogin(uuid, playerName, playerAddress);
                 }
+                denyUser = !plugin.mysqlm.isPlayerWhitelisted(uuid);
                 break;
         }
         if (denyUser) {
