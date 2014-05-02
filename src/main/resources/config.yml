@@ -10,7 +10,7 @@ DebugMessages: false
 SaveQueries: true
 KickRemove: true
 AlwaysLookup: false
-Focus: 'file'
+Focus: file
 LogUsage:
   Add: false
   Remove: false
@@ -20,11 +20,11 @@ Notify:
   Console: false
   Player: true
 MySQL:
-  host: 'localhost'
+  host: localhost
   port: 3306
-  database: 'grimlist'
-  username: 'root'
-  password: 'toor'
+  database: 'grimlist
+  username: root
+  password: toor
 Url:
-  link: 'http://localhost/playerdata.yml'
+  link: http://localhost/playerdata.yml
   update-interval: 120
