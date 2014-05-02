@@ -83,12 +83,11 @@ public class MySQLManager {
         executeUpdate("CREATE TABLE IF NOT EXISTS `uselogs` (" +
                 "`vicUuid` varchar(36) NOT NULL, " +
                 "`vicName` varchar(16) NOT NULL, " +
-                "`command` varchar(6) NOT NULL, " +
-                "`arguments` varchar(64) NOT NULL, " +
+                "`command` varchar(64) NOT NULL, " +
                 "`exUuid` varchar(36) NOT NULL, " +
                 "`exName` varchar(16) NOT NULL, " +
                 "`datePerformed` varchar(19) NOT NULL, " +
-                "`commandNumber` int(9) NOT NULL DEFAULT '0', " +
+                "`commandNumber` int(9) NOT NULL AUTO_INCREMENT, " +
                 "PRIMARY KEY (`commandNumber`)" +
                 ") ENGINE=InnoDB DEFAULT CHARSET=latin1;");
     }
@@ -184,9 +183,9 @@ public class MySQLManager {
         }
     }
 
-    public void addCommandLog(String vicUuid, String vicName, String command, String exUuid, String exName){
+    public void addCommandLog(String vicName, String vicUuid, String command, String exUuid, String exName){
         SimpleDateFormat fDate = new SimpleDateFormat("MM.dd.yyyy-HH:mm:ss");
-        String sql = "INSERT INTO `" + database + ("`.`uselogs` (`vicUuid`, `vicName`, `command`, `exUuid`, `exName`, `datePerformed`, `commandNumber`) VALUES {" +
+        String sql = "INSERT INTO `" + database + ("`.`uselogs` (`vicUuid`, `vicName`, `command`, `exUuid`, `exName`, `datePerformed`, `commandNumber`) VALUES (" +
                 "'[VICUUID]', '[VICNAME]', '[COMMAND]', '[EXUUID]', '[EXNAME]', '[DATE]', NULL);")
                 .replace("[VICUUID]", vicUuid)
                 .replace("[VICNAME]", vicName)
@@ -301,7 +300,6 @@ public class MySQLManager {
     }
 
     public boolean isNameAPreviousName(String uuid, String name) {
-        List<String> usernames = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ps = null;
         try {
@@ -309,13 +307,12 @@ public class MySQLManager {
             ps = conn.prepareStatement("SELECT `usernames` FROM `" + database + "`.`previoususernames` WHERE `uuid` = ?;");
             ps.setString(1, uuid);
             ResultSet rs = ps.executeQuery();
-            int i = 1;
             while (rs.next()) {
-                usernames.add(rs.getString(i));
-                i++;
+                if (rs.getString(1).equalsIgnoreCase(name)) {
+                    clean(conn, ps);
+                    return true;
+                }
             }
-            clean(conn, ps);
-            return usernames.contains(name);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -324,7 +321,6 @@ public class MySQLManager {
     }
 
     public boolean isAddressAPreviousAddress(String uuid, String address) {
-        List<String> addresses = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ps = null;
         try {
@@ -332,13 +328,12 @@ public class MySQLManager {
             ps = conn.prepareStatement("SELECT `addresses` FROM `" + database + "`.`previousaddresses` WHERE `uuid` = ?;");
             ps.setString(1, uuid);
             ResultSet rs = ps.executeQuery();
-            int i = 1;
             while (rs.next()) {
-                addresses.add(rs.getString(i));
-                i++;
+                if (rs.getString(1).equalsIgnoreCase(address)) {
+                    clean(conn, ps);
+                    return true;
+                }
             }
-            clean(conn, ps);
-            return addresses.contains(address);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -453,7 +448,6 @@ public class MySQLManager {
         }
         String isWhitelisted = playerData.get(1);
         String lastUsername = playerData.get(2);
-        String lastAddress = playerData.get(3);
         String firstLogin = playerData.get(4);
         String lastLogin = playerData.get(5);
         String loginCount = playerData.get(6);
