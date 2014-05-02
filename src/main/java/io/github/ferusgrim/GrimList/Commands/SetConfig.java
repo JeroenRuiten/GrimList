@@ -20,7 +20,7 @@ public class SetConfig {
 
     public boolean run(CommandSender sender, String[] args) {
         String s1 = WordUtils.capitalize(args[1].toLowerCase());
-        if (s1.equals("Whitelist") || s1.equals("Metrics") || s1.equals("Updater") || s1.equals("Debugmessages") || s1.equals("Savequeries") || s1.equals("Kickremove")) {
+        if (s1.equals("Whitelist") || s1.equals("Metrics") || s1.equals("Updater") || s1.equals("Debugmessages") || s1.equals("Savequeries") || s1.equals("Kickremove") || s1.equals("Alwayslookup")) {
             if (s1.equals("Debugmessages")) {
                 s1 = "DebugMessages";
             }
@@ -29,6 +29,9 @@ public class SetConfig {
             }
             if (s1.equals("Kickremove")) {
                 s1 = "KickRemove";
+            }
+            if (s1.equals("Alwayslookup")) {
+                s1 = "AlwaysLookup";
             }
             if (!args[2].equalsIgnoreCase("true") && !args[2].equalsIgnoreCase("false")) {
                 sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Please select between true or false!");
@@ -44,9 +47,9 @@ public class SetConfig {
             sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + s1 + " has been " + (newBoolean ? "enabled" : "disabled") + "!");
             return true;
         }
-        if (s1.equals("Notify")) {
+        if (s1.equals("Notify") || s1.equals("LogUsage")) {
             String s2 = WordUtils.capitalize(args[2].toLowerCase());
-            if (s2.equals("Console") || s2.equals("Player")) {
+            if (s2.equals("Console") || s2.equals("Player") || s2.equals("Add") || s2.equals("Remove") || s2.equals("Delete") || s2.equals("View")) {
                 if (args.length < 4 || (args[3].equalsIgnoreCase("true")) && (args[3].equalsIgnoreCase("false"))) {
                     sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Please select between true or false!");
                     return true;
