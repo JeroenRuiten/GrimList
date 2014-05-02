@@ -47,7 +47,10 @@ public class SetConfig {
             sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + s1 + " has been " + (newBoolean ? "enabled" : "disabled") + "!");
             return true;
         }
-        if (s1.equals("Notify") || s1.equals("LogUsage")) {
+        if (s1.equals("Notify") || s1.equals("Logusage")) {
+            if (s1.equals("Logusage")) {
+                s1 = "LogUsage";
+            }
             String s2 = WordUtils.capitalize(args[2].toLowerCase());
             if (s2.equals("Console") || s2.equals("Player") || s2.equals("Add") || s2.equals("Remove") || s2.equals("Delete") || s2.equals("View")) {
                 if (args.length < 4 || (args[3].equalsIgnoreCase("true")) && (args[3].equalsIgnoreCase("false"))) {
@@ -88,6 +91,38 @@ public class SetConfig {
             plugin.updateFocus(s2);
             sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Whitelist focus altered to \"" + s2 + "\"!");
             return true;
+        }
+        if (s1.equals("Mysql")) {
+            String s2 = args[2].toLowerCase();
+            if (args.length < 4) {
+                sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "You forgot what to alter " + s2 + " to!");
+                return true;
+            }
+            if (s2.equals("host") || s2.equals("database") || s2.equals("username") || s2.equals("username") || s2.equals("password")) {
+                if (plugin.getConfig().getString("MySQL." + s2).equals(args[3])) {
+                    sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "MySQL " + WordUtils.capitalize(s2) + " is already set to : " + args[3]);
+                    return true;
+                } else {
+                    plugin.getConfig().set("MySQL." + s2, args[3]);
+                    sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "MySQL " + WordUtils.capitalize(s2) + " was altered to : " + args[3]);
+                }
+            }
+            if (s2.equals("port")) {
+                int s3I;
+                if (s2.equals("port")) {
+                    if (!args[3].matches("[0-9]{1,5}") || args[3].length() > 5) {
+                        sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Invalid port!");
+                        return true;
+                    }
+                    s3I = Integer.parseInt(args[3]);
+                    if (plugin.getConfig().getInt("MySQL.port") == s3I) {
+                        sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "MySQL Port is already set to : " + s3I);
+                    } else {
+                        plugin.getConfig().set("MySQL.port", s3I);
+                        sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "MySQL Port altered to : " + s3I);
+                    }
+                }
+            }
         }
         sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Config setting doesn't exist, or can't be modified in-game.");
         return true;
