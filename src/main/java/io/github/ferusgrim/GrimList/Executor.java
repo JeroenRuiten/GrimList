@@ -67,31 +67,17 @@ public class Executor implements CommandExecutor {
         }
         if (function.equals("add") || function.equals("remove") || function.equals("delete") || function.equals("view") || function.equals("getid")) {
             if (args.length < 2) {
-                if (sender instanceof Player) {
-                    sender.sendMessage(plugin.mStart + "Missing username!");
-                } else {
-                    plugin.log("WARNING", "Missing username!");
-                }
+                sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Missing username!");
                 return true;
             }
             if (!args[1].matches("[a-zA-Z0-9_]{3,16}")) {
-                if (sender instanceof Player) {
-                    sender.sendMessage(plugin.mStart + "Invalid username!");
-                } else {
-                    plugin.log("WARNING", "Invalid username!");
-                }
+                sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Invalid username!");
                 return true;
             }
         }
-        if (function.equals("set")) {
-            if (args.length < 3) {
-                if (sender instanceof Player) {
-                    sender.sendMessage(plugin.mStart + "Not enough arguments to use this command!");
-                } else {
-                    plugin.log("WARNING", "Not enough arguments to use this command!");
-                }
-                return true;
-            }
+        if (function.equals("set") && args.length < 3) {
+            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Not enough arguments to use this command!");
+            return true;
         }
         return false;
     }
