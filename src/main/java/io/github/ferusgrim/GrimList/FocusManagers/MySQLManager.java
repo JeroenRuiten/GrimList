@@ -35,7 +35,7 @@ public class MySQLManager {
         setupKnownAddresses();
     }
 
-   private void registerPaths() {
+    private void registerPaths() {
         host = plugin.getConfig().getString("MySQL.host");
         port = plugin.getConfig().getInt("MySQL.port");
         database = plugin.getConfig().getString("MySQL.database");
@@ -132,9 +132,11 @@ public class MySQLManager {
         String sql = "DELETE FROM `" + database + "`.`playerdata` WHERE `playerdata`.`uuid` = '[UUID]';"
                 .replace("[UUID]", uuid);
         executeUpdate(sql);
-        sql = "DELETE FROM `" + database + "`.`previoususernames` WHERE `previoususernames`.`uuid` = '[UUID]';";
+        sql = "DELETE FROM `" + database + "`.`previoususernames` WHERE `previoususernames`.`uuid` = '[UUID]';"
+                .replace("[UUID]", uuid);
         executeUpdate(sql);
-        sql = "DELETE FROM `" + database + "`.`previousaddresses` WHERE `previousaddresses`.`uuid` = '[UUID]';";
+        sql = "DELETE FROM `" + database + "`.`previousaddresses` WHERE `previousaddresses`.`uuid` = '[UUID]';"
+                .replace("[UUID]", uuid);
         executeUpdate(sql);
     }
 
