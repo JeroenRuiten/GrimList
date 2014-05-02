@@ -20,31 +20,21 @@ import java.util.List;
 
 public class MySQLManager {
     private final GrimList plugin;
-    private String host;
-    private int port;
-    private String database;
-    private String username;
-    private String password;
 
     public MySQLManager(GrimList plugin) {
         this.plugin = plugin;
-        registerPaths();
         setupPlayerDataTable();
         setupLogTable();
         setupKnownUsernames();
         setupKnownAddresses();
     }
 
-    private void registerPaths() {
-        host = plugin.getConfig().getString("MySQL.host");
-        port = plugin.getConfig().getInt("MySQL.port");
-        database = plugin.getConfig().getString("MySQL.database");
-        username = plugin.getConfig().getString("MySQL.username");
-        password = plugin.getConfig().getString("MySQL.password");
-    }
-
     private Connection sqlConnection() {
-        registerPaths();
+        String host = plugin.getConfig().getString("MySQL.host");
+        int port = plugin.getConfig().getInt("MySQL.port");
+        String database = plugin.getConfig().getString("MySQL.database");
+        String username = plugin.getConfig().getString("MySQL.username");
+        String password = plugin.getConfig().getString("MySQL.password");
         try {
             return DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?autoReconnect=true&user=" + username + "&password=" + password);
         } catch (SQLException e) {
@@ -53,12 +43,21 @@ public class MySQLManager {
         return null;
     }
 
-    private void executeUpdate(String sql) {
+    private void setupPlayerDataTable() {
         Connection conn = null;
         PreparedStatement ps = null;
         try {
             conn = sqlConnection();
-            ps = conn.prepareStatement(sql);
+            ps = conn.prepareStatement("CREATE TABLE IF NOT EXISTS `playerdata` (" +
+                    "`uuid` varchar(36) NOT NULL, " +
+                    "`isWhitelisted` tinyint(1) NOT NULL, " +
+                    "`lastUsername` varchar(16) NOT NULL," +
+                    "`lastAddress` varchar(15) NOT NULL, " +
+                    "`firstLogin` varchar(19) NOT NULL, " +
+                    "`lastLogin` varchar(19) NOT NULL, " +
+                    "`loginCount` int(9) NOT NULL, " +
+                    "UNIQUE KEY `uuid` (`uuid`)" +
+                    ") ENGINE=InnoDB DEFAULT CHARSET=latin1;");
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -66,100 +65,172 @@ public class MySQLManager {
         clean(conn, ps);
     }
 
-    private void setupPlayerDataTable() {
-        executeUpdate("CREATE TABLE IF NOT EXISTS `playerdata` (" +
-                "`uuid` varchar(36) NOT NULL, " +
-                "`isWhitelisted` tinyint(1) NOT NULL, " +
-                "`lastUsername` varchar(16) NOT NULL," +
-                "`lastAddress` varchar(15) NOT NULL, " +
-                "`firstLogin` varchar(19) NOT NULL, " +
-                "`lastLogin` varchar(19) NOT NULL, " +
-                "`loginCount` int(9) NOT NULL, " +
-                "UNIQUE KEY `uuid` (`uuid`)" +
-                ") ENGINE=InnoDB DEFAULT CHARSET=latin1;");
-    }
-
     private void setupLogTable() {
-        executeUpdate("CREATE TABLE IF NOT EXISTS `uselogs` (" +
-                "`vicUuid` varchar(36) NOT NULL, " +
-                "`vicName` varchar(16) NOT NULL, " +
-                "`command` varchar(64) NOT NULL, " +
-                "`exUuid` varchar(36) NOT NULL, " +
-                "`exName` varchar(16) NOT NULL, " +
-                "`datePerformed` varchar(19) NOT NULL, " +
-                "`commandNumber` int(9) NOT NULL AUTO_INCREMENT, " +
-                "PRIMARY KEY (`commandNumber`)" +
-                ") ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = sqlConnection();
+            ps = conn.prepareStatement("CREATE TABLE IF NOT EXISTS `uselogs` (" +
+                    "`vicUuid` varchar(36) NOT NULL, " +
+                    "`vicName` varchar(16) NOT NULL, " +
+                    "`command` varchar(64) NOT NULL, " +
+                    "`exUuid` varchar(36) NOT NULL, " +
+                    "`exName` varchar(16) NOT NULL, " +
+                    "`datePerformed` varchar(19) NOT NULL, " +
+                    "`commandNumber` int(9) NOT NULL AUTO_INCREMENT, " +
+                    "PRIMARY KEY (`commandNumber`)" +
+                    ") ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        clean(conn, ps);
     }
 
     private void setupKnownUsernames() {
-        executeUpdate("CREATE TABLE IF NOT EXISTS `previoususernames` (" +
-                "`uuid` varchar(36) NOT NULL, " +
-                "`usernames` varchar(16) NOT NULL, " +
-                "UNIQUE KEY `usernames` (`usernames`), " +
-                "KEY `uuid` (`uuid`)" +
-                ") ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = sqlConnection();
+            ps = conn.prepareStatement("CREATE TABLE IF NOT EXISTS `previoususernames` (" +
+                    "`uuid` varchar(36) NOT NULL, " +
+                    "`usernames` varchar(16) NOT NULL, " +
+                    "UNIQUE KEY `usernames` (`usernames`), " +
+                    "KEY `uuid` (`uuid`)" +
+                    ") ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        clean(conn, ps);
     }
 
     private void setupKnownAddresses() {
-        executeUpdate("CREATE TABLE IF NOT EXISTS `previousaddresses` (" +
-                "`uuid` varchar(36) NOT NULL, " +
-                "`addresses` varchar(16) NOT NULL, " +
-                "UNIQUE KEY `addresses` (`addresses`), " +
-                "KEY `uuid` (`uuid`)" +
-                ") ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = sqlConnection();
+            ps = conn.prepareStatement("CREATE TABLE IF NOT EXISTS `previousaddresses` (" +
+                    "`uuid` varchar(36) NOT NULL, " +
+                    "`addresses` varchar(16) NOT NULL, " +
+                    "UNIQUE KEY `addresses` (`addresses`), " +
+                    "KEY `uuid` (`uuid`)" +
+                    ") ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        clean(conn, ps);
     }
 
-    public void addPlayerToWhitelist(String uuid, String name){
-        String sql = "UPDATE `" + database + "`.`playerdata` SET `isWhitelisted` = '1' WHERE `playerdata`.`uuid` = '[UUID]'"
-                .replace("[UUID]", uuid);
-        executeUpdate(sql);
+    public void addPlayerToWhitelist(String uuid, String name) {
+        String database = plugin.getConfig().getString("MySQL.database");
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = sqlConnection();
+            ps = conn.prepareStatement("UPDATE `" + database + "`.`playerdata` SET `isWhitelisted` = '1' WHERE `playerdata`.`uuid` = ?");
+            ps.setString(1, uuid);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        clean(conn, ps);
         if (!isNameAPreviousName(uuid, name)) {
             addNewUsername(uuid, name);
         }
     }
 
-    public void removePlayerFromWhitelist(String uuid, String name){
-        String sql = "UPDATE `" + database + "`.`playerdata` SET `isWhitelisted` = '0' WHERE `playerdata`.`uuid` = '[UUID]'"
-                .replace("[UUID]", uuid);
-        executeUpdate(sql);
+    public void removePlayerFromWhitelist(String uuid, String name) {
+        String database = plugin.getConfig().getString("MySQL.database");
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = sqlConnection();
+            ps = conn.prepareStatement("UPDATE `" + database + "`.`playerdata` SET `isWhitelisted` = '0' WHERE `playerdata`.`uuid` = ?");
+            ps.setString(1, uuid);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        clean(conn, ps);
         if (!isNameAPreviousName(uuid, name)) {
             addNewUsername(uuid, name);
         }
     }
 
-    public void deletePlayerFromRecord(String uuid){
-        String sql = "DELETE FROM `" + database + "`.`playerdata` WHERE `playerdata`.`uuid` = '[UUID]';"
-                .replace("[UUID]", uuid);
-        executeUpdate(sql);
-        sql = "DELETE FROM `" + database + "`.`previoususernames` WHERE `previoususernames`.`uuid` = '[UUID]';"
-                .replace("[UUID]", uuid);
-        executeUpdate(sql);
-        sql = "DELETE FROM `" + database + "`.`previousaddresses` WHERE `previousaddresses`.`uuid` = '[UUID]';"
-                .replace("[UUID]", uuid);
-        executeUpdate(sql);
+    public void deletePlayerFromRecord(String uuid) {
+        String database = plugin.getConfig().getString("MySQL.database");
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = sqlConnection();
+            ps = conn.prepareStatement("DELETE FROM `" + database + "`.`playerdata` WHERE `playerdata`.`uuid` = ?;");
+            ps.setString(1, uuid);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        clean(conn, ps);
+        try {
+            conn = sqlConnection();
+            ps = conn.prepareStatement("DELETE FROM `" + database + "`.`previoususernames` WHERE `previoususernames`.`uuid` = ?;");
+            ps.setString(1, uuid);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        clean(conn, ps);
+        try {
+            conn = sqlConnection();
+            ps = conn.prepareStatement("DELETE FROM `" + database + "`.`previousaddresses` WHERE `previousaddresses`.`uuid` = ?;");
+            ps.setString(1, uuid);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        clean(conn, ps);
     }
 
-    public void createRecordFromQuery(String uuid, String name){
-        String sql = "INSERT INTO `" + database + ("`.`playerdata` (`uuid`, `isWhitelisted`, `lastUsername`, `lastAddress`, `firstLogin`, `lastLogin`, `loginCount`) VALUES (" +
-                "'[UUID]', '0','[NAME]', '', '', '', '0');")
-                .replace("[UUID]", uuid)
-                .replace("[NAME]", name);
-        executeUpdate(sql);
+    public void createRecordFromQuery(String uuid, String name) {
+        String database = plugin.getConfig().getString("MySQL.database");
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = sqlConnection();
+            ps = conn.prepareStatement("INSERT INTO `" + database + "`.`playerdata` (`uuid`, `isWhitelisted`, `lastUsername`, `lastAddress`, `firstLogin`, `lastLogin`, `loginCount`) VALUES (" +
+                    "?, '0', ?, '', '', '', '0');");
+            ps.setString(1, uuid);
+            ps.setString(2, name);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        clean(conn, ps);
         if (!isNameAPreviousName(uuid, name)) {
             addNewUsername(uuid, name);
         }
     }
 
-    public void createRecordFromLogin(String uuid, String name, String address){
+    public void createRecordFromLogin(String uuid, String name, String address) {
+        String database = plugin.getConfig().getString("MySQL.database");
         SimpleDateFormat fDate = new SimpleDateFormat("MM.dd.yyyy-HH:mm:ss");
-        String sql = "INSERT INTO `" + database + ("`.`playerdata` (`uuid`, `isWhitelisted`, `lastUsername`, `lastAddress`, `firstLogin`, `lastLogin`, `loginCount`) " +
-                "VALUES ('[UUID]', '0', '[NAME]', '[ADDRESS]', '[DATE]', '[DATE]', '1');")
-                .replace("[UUID]", uuid)
-                .replace("[NAME]", name)
-                .replace("[ADDRESS]", address)
-                .replace("[DATE]", fDate.format(new Date()));
-        executeUpdate(sql);
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = sqlConnection();
+            ps = conn.prepareStatement("INSERT INTO `" + database + "`.`playerdata` (`uuid`, `isWhitelisted`, `lastUsername`, `lastAddress`, `firstLogin`, `lastLogin`, `loginCount`) " +
+                    "VALUES ('[UUID]', '0', '[NAME]', '[ADDRESS]', '[DATE]', '[DATE]', '1');");
+            ps.setString(1, uuid);
+            ps.setString(2, name);
+            ps.setString(3, address);
+            ps.setString(4, fDate.format(new Date()));
+            ps.setString(5, fDate.format(new Date()));
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        clean(conn, ps);
         if (!isNameAPreviousName(uuid, name)) {
             addNewUsername(uuid, name);
         }
@@ -168,15 +239,34 @@ public class MySQLManager {
         }
     }
 
-    public void alterRecordOnLogin(String uuid, String name, String address){
+    public void alterRecordOnLogin(String uuid, String name, String address) {
+        String database = plugin.getConfig().getString("MySQL.database");
         SimpleDateFormat fDate = new SimpleDateFormat("MM.dd.yyyy-HH:mm:ss");
-        String sql = "UPDATE `" + database + "`.`playerdata` SET `lastUsername` = '[NAME]', `lastAddress` = '[ADDRESS]', "
-                .replace("[NAME]", name)
-                .replace("[ADDRESS]", address);
-        sql = sql + (isFirstLoginSet(uuid) ? "`firstLogin` = '[DATE]', " : "") + "`lastLogin` = '[DATE]', `loginCount` = loginCount + 1 WHERE `playerdata`.`uuid` = '[UUID]';"
-                .replace("[UUID]", uuid)
-                .replace("[DATE]", fDate.format(new Date()));
-        executeUpdate(sql);
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = sqlConnection();
+            if (isFirstLoginSet(uuid)) {
+                ps = conn.prepareStatement("UPDATE `" + database + "`.`playerdata` SET `lastUsername` = ?, `lastAddress` = ?, `lastLogin` = ?, " +
+                        "`loginCount` = loginCount + 1 WHERE `playerdata`.`uuid` = ?;");
+                ps.setString(1, name);
+                ps.setString(2, address);
+                ps.setString(3, fDate.format(new Date()));
+                ps.setString(4, uuid);
+            } else {
+                ps = conn.prepareStatement("UPDATE `" + database + "`.`playerdata` SET `lastUsername` = ?, `lastAddress` = ?, `firstLogin` = ?, " +
+                        "`lastLogin` = ?, `loginCount` = loginCount + 1 WHERE `playerdata`.`uuid` = ?;");
+                ps.setString(1, name);
+                ps.setString(2, address);
+                ps.setString(3, fDate.format(new Date()));
+                ps.setString(4, fDate.format(new Date()));
+                ps.setString(5, uuid);
+            }
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        clean(conn, ps);
         if (!isNameAPreviousName(uuid, name)) {
             addNewUsername(uuid, name);
         }
@@ -185,34 +275,62 @@ public class MySQLManager {
         }
     }
 
-    public void addCommandLog(String vicName, String vicUuid, String command, String exUuid, String exName){
+    public void addCommandLog(String vicName, String vicUuid, String command, String exUuid, String exName) {
+        String database = plugin.getConfig().getString("MySQL.database");
         SimpleDateFormat fDate = new SimpleDateFormat("MM.dd.yyyy-HH:mm:ss");
-        String sql = "INSERT INTO `" + database + ("`.`uselogs` (`vicUuid`, `vicName`, `command`, `exUuid`, `exName`, `datePerformed`, `commandNumber`) VALUES (" +
-                "'[VICUUID]', '[VICNAME]', '[COMMAND]', '[EXUUID]', '[EXNAME]', '[DATE]', NULL);")
-                .replace("[VICUUID]", vicUuid)
-                .replace("[VICNAME]", vicName)
-                .replace("[COMMAND]", command)
-                .replace("[EXUUID]", exUuid)
-                .replace("[EXNAME]", exName)
-                .replace("[DATE]", fDate.format(new Date()));
-        executeUpdate(sql);
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = sqlConnection();
+            ps = conn.prepareStatement("INSERT INTO `" + database + ("`.`uselogs` (`vicUuid`, `vicName`, `command`, `exUuid`, `exName`, `datePerformed`, `commandNumber`) VALUES (" +
+                    "?, ?, ?, ?, ?, ?, NULL);"));
+            ps.setString(1, vicUuid);
+            ps.setString(2, vicName);
+            ps.setString(3, command);
+            ps.setString(4, exUuid);
+            ps.setString(5, exName);
+            ps.setString(6, fDate.format(new Date()));
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        clean(conn, ps);
     }
 
     public void addNewUsername(String uuid, String name) {
-        String sql = "INSERT INTO `" + database + "`.`previoususernames` (`uuid`, `usernames`) VALUES ('[UUID]', '[NAME]');"
-                .replace("[UUID]", uuid)
-                .replace("[NAME]", name);
-        executeUpdate(sql);
+        String database = plugin.getConfig().getString("MySQL.database");
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = sqlConnection();
+            ps = conn.prepareStatement("INSERT INTO `" + database + "`.`previoususernames` (`uuid`, `usernames`) VALUES (?, ?);");
+            ps.setString(1, uuid);
+            ps.setString(2, name);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        clean(conn, ps);
     }
 
     public void addNewAddress(String uuid, String address) {
-        String sql = "INSERT INTO `" + database + "`.`previousaddresses` (`uuid`, `addresses`) VALUES ('[UUID]', '[ADDRESS]');"
-                .replace("[UUID]", uuid)
-                .replace("[ADDRESS]", address);
-        executeUpdate(sql);
+        String database = plugin.getConfig().getString("MySQL.database");
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = sqlConnection();
+            ps = conn.prepareStatement("INSERT INTO `" + database + "`.`previousaddresses` (`uuid`, `addresses`) VALUES (?, ?);");
+            ps.setString(1, uuid);
+            ps.setString(2, address);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        clean(conn, ps);
     }
 
     public boolean doesRecordExist(String uuid) {
+        String database = plugin.getConfig().getString("MySQL.database");
         Connection conn = null;
         PreparedStatement ps = null;
         try {
@@ -237,6 +355,7 @@ public class MySQLManager {
     }
 
     public boolean isPlayerWhitelisted(String uuid) {
+        String database = plugin.getConfig().getString("MySQL.database");
         Connection conn = null;
         PreparedStatement ps = null;
         try {
@@ -256,6 +375,7 @@ public class MySQLManager {
     }
 
     public boolean isFirstLoginSet(String uuid) {
+        String database = plugin.getConfig().getString("MySQL.database");
         Connection conn = null;
         PreparedStatement ps = null;
         try {
@@ -275,6 +395,7 @@ public class MySQLManager {
     }
 
     public boolean isNameAPreviousName(String uuid, String name) {
+        String database = plugin.getConfig().getString("MySQL.database");
         Connection conn = null;
         PreparedStatement ps = null;
         try {
@@ -296,6 +417,7 @@ public class MySQLManager {
     }
 
     public boolean isAddressAPreviousAddress(String uuid, String address) {
+        String database = plugin.getConfig().getString("MySQL.database");
         Connection conn = null;
         PreparedStatement ps = null;
         try {
@@ -317,6 +439,7 @@ public class MySQLManager {
     }
 
     public String getUUID(String name) {
+        String database = plugin.getConfig().getString("MySQL.database");
         String uuid = "";
         Connection conn = null;
         PreparedStatement ps = null;
@@ -336,6 +459,7 @@ public class MySQLManager {
     }
 
     private List<String> playerData(String uuid) {
+        String database = plugin.getConfig().getString("MySQL.database");
         List<String> playerData = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ps = null;
@@ -361,6 +485,7 @@ public class MySQLManager {
     }
 
     private List<String> previousUsernames(String uuid) {
+        String database = plugin.getConfig().getString("MySQL.database");
         List<String> usernames = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ps = null;
@@ -374,7 +499,7 @@ public class MySQLManager {
                     usernames.add(rs.getString(1));
                 }
             }
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         clean(conn, ps);
@@ -382,6 +507,7 @@ public class MySQLManager {
     }
 
     private List<String> previousAddresses(String uuid) {
+        String database = plugin.getConfig().getString("MySQL.database");
         List<String> addresses = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ps = null;
@@ -395,7 +521,7 @@ public class MySQLManager {
                     addresses.add(rs.getString(1));
                 }
             }
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         clean(conn, ps);
