@@ -220,7 +220,7 @@ public class MySQLManager {
         try {
             conn = sqlConnection();
             ps = conn.prepareStatement("INSERT INTO `" + database + "`.`playerdata` (`uuid`, `isWhitelisted`, `lastUsername`, `lastAddress`, `firstLogin`, `lastLogin`, `loginCount`) " +
-                    "VALUES ('[UUID]', '0', '[NAME]', '[ADDRESS]', '[DATE]', '[DATE]', '1');");
+                    "VALUES (?, '0', ?, ?, ?, ?, '1');");
             ps.setString(1, uuid);
             ps.setString(2, name);
             ps.setString(3, address);

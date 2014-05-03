@@ -22,7 +22,7 @@ Notify:
 MySQL:
   host: localhost
   port: 3306
-  database: 'grimlist
+  database: grimlist
   username: root
   password: toor
 Url:
