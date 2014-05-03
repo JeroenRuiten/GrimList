@@ -49,12 +49,14 @@ public class Executor implements CommandExecutor {
             case "set":
                 SetConfig sc = new SetConfig(plugin);
                 return sc.run(sender, args);
+            case "export":
+                ConvertRecords exp = new ConvertRecords(plugin);
+                return exp.run(sender, args);
+            case "import":
+                ConvertRecords imp = new ConvertRecords(plugin);
+                return imp.run(sender, args);
             default:
-                if (sender instanceof Player) {
-                    sender.sendMessage(plugin.mStart + "Unknown or invalid command!");
-                } else {
-                    plugin.log("WARNING", "Unknown or invalid command!");
-                }
+                sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Unknown or invalid command!");
                 return true;
         }
     }
@@ -76,6 +78,10 @@ public class Executor implements CommandExecutor {
             }
         }
         if (function.equals("set") && args.length < 3) {
+            sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Not enough arguments to use this command!");
+            return true;
+        }
+        if ((function.equals("export") || function.equals("import")) && args.length < 2) {
             sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Not enough arguments to use this command!");
             return true;
         }
@@ -104,6 +110,12 @@ public class Executor implements CommandExecutor {
                 break;
             case "-g":
                 function = "getid";
+                break;
+            case "-e":
+                function = "export";
+                break;
+            case "-i":
+                function = "import";
                 break;
         }
         return function;
