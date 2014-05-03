@@ -32,12 +32,14 @@ In short, GrimList is the premier whitelisting plugin. I challenge you to find a
 Permissions | Functions
 :-: | :--
 grimlist.* | _Grants all permissions._
+grimlist.mod | _Grants permissions to 'add', 'remove', 'view', 'getid', and 'help'._
 grimlist.add | _Allows player to add others to the whitelist._
 grimlist.remove | _Allows player to remove others from the whitelist._
 grimlist.delete | _Allows player to completely delete another player record._
 grimlist.view | _Allows a player to view another player's player data._
 grimlist.getid | _Allows a player to gather another player's UUID._
 grimlist.set | _Allows a player to change configuration in-game._
+grimlist.convert | _Allows a player to import or export foci._
 grimlist.help | _Allows a player to view the help menu._
 grimlist.update | _Shows notification of update on join._
 grimlist.notify | _Notifies player on failed join attempt._
