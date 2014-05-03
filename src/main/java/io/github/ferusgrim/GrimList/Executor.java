@@ -63,7 +63,10 @@ public class Executor implements CommandExecutor {
 
     private boolean containsError(CommandSender sender, String[] args) {
         String function = inferAlias(args[0].toLowerCase());
-        if (!sender.hasPermission("grimlist." + args[0])) {
+        if (function.equals("export") || function.equals("import")) {
+            function = "convert";
+        }
+        if (!sender.hasPermission("grimlist." + function)) {
             sender.sendMessage(plugin.mStart + "Insufficient privileges!");
             return true;
         }
