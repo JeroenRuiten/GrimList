@@ -24,6 +24,15 @@ permissions:
       grimlist.update: true
       grimlist.help: true
       grimlist.set: true
+      grimlist.convert: true
+  grimlist.mod:
+    description: Safe commands for whitelisters.
+    children:
+      grimlist.add: true
+      grimlist.remove: true
+      grimlist.view: true
+      grimlist.getid: true
+      grimlist.help: true
   grimlist.add:
     description: Allows you to add a player to the whitelist.
     default: op
@@ -47,6 +56,9 @@ permissions:
     default: op
   grimlist.update:
     description: Notifies player on login if an update is available.
+    default: op
+  grimlist.convert:
+    description: Allows you to convert between focus types.
     default: op
   grimlist.notify:
     description: Notifies player of failed login attempts.
