@@ -26,5 +26,5 @@ MySQL:
   username: root
   password: toor
 Url:
-  link: http://localhost/playerdata.yml
+  link: http://your.pd/playerdata.yml
   update-interval: 120
