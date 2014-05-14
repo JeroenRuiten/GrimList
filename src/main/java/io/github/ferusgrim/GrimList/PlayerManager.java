@@ -37,11 +37,7 @@ class PlayerManager implements Listener {
                 denyUser = !plugin.filem.isPlayerWhitelisted(uuid);
                 break;
             case "mysql":
-                if (plugin.mysqlm.doesRecordExist(uuid)) {
-                    plugin.mysqlm.alterRecordOnLogin(uuid, playerName, playerAddress);
-                } else {
-                    plugin.mysqlm.createRecordFromLogin(uuid, playerName, playerAddress);
-                }
+                plugin.mysqlm.recordOnLogin(uuid, playerName, playerAddress);
                 denyUser = !plugin.mysqlm.isPlayerWhitelisted(uuid);
                 break;
         }

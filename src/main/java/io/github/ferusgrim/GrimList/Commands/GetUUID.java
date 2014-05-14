@@ -87,9 +87,7 @@ public class GetUUID {
                             }
                             break;
                         case "mysql":
-                            if (!plugin.mysqlm.doesRecordExist(uuid)) {
-                                plugin.mysqlm.createRecordFromQuery(uuid, name);
-                            }
+                            plugin.mysqlm.removePlayerFromWhitelist(uuid, name);
                             break;
                     }
                 }

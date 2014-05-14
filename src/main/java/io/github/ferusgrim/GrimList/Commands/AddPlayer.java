@@ -110,7 +110,6 @@ public class AddPlayer {
                                 sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player was added to the whitelist!");
                             }
                         } else {
-                            plugin.mysqlm.createRecordFromQuery(uuid, name);
                             plugin.mysqlm.addPlayerToWhitelist(uuid, name);
                             if (plugin.getConfig().getBoolean("LogUsage.Add")) {
                                 plugin.mysqlm.addCommandLog(name, uuid, "/whitelist add " + name, (sender instanceof Player ? plugin.getServer().getPlayerExact(sender.getName()).getUniqueId().toString() : "CONSOLE"), sender.getName());

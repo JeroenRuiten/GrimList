@@ -138,7 +138,7 @@ public class RemovePlayer {
                             }
                         } else {
                             if (plugin.getConfig().getBoolean("SaveQueries")) {
-                                plugin.mysqlm.createRecordFromQuery(uuid, name);
+                                plugin.mysqlm.removePlayerFromWhitelist(uuid, name);
                             }
                             sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Player isn't whitelisted!");
                         }

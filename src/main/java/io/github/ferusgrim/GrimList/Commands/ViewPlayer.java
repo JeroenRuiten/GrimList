@@ -104,7 +104,7 @@ public class ViewPlayer {
                             }
                         } else {
                             if (plugin.getConfig().getBoolean("SaveQueries")) {
-                                plugin.mysqlm.createRecordFromQuery(uuid, name);
+                                plugin.mysqlm.removePlayerFromWhitelist(uuid, name);
                                 plugin.mysqlm.doViewPlayer(sender, uuid);
                                 if (plugin.getConfig().getBoolean("LogUsage.View")) {
                                     plugin.mysqlm.addCommandLog(name, uuid, "/whitelist view " + name, (sender instanceof Player ? plugin.getServer().getPlayerExact(sender.getName()).getUniqueId().toString() : "CONSOLE"), sender.getName());
