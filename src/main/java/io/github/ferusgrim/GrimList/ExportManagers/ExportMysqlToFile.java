@@ -46,15 +46,17 @@ public class ExportMysqlToFile {
                 canRun = false;
                 Connection conn = null;
                 PreparedStatement ps = null;
+                ResultSet rs = null;
                 String host = plugin.getConfig().getString("MySQL.host");
                 int port = plugin.getConfig().getInt("MySQL.port");
                 String database = plugin.getConfig().getString("MySQL.database");
                 String username = plugin.getConfig().getString("MySQL.username");
                 String password = plugin.getConfig().getString("MySQL.password");
                 try {
-                    conn = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?autoReconnect=true&user=" + username + "&password=" + password);
-                    ps = conn.prepareStatement("SELECT * FROM `" + database + "`.`playerdata`;");
-                    ResultSet rs = ps.executeQuery();
+                    conn = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?autoReconnect=true&user=" + username +
+                            (password != null && password.isEmpty() ? "&password=" + password : ""));
+                    ps = conn.prepareStatement("SELECT * FROM " + database + ".playerdata;");
+                    rs = ps.executeQuery();
                     if (rs.isBeforeFirst()) {
                         if (!new File(plugin.getDataFolder(), "playerdata.yml").exists()) {
                             fm.saveDefault();
@@ -78,6 +80,20 @@ public class ExportMysqlToFile {
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
+                } finally {
+                    try {
+                        if (ps != null) {
+                            ps.close();
+                        }
+                        if (conn != null) {
+                            conn.close();
+                        }
+                        if (rs != null) {
+                            rs.close();
+                        }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 

@@ -36,7 +36,8 @@ public class MySQLManager {
         String username = plugin.getConfig().getString("MySQL.username");
         String password = plugin.getConfig().getString("MySQL.password");
         try {
-            return DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?autoReconnect=true&user=" + username + "&password=" + password);
+            return DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?autoReconnect=true&user=" + username +
+                    (password != null && password.isEmpty() ? "&password=" + password : ""));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -61,8 +62,9 @@ public class MySQLManager {
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            clean(conn, ps, null);
         }
-        clean(conn, ps);
     }
 
     private void setupLogTable() {
@@ -83,8 +85,9 @@ public class MySQLManager {
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            clean(conn, ps, null);
         }
-        clean(conn, ps);
     }
 
     private void setupKnownUsernames() {
@@ -101,8 +104,9 @@ public class MySQLManager {
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            clean(conn, ps, null);
         }
-        clean(conn, ps);
     }
 
     private void setupKnownAddresses() {
@@ -119,8 +123,9 @@ public class MySQLManager {
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            clean(conn, ps, null);
         }
-        clean(conn, ps);
     }
 
     public void addPlayerToWhitelist(String uuid, String name) {
@@ -136,8 +141,9 @@ public class MySQLManager {
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            clean(conn, ps, null);
         }
-        clean(conn, ps);
         if (!isNameAPreviousName(uuid, name)) {
             addNewUsername(uuid, name);
         }
@@ -156,8 +162,9 @@ public class MySQLManager {
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            clean(conn, ps, null);
         }
-        clean(conn, ps);
         if (!isNameAPreviousName(uuid, name)) {
             addNewUsername(uuid, name);
         }
@@ -172,28 +179,17 @@ public class MySQLManager {
             ps = conn.prepareStatement("DELETE FROM " + database + ".playerdata WHERE playerdata.uuid = ?");
             ps.setString(1, uuid);
             ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        clean(conn, ps);
-        try {
-            conn = sqlConnection();
             ps = conn.prepareStatement("DELETE FROM " + database + ".previoususernames WHERE previoususernames.uuid = ?");
             ps.setString(1, uuid);
             ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        clean(conn, ps);
-        try {
-            conn = sqlConnection();
             ps = conn.prepareStatement("DELETE FROM " + database + ".previousaddresses WHERE previousaddresses.uuid = ?");
             ps.setString(1, uuid);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            clean(conn, ps, null);
         }
-        clean(conn, ps);
     }
 
     public void recordOnLogin(String uuid, String name, String address) {
@@ -223,8 +219,9 @@ public class MySQLManager {
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            clean(conn, ps, null);
         }
-        clean(conn, ps);
         if (!isNameAPreviousName(uuid, name)) {
             addNewUsername(uuid, name);
         }
@@ -251,8 +248,9 @@ public class MySQLManager {
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            clean(conn, ps, null);
         }
-        clean(conn, ps);
     }
 
     public void addNewUsername(String uuid, String name) {
@@ -267,8 +265,9 @@ public class MySQLManager {
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            clean(conn, ps, null);
         }
-        clean(conn, ps);
     }
 
     public void addNewAddress(String uuid, String address) {
@@ -283,52 +282,46 @@ public class MySQLManager {
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            clean(conn, ps, null);
         }
-        clean(conn, ps);
     }
 
     public boolean doesRecordExist(String uuid) {
         String database = plugin.getConfig().getString("MySQL.database");
         Connection conn = null;
         PreparedStatement ps = null;
+        ResultSet rs = null;
         try {
             conn = sqlConnection();
             ps = conn.prepareStatement("SELECT COUNT(*) FROM " + database + ".playerdata WHERE playerdata.uuid = ?");
             ps.setString(1, uuid);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                if (rs.getInt(1) < 1) {
-                    clean(conn, ps);
-                    return false;
-                }
-            } else {
-                clean(conn, ps);
-                return false;
-            }
+            rs = ps.executeQuery();
+            return rs.next() && rs.getInt(1) > 1;
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            clean(conn, ps, rs);
         }
-        clean(conn, ps);
-        return true;
+        return false;
     }
 
     public boolean isPlayerWhitelisted(String uuid) {
         String database = plugin.getConfig().getString("MySQL.database");
         Connection conn = null;
         PreparedStatement ps = null;
+        ResultSet rs = null;
         try {
             conn = sqlConnection();
             ps = conn.prepareStatement("SELECT isWhitelisted FROM " + database + ".playerdata WHERE playerdata.uuid = ?");
             ps.setString(1, uuid);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next() && rs.getInt(1) == 1) {
-                clean(conn, ps);
-                return true;
-            }
+            rs = ps.executeQuery();
+            return rs.next() && rs.getInt(1) == 1;
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            clean(conn, ps, rs);
         }
-        clean(conn, ps);
         return false;
     }
 
@@ -336,19 +329,18 @@ public class MySQLManager {
         String database = plugin.getConfig().getString("MySQL.database");
         Connection conn = null;
         PreparedStatement ps = null;
+        ResultSet rs = null;
         try {
             conn = sqlConnection();
             ps = conn.prepareStatement("SELECT firstLogin FROM " + database + ".playerdata WHERE playerdata.uuid = ?");
             ps.setString(1, uuid);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                clean(conn, ps);
-                return false;
-            }
+            rs = ps.executeQuery();
+            return !rs.next();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            clean(conn, ps, rs);
         }
-        clean(conn, ps);
         return true;
     }
 
@@ -356,21 +348,22 @@ public class MySQLManager {
         String database = plugin.getConfig().getString("MySQL.database");
         Connection conn = null;
         PreparedStatement ps = null;
+        ResultSet rs = null;
         try {
             conn = sqlConnection();
             ps = conn.prepareStatement("SELECT usernames FROM " + database + ".previoususernames WHERE uuid = ?");
             ps.setString(1, uuid);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
             while (rs.next()) {
                 if (rs.getString(1).equalsIgnoreCase(name)) {
-                    clean(conn, ps);
                     return true;
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            clean(conn, ps, rs);
         }
-        clean(conn, ps);
         return false;
     }
 
@@ -378,21 +371,22 @@ public class MySQLManager {
         String database = plugin.getConfig().getString("MySQL.database");
         Connection conn = null;
         PreparedStatement ps = null;
+        ResultSet rs = null;
         try {
             conn = sqlConnection();
             ps = conn.prepareStatement("SELECT addresses FROM " + database + ".previousaddresses WHERE uuid = ?");
             ps.setString(1, uuid);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
             while (rs.next()) {
                 if (rs.getString(1).equalsIgnoreCase(address)) {
-                    clean(conn, ps);
                     return true;
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            clean(conn, ps, rs);
         }
-        clean(conn, ps);
         return false;
     }
 
@@ -401,18 +395,20 @@ public class MySQLManager {
         String uuid = "";
         Connection conn = null;
         PreparedStatement ps = null;
+        ResultSet rs = null;
         try {
             conn = sqlConnection();
             ps = conn.prepareStatement("SELECT uuid FROM " + database + ".playerdata WHERE playerdata.lastUsername = ?");
             ps.setString(1, name);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
             if (rs.next()) {
                 uuid = rs.getString(1);
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            clean(conn, ps, rs);
         }
-        clean(conn, ps);
         return uuid;
     }
 
@@ -421,11 +417,12 @@ public class MySQLManager {
         List<String> playerData = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ps = null;
+        ResultSet rs = null;
         try {
             conn = sqlConnection();
             ps = conn.prepareStatement("SELECT * FROM " + database + ".playerdata WHERE playerdata.uuid = ?");
             ps.setString(1, uuid);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
             if (rs.next()) {
                 playerData.add(rs.getString(1));
                 playerData.add(rs.getInt(2) == 1 ? "Yes" : "No");
@@ -437,8 +434,9 @@ public class MySQLManager {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            clean(conn, ps, rs);
         }
-        clean(conn, ps);
         return playerData;
     }
 
@@ -447,11 +445,12 @@ public class MySQLManager {
         List<String> usernames = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ps = null;
+        ResultSet rs = null;
         try {
             conn = sqlConnection();
             ps = conn.prepareStatement("SELECT usernames FROM " + database + ".previoususernames WHERE previoususernames.uuid = ?");
             ps.setString(1, uuid);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
             if (rs.isBeforeFirst()) {
                 while (rs.next()) {
                     usernames.add(rs.getString(1));
@@ -459,8 +458,9 @@ public class MySQLManager {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            clean(conn, ps, rs);
         }
-        clean(conn, ps);
         return usernames;
     }
 
@@ -469,11 +469,12 @@ public class MySQLManager {
         List<String> addresses = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ps = null;
+        ResultSet rs = null;
         try {
             conn = sqlConnection();
             ps = conn.prepareStatement("SELECT addresses FROM " + database + ".previousaddresses WHERE previousaddresses.uuid = ?");
             ps.setString(1, uuid);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
             if (rs.isBeforeFirst()) {
                 while (rs.next()) {
                     addresses.add(rs.getString(1));
@@ -481,18 +482,22 @@ public class MySQLManager {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            clean(conn, ps, rs);
         }
-        clean(conn, ps);
         return addresses;
     }
 
-    private void clean(Connection conn, PreparedStatement ps) {
+    private void clean(Connection conn, PreparedStatement ps, ResultSet rs) {
         try {
             if (ps != null) {
                 ps.close();
             }
             if (conn != null) {
                 conn.close();
+            }
+            if (rs != null) {
+                rs.close();
             }
         } catch (SQLException e) {
             e.printStackTrace();

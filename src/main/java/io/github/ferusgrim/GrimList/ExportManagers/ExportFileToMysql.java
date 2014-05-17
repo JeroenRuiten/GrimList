@@ -54,13 +54,14 @@ public class ExportFileToMysql {
                 String username = plugin.getConfig().getString("MySQL.username");
                 String password = plugin.getConfig().getString("MySQL.password");
                 try {
-                    conn = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?autoReconnect=true&user=" + username + "&password=" + password);
+                    conn = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?autoReconnect=true&user=" + username +
+                            (password != null && password.isEmpty() ? "&password=" + password : ""));
                     if (fm.isPlayersPopulated()) {
                         for (String uuid : fm.get().getConfigurationSection("Players").getKeys(false)) {
                             if (!mm.doesRecordExist(uuid)) {
                                 String path = "Players." + uuid;
                                 List<String> playerData = new ArrayList<>(dataLister(path));
-                                ps = conn.prepareStatement("INSERT INTO `" + database + "`.`playerdata` (`uuid`, `isWhitelisted`, `lastUsername`, `lastAddress`, `firstLogin`, `lastLogin`, `loginCount`) " +
+                                ps = conn.prepareStatement("INSERT INTO " + database + ".playerdata (uuid, isWhitelisted, lastUsername, lastAddress, firstLogin, lastLogin, loginCount) " +
                                         "VALUES (?, ?, ?, ?, ?, ?, ?);");
                                 ps.setString(1, uuid);
                                 ps.setInt(2, playerData.get(0).equals("true") ? 1 : 0);
@@ -76,6 +77,17 @@ public class ExportFileToMysql {
                     clean(conn, ps);
                 } catch (SQLException e) {
                     e.printStackTrace();
+                } finally {
+                    try {
+                        if (ps != null) {
+                            ps.close();
+                        }
+                        if (conn != null) {
+                            conn.close();
+                        }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
