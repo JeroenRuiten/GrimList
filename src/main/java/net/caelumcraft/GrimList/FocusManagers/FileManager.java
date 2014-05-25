@@ -4,9 +4,9 @@
  * Copyright under GPLv3 to Nicholas Badger (FerusGrim) - 2014
  */
 
-package io.github.ferusgrim.GrimList.FocusManagers;
+package net.caelumcraft.GrimList.FocusManagers;
 
-import io.github.ferusgrim.GrimList.GrimList;
+import net.caelumcraft.GrimList.GrimList;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;

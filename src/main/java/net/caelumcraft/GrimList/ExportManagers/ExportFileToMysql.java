@@ -4,16 +4,15 @@
  * Copyright under GPLv3 to Nicholas Badger (FerusGrim) - 2014
  */
 
-package io.github.ferusgrim.GrimList.ExportManagers;
+package net.caelumcraft.GrimList.ExportManagers;
 
-import io.github.ferusgrim.GrimList.FocusManagers.FileManager;
-import io.github.ferusgrim.GrimList.FocusManagers.MySQLManager;
-import io.github.ferusgrim.GrimList.GrimList;
-import io.github.ferusgrim.GrimList.utils.AsyncThenSyncOperation;
+import net.caelumcraft.GrimList.FocusManagers.FileManager;
+import net.caelumcraft.GrimList.FocusManagers.MySQLManager;
+import net.caelumcraft.GrimList.GrimList;
+import net.caelumcraft.GrimList.utils.AsyncThenSyncOperation;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +38,7 @@ public class ExportFileToMysql {
         return true;
     }
 
-    private void gatherMysqlData(CommandSender sender) {
+    private void gatherMysqlData(final CommandSender sender) {
         sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Exporting File to MySQL. This may take a moment...");
         new AsyncThenSyncOperation(plugin, true) {
 

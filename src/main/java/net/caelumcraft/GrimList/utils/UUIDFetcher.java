@@ -1,4 +1,4 @@
-package io.github.ferusgrim.GrimList.utils;
+package net.caelumcraft.GrimList.utils;
 
 import com.google.common.collect.ImmutableList;
 import org.json.simple.JSONArray;

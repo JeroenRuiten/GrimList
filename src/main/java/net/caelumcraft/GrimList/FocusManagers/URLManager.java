@@ -4,14 +4,14 @@
  * Copyright under GPLv3 to Nicholas Badger (FerusGrim) - 2014
  */
 
-package io.github.ferusgrim.GrimList.FocusManagers;
+package net.caelumcraft.GrimList.FocusManagers;
 
-import io.github.ferusgrim.GrimList.GrimList;
+import net.caelumcraft.GrimList.GrimList;
 
-class SQLiteManager {
+class URLManager {
     private final GrimList plugin;
 
-    public SQLiteManager(GrimList plugin) {
+    public URLManager(GrimList plugin) {
         this.plugin = plugin;
     }
 }

@@ -4,10 +4,10 @@
  * Copyright under GPLv3 to Nicholas Badger (FerusGrim) - 2014
  */
 
-package io.github.ferusgrim.GrimList;
+package net.caelumcraft.GrimList;
 
-import io.github.ferusgrim.GrimList.FocusManagers.FileManager;
-import io.github.ferusgrim.GrimList.FocusManagers.MySQLManager;
+import net.caelumcraft.GrimList.FocusManagers.FileManager;
+import net.caelumcraft.GrimList.FocusManagers.MySQLManager;
 import net.gravitydevelopment.updater.Updater;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginManager;

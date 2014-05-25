@@ -4,11 +4,11 @@
  * Copyright under GPLv3 to Nicholas Badger (FerusGrim) - 2014
  */
 
-package io.github.ferusgrim.GrimList.Commands;
+package net.caelumcraft.GrimList.Commands;
 
-import io.github.ferusgrim.GrimList.GrimList;
-import io.github.ferusgrim.GrimList.utils.AsyncThenSyncOperation;
-import io.github.ferusgrim.GrimList.utils.UUIDFetcher;
+import net.caelumcraft.GrimList.GrimList;
+import net.caelumcraft.GrimList.utils.AsyncThenSyncOperation;
+import net.caelumcraft.GrimList.utils.UUIDFetcher;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -80,7 +80,7 @@ public class RemovePlayer {
         return true;
     }
 
-    private void runOperation(CommandSender sender, String name) {
+    private void runOperation(final CommandSender sender, final String name) {
         sender.sendMessage((sender instanceof Player ? plugin.mStart : "") + "Looking up UUID. This can take a moment...");
         new AsyncThenSyncOperation(plugin, true) {
             private Map<String, UUID> response = null;

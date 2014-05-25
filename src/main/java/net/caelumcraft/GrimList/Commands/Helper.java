@@ -4,7 +4,7 @@
  * Copyright under GPLv3 to Nicholas Badger (FerusGrim) - 2014
  */
 
-package io.github.ferusgrim.GrimList.Commands;
+package net.caelumcraft.GrimList.Commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

@@ -4,11 +4,11 @@
  * Copyright under GPLv3 to Nicholas Badger (FerusGrim) - 2014
  */
 
-package io.github.ferusgrim.GrimList.Commands;
+package net.caelumcraft.GrimList.Commands;
 
-import io.github.ferusgrim.GrimList.ExportManagers.ExportFileToMysql;
-import io.github.ferusgrim.GrimList.ExportManagers.ExportMysqlToFile;
-import io.github.ferusgrim.GrimList.GrimList;
+import net.caelumcraft.GrimList.ExportManagers.ExportFileToMysql;
+import net.caelumcraft.GrimList.ExportManagers.ExportMysqlToFile;
+import net.caelumcraft.GrimList.GrimList;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

@@ -6,7 +6,7 @@
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
-package io.github.ferusgrim.GrimList.utils;
+package net.caelumcraft.GrimList.utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;

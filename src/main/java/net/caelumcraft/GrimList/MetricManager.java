@@ -4,7 +4,7 @@
  * Copyright under GPLv3 to Nicholas Badger (FerusGrim) - 2014
  */
 
-package io.github.ferusgrim.GrimList;
+package net.caelumcraft.GrimList;
 
 import org.mcstats.Metrics;
 import org.mcstats.Metrics.Graph;

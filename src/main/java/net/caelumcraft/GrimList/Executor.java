@@ -4,9 +4,9 @@
  * Copyright under GPLv3 to Nicholas Badger (FerusGrim) - 2014
  */
 
-package io.github.ferusgrim.GrimList;
+package net.caelumcraft.GrimList;
 
-import io.github.ferusgrim.GrimList.Commands.*;
+import net.caelumcraft.GrimList.Commands.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
