@@ -37,7 +37,7 @@ public class MySQLManager {
         String password = plugin.getConfig().getString("MySQL.password");
         try {
             return DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?autoReconnect=true&user=" + username +
-                    (password != null && password.isEmpty() ? "&password=" + password : ""));
+                    (password != null && !password.isEmpty() ? "&password=" + password : ""));
         } catch (SQLException e) {
             e.printStackTrace();
         }
